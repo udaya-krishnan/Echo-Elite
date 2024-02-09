@@ -198,6 +198,7 @@ const verifylogin = async (req, res) => {
         if (passwordMatch) {
           req.session.auth = true;
           req.session.userId = userData._id;
+          
           // console.log(req.session.userId)
           // res.redirect('/home')
           res.json({ status: "home" });
@@ -372,6 +373,8 @@ const resendOtp = async (req, res) => {
         });
       }
      
+
+
 
     // if (req.session.forgotData) {
     //   const email = req.session.forgotData.email;

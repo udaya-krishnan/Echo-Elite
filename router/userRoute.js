@@ -22,8 +22,8 @@ user_router.get('/forgot',userAuth.isLogOut,userController.loadForgot)
 user_router.post('/forgotPost',userAuth.isLogOut,userController.forgot) 
 user_router.get('/forgotOtp',userAuth.isLogOut,userController.loadForgotOTP)
 user_router.get('/logout',userAuth.islogin,userController.logout)
-user_router.get('/home',userAuth.islogin,userController.loadHome)
-user_router.get('/dashboard',userAuth.islogin,userController.loadDash)
+user_router.get('/home',userAuth.isBlocked,userAuth.islogin,userController.loadHome)
+user_router.get('/dashboard',userAuth.isBlocked,userAuth.islogin,userController.loadDash)
 
 
 user_router.get("/resendOtp",userController.resendOtp)

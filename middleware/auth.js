@@ -1,4 +1,4 @@
-
+const User=require("../model/userModel")
 
 const islogin=async(req,res,next)=>{
   try {
@@ -31,5 +31,23 @@ const isLogOut=async(req,res,next)=>{
     }
 }
 
+const isBlocked=async(req,res,next)=>{
+  try {
+    if(req.session.email){
+        const findUser=await User.findOne({email:req.session.email})
 
-module.exports={islogin,isLogOut}
+        if(findUser.is_blocked==true){
+          res.render("login")
+        }else{
+          next()
+        }
+    }else{
+      next()
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
+module.exports={islogin,isLogOut,isBlocked}
