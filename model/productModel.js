@@ -40,6 +40,10 @@ const productSchema=new mongoose.Schema({
     color:{
         type:String,
         require:true
+    },
+    is_blocked:{
+        type:Boolean,
+        require:true
     }
 
 },{versionKey:false})

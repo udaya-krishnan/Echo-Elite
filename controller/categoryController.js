@@ -23,9 +23,18 @@ const addCate=async(req,res)=>{
         const name=req.body.name
         const dis=req.body.dis
 
-        const catName = await Category.findOne({ name: name });
+        const allData=await Category.find({})
+    
+   const allName=allData.map((x)=>x.name)
 
-        if(catName){
+   let unique=false;
+   for(i=0;i<allName.length;i++){
+    if(name.toLowerCase()==allName[i].toLowerCase()){
+        unique=true
+    }
+   }
+
+        if(unique){
             res.json({status:"unique"})
         }else{
 
@@ -103,9 +112,38 @@ const loadEdit=async(req,res)=>{
 
 const editCat=async(req,res)=>{
     try {
+
+        
         const name=req.body.name
         const dis=req.body.dis
         const id=req.body.id
+        // console.log(name)
+  
+   const allData=await Category.find({})
+    
+   const allName=allData.map((x)=>x.name)
+
+   let unique=false;
+   for(i=0;i<allName.length;i++){
+    if(name.toLowerCase()==allName[i].toLowerCase()){
+        unique=true
+    }
+   }
+         
+   if(name==req.session.catData.name){
+    unique=false;
+   }
+
+   
+    
+        
+
+
+     
+          if(unique){
+            // console.log("hello");
+                res.json({status:"unique"})
+          }else{
 
             const catData= await Category.findOneAndUpdate({_id:id},{
                 $set:{
@@ -114,7 +152,10 @@ const editCat=async(req,res)=>{
                 }
             })
         
-        res.json({status:true})
+           res.json({status:true})
+          }
+
+           
     } catch (error) {
         console.log(error.message)
     }

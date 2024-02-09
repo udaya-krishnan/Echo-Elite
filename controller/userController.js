@@ -36,7 +36,12 @@ const securePassword = async (password) => {
 
 const loadLanding = async (req, res) => {
   try {
-    res.render("landing");
+    const catData= await Category.find({})
+
+    const proData=await Product.find({})
+
+    const brandData=await Brand.find({})
+    res.render("landing",{catData,proData,brandData});
   } catch (error) {
     console.log(error.message);
   }

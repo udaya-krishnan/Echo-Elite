@@ -48,7 +48,8 @@ const addProduct=async(req,res)=>{
             image:imageName,
             category:req.body.catName,
             brand:req.body.brandName,
-            color:req.body.color
+            color:req.body.color,
+            is_blocked:false
         })
 
         const proData=await product.save()
@@ -108,10 +109,46 @@ const editPro=async(req,res)=>{
     }
 }
 
+const imagDelete=async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+const blockPro=async(req,res)=>{
+    try {
+        const id=req.query.id
+        const findPro=await Product.findById({_id:id})
+        if(findPro.is_blocked==false){
+        const blockPro=await Product.findByIdAndUpdate({_id:id},{
+            $set:{
+                is_blocked:true
+            }
+        })
+        
+    }else{
+        const blockPro=await Product.findByIdAndUpdate({_id:id},{
+            $set:{
+                is_blocked:false
+            }
+        })
+    }
+    res.redirect("/admin/product")
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
 module.exports={
     loadProduct,
     loadAdd,
     addProduct,
     loadEdit,
-    editPro
+    editPro,
+    blockPro
 }

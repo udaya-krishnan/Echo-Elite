@@ -79,7 +79,9 @@
 
    admin_route.post("/edit-pro",isAdmin,proUpload.array("proImage",5),productControle.editPro)
 
-   admin_route.get('/block-pro')
+   admin_route.get('/block-pro',isAdmin,productControle.blockPro)
+
+   admin_route.get("/image-delete")
 
 
 

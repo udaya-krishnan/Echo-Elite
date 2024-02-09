@@ -278,7 +278,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="text-sm-end">
-                        All rights reserved by udayan
+                        All rights reserved
                     </div>
                 </div>
             </div>
@@ -330,7 +330,7 @@
             } else {
                 document.getElementById("rpErr").innerHTML = ""
             }
-            if (regex.test(rp)) {
+            if (!regex.test(rp)) {
                 document.getElementById("rpErr").innerHTML = "Invalid price"
             } else {
                 document.getElementById("rpErr").innerHTML = ""
@@ -347,7 +347,7 @@
             } else {
                 document.getElementById("opErr").innerHTML = ""
             }
-            if (regex.test(op)) {
+            if (!regex.test(op)) {
                 document.getElementById("opErr").innerHTML = "Invalid price"
             } else {
                 document.getElementById("opErr").innerHTML = ""
@@ -365,7 +365,7 @@
             } else {
                 document.getElementById("stErr").innerHTML = ""
             }
-            if (regex.test(st)) {
+            if (!regex.test(st)) {
                 document.getElementById("stErr").innerHTML = "Invalid price"
             } else {
                 document.getElementById("stErr").innerHTML = ""
@@ -383,7 +383,7 @@
             } else {
                 document.getElementById("offErr").innerHTML = ""
             }
-            if (regex.test(st)) {
+            if (!regex.test(st)) {
                 document.getElementById("offErr").innerHTML = "Invalid price"
             } else {
                 document.getElementById("offErr").innerHTML = ""
@@ -408,7 +408,7 @@
             } else {
                 document.getElementById("coErr").innerHTML = ""
             }
-            if (nameRegex.test(col)) {
+            if (!nameRegex.test(col)) {
                 document.getElementById("coErr").innerHTML = "Invalid Color"
             } else {
                 document.getElementById("coErr").innerHTML = ""

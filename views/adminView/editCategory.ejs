@@ -222,7 +222,15 @@
                     id
                 },
                 success:(response)=>{
-                     if(response.status===true){
+                     if(response.status==="unique"){
+
+                        document.getElementById("nameErr").innerHTML="Category already Exits"
+
+                        setTimeout(()=>{
+                            document.getElementById("nameErr").innerHTML=""
+                        },1500)
+                        
+                    }else if(response.status===true){
                         window.location.href="http://localhost:2003/admin/category"
                     }
                 }

@@ -186,12 +186,20 @@
                                     <div class="info-wrap">
                                         <a href="#" class="title text-truncate"><%= proData[i].name %></a>
                                         <div class="price mb-2">$<%= proData[i].offerPrice %></div> 
+                                        <% if (proData[i].is_blocked==true ) { %>
+                                            <a href="/admin/block-pro?id=<%= proData[i]._id %>" class="btn btn-sm font-sm btn-light rounded">
+                                                <i class="material-icons md-delete_forever"></i> unlist
+                                            </a>
+                                      
+                                        <% } else { %>
+                                         
                                         <a href="/admin/edit-pro?id=<%= proData[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
                                             <i class="material-icons md-edit"></i> Edit
                                         </a>
                                         <a href="/admin/block-pro?id=<%= proData[i]._id %>" class="btn btn-sm font-sm btn-light rounded">
-                                            <i class="material-icons md-delete_forever"></i> Delete
+                                            <i class="material-icons md-delete_forever"></i> list
                                         </a>
+                                       <% } %> 
                                     </div>
                                 </div> 
                             </div> 

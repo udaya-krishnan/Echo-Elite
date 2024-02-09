@@ -38,6 +38,10 @@ app.use('/',userRoute)
 const adminRoute=require('./router/adminRoute')
 app.use('/admin',adminRoute)
 
+app.get("*",(req,res)=>{
+    res.redirect("/404")
+})
+
 app.listen(2003,()=>{
     console.log("server Running")
 })  
