@@ -4,9 +4,9 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const generateOTP = require("../controller/otpGenrate");
 
-const Category=require("../model/categoryModel")
-const Product=require("../model/productModel")
-const Brand=require("../model/brandModel")
+const Category = require("../model/categoryModel");
+const Product = require("../model/productModel");
+const Brand = require("../model/brandModel");
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -14,7 +14,7 @@ const pass = process.env.Pass;
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
-  secure: false, 
+  secure: false,
   requireTLS: true,
   auth: {
     user: Email,
@@ -36,12 +36,12 @@ const securePassword = async (password) => {
 
 const loadLanding = async (req, res) => {
   try {
-    const catData= await Category.find({})
+    const catData = await Category.find({});
 
-    const proData=await Product.find({})
+    const proData = await Product.find({});
 
-    const brandData=await Brand.find({})
-    res.render("landing",{catData,proData,brandData});
+    const brandData = await Brand.find({});
+    res.render("landing", { catData, proData, brandData });
   } catch (error) {
     console.log(error.message);
   }
@@ -71,7 +71,7 @@ const insertUser = async (req, res) => {
 
     // res.redirect('/otp')
     const otp = generateOTP();
-    console.log(otp)
+    console.log(otp);
     //     // console.log(otp);
     //      const {name,email,mobile,password,confirm}=req.body
     const existsEmail = await User.findOne({ email: email });
@@ -110,7 +110,6 @@ const insertUser = async (req, res) => {
         });
       }
     }
-
   } catch (error) {
     console.log(error);
   }
@@ -131,14 +130,14 @@ const loadOtp = async (req, res) => {
 const getOtp = async (req, res) => {
   try {
     //  console.log(req.session,'this is session data')
-  //  console.log('hello')
-    const gotOtp =req.body.otp;
+    //  console.log('hello')
+    const gotOtp = req.body.otp;
     // console.log(gotOtp)
-      // console.log(req.session.Data.otp);
-    console.log(gotOtp)
+    // console.log(req.session.Data.otp);
+    console.log(gotOtp);
     if (req.session.Data) {
       // console.log('hello');
-        //  console.log(req.session.Data.otp)
+      //  console.log(req.session.Data.otp)
       if (gotOtp == req.session.Data.otp) {
         const passwordHash = await securePassword(req.session.Data.password);
         const user = new User({
@@ -149,7 +148,7 @@ const getOtp = async (req, res) => {
           is_admin: 0,
           is_verified: 1,
         });
-        const userData = await user.save(); 
+        const userData = await user.save();
         res.json({ status: true });
       } else {
         res.json({ status: "wroung" });
@@ -177,11 +176,7 @@ const getOtp = async (req, res) => {
 
 const loadLogin = async (req, res) => {
   try {
-    
-   
-    
-      res.render("login");
-    
+    res.render("login");
   } catch (error) {
     console.log(error.message);
   }
@@ -189,36 +184,33 @@ const loadLogin = async (req, res) => {
 
 const verifylogin = async (req, res) => {
   try {
-    
     const email = req.body.email;
     const password = req.body.password;
 
     req.session.email = email;
 
-   
-
     const userData = await User.findOne({ email: email });
     // console.log(userData);
-    console.log(userData)
-    if(userData){
-    if (userData.is_blocked==false) {
-      const passwordMatch = await bcrypt.compare(password, userData.password);
-      if (passwordMatch) {
-        req.session.auth=true
-        req.session.userId = userData._id;
-        // console.log(req.session.userId)
-        // res.redirect('/home')
-        res.json({ status: "home" });
+    console.log(userData);
+    if (userData) {
+      if (userData.is_blocked == false) {
+        const passwordMatch = await bcrypt.compare(password, userData.password);
+        if (passwordMatch) {
+          req.session.auth = true;
+          req.session.userId = userData._id;
+          // console.log(req.session.userId)
+          // res.redirect('/home')
+          res.json({ status: "home" });
+        } else {
+          // res.render('login')
+          res.json({ status: "passErr" });
+        }
       } else {
-        // res.render('login')
-        res.json({ status: "passErr" });
+        res.json({ status: "blocked" });
       }
     } else {
-      res.json({ status: "blocked" });
+      res.json({ status: "emailErr" });
     }
-  }else{
-    res.json({ status:"emailErr"})
-  }
   } catch (error) {
     console.log(error.message);
   }
@@ -228,9 +220,8 @@ const verifylogin = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    
-    req.session.email=null
-  
+    req.session.email = null;
+
     res.redirect("/");
   } catch (error) {
     console.log(error.message);
@@ -292,8 +283,6 @@ const forgot = async (req, res) => {
     } else {
       res.json({ status: "emailWro" });
     }
-
-   
   } catch (error) {
     console.log(error.message);
   }
@@ -303,14 +292,13 @@ const forgot = async (req, res) => {
 
 const loadHome = async (req, res) => {
   try {
-  
-    const catData= await Category.find({})
+    const catData = await Category.find({});
 
-    const proData=await Product.find({})
+    const proData = await Product.find({});
 
-    const brandData=await Brand.find({})
+    const brandData = await Brand.find({});
 
-    res.render("home",{catData,proData,brandData});
+    res.render("home", { catData, proData, brandData });
   } catch (error) {
     console.log(error.massage);
   }
@@ -338,32 +326,83 @@ const loadDash = async (req, res) => {
   }
 };
 
-
-const loadProduct=async(req,res)=>{
+const loadProduct = async (req, res) => {
   try {
-      const id=req.query.id
+    const id = req.query.id;
 
-      const proData= await Product.findById({_id:id})
+    const proData = await Product.findById({ _id: id });
 
-      const fullData=await Product.find({})
-   
+    const fullData = await Product.find({});
 
-    res.render("product",{proData,fullData})
+    res.render("product", { proData, fullData });
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
-
-const PNF=async(req,res)=>{
+const PNF = async (req, res) => {
   try {
-    res.render("404")
+    res.render("404");
   } catch (error) {
     console.log(error.meassge);
   }
-}
+};
 
+const resendOtp = async (req, res) => {
+  try {
+    console.log("hello");
+   
+      const email = req.session.Data.email;
+      const resendOtpGen = generateOTP();
+      req.session.Data.otp = resendOtpGen;
 
+      const mailOptions = await {
+        form: Email,
+        to: email,
+        subject: "Your OTP for Verification",
+        text: `your otp ${resendOtpGen}`,
+      };
+      if (mailOptions) {
+        transporter.sendMail(mailOptions, (err) => {
+          if (err) {
+            console.log(err.message);
+          } else {
+            console.log("mail send sucessfull");
+          }
+        });
+      }
+     
+
+    // if (req.session.forgotData) {
+    //   const email = req.session.forgotData.email;
+    //   const resendOtpGen = generateOTP();
+    //   req.session.forgotData.otp = resendOtpGen;
+    //   const mailOptions = await {
+    //     form: Email,
+    //     to: email,
+    //     subject: "Your OTP for Verification",
+    //     text: `your otp ${resendOtpGen}`,
+    //   };
+    //   if (mailOptions) {
+    //     transporter.sendMail(mailOptions, (err) => {
+    //       if (err) {
+    //         console.log(err.message);
+    //       } else {
+    //         console.log("mail send sucessfull");
+    //       }
+    //     });
+    //   }
+    // }
+
+    // req.session.forgotData.otp=resendOtpGen
+
+    // console.log(req.session.Data.otp)
+
+    res.json({ status: true });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 module.exports = {
   loadLanding,
@@ -380,5 +419,6 @@ module.exports = {
   loadForgotOTP,
   loadDash,
   loadProduct,
-  PNF
+  PNF,
+  resendOtp,
 };

@@ -134,11 +134,6 @@ const editCat=async(req,res)=>{
     unique=false;
    }
 
-   
-    
-        
-
-
      
           if(unique){
             // console.log("hello");
@@ -174,9 +169,6 @@ const cancelCat=async(req,res)=>{
         }else{
             res.json({status:true})
         }
-        
-   
-        
         
         
     } catch (error) {

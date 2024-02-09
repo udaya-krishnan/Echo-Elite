@@ -26,6 +26,8 @@ user_router.get('/home',userAuth.islogin,userController.loadHome)
 user_router.get('/dashboard',userAuth.islogin,userController.loadDash)
 
 
+user_router.get("/resendOtp",userController.resendOtp)
+
 user_router.get('/showproduct',userController.loadProduct)
   
 

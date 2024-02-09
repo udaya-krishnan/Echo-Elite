@@ -1182,11 +1182,18 @@
             })
         }
 
-
-
         function resendOTP() {
            
-         window.location.href="http://localhost:2003/registration"
+        $.ajax({
+            url:"/resendOtp",
+            method:"get",
+            success:(response)=>{
+                if(response.status==true){
+                    window.location.href = "http://localhost:2003/otp"
+                }
+            }
+            
+        })
 
         }
 
