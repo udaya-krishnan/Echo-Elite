@@ -1,0 +1,493 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:31 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/admin_assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/admin_assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin/dashboard" class="brand-wrap">
+                <img src="/admin_assets/imgs/theme/echo.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+
+                </li>
+
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/sellers"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Sellers</span>
+                    </a>
+                    <div class="submenu">
+
+                    </div>
+                </li>
+
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/brand"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+
+            </ul>
+            <hr>
+            <!-- <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-settings-1.html">Setting sample 1</a>
+                        <a href="page-settings-2.html">Setting sample 2</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-blank.html"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Starter page </span>
+                    </a>
+                </li>
+            </ul> -->
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i
+                                class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <!-- <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li> -->
+                    <!-- <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li> -->
+                    <!-- <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img src="/admin_assets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/admin_assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/admin_assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/admin_assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
+                        </div>
+                    </li> -->
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle"
+                                src="/admin_assets/imgs/icons/administrators-6.png" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <form action="" method="post" enctype="multipart/form-data" id="submitId">
+                <div class="row">
+                    <div class="col-lg-9" style="width: 60%;">
+                        <div class="content-header">
+                            <h2 class="content-title">Add New Product</h2>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4>Basic</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Product title</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_name"
+                                        name="product_name" onblur="nameFun()">
+                                    <p id="nameErr" class="text-danger"></p>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Full description</label>
+                                    <textarea placeholder="Type here" class="form-control" name="product_dis" rows="4"
+                                        id="product_dis" onblur="disFun()"></textarea>
+                                    <p id="disErr" class="text-danger"></p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Regular price</label>
+                                            <input placeholder="$" type="text" class="form-control" name="regprice"
+                                                id="regprice" onblur="rpFun()">
+                                            <p id="rpErr" class="text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Offer price</label>
+                                            <input placeholder="$" type="text" class="form-control" name="offprice"
+                                                id="offprice" onblur="opFun()">
+                                            <p id="opErr" class="text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Stock</label>
+                                            <input placeholder="" type="text" class="form-control" name="stock"
+                                                id="stock" onblur="stFun()">
+                                            <p id="stErr" class="text-danger"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">offer Percentage</label>
+                                    <input type="text" placeholder="%" class="form-control" id="off" name="off"
+                                        onblur="ofFun()">
+                                    <p id="offErr" class="text-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mt-4">
+                        <div class="card mb-4" style="width: 290px;">
+                            <div class="card-header">
+                                <h4>Media</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-upload">
+                                    <img src="/admin_assets/imgs/theme/upload.svg" alt="">
+                                    <input class="form-control" name="proImage" type="file" multiple>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4" style="width: 290px;">
+                            <div class="card-header">
+                                <h4>Organization</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row gx-2">
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-select" name="catName">
+                                            <% for( let i=0; i < catData.length; i++ ) { %>
+                                                <% if (catData[i].is_blocked===false) { %>
+                                                    <option>
+                                                        <%= catData[i].name %>
+                                                    </option>
+                                                    <% } %>
+                                                        <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label">Brand</label>
+                                        <select class="form-select" name="brandName">
+                                            <% for( let i=0; i < brandData.length; i++ ) { %>
+                                                <% if (brandData[i].is_blocked===false) { %>
+                                                    <option>
+                                                        <%= brandData[i].name %>
+                                                    </option>
+                                                    <% } %>
+                                                        <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Color</label>
+                                    <input type="text" class="form-control" name="color" id="color" onblur="coFun()">
+                                    <p id="coErr" class="text-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-lg-9">
+                        <div>
+                            <input type="submit" class="btn btn-outline-secondary " onclick="cancel()" value="Cancel">
+                            <input type="submit" class="btn btn-primary " value="Add">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+        <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="/admin_assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin_assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin_assets/js/vendors/select2.min.js"></script>
+    <script src="/admin_assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin_assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/admin_assets/js/main.js" type="text/javascript"></script>
+
+
+
+    <script>
+
+        function nameFun() {
+            const name = document.getElementById("product_name").value
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (name.trim() == '') {
+                document.getElementById("nameErr").innerHTML = "Product name is require"
+            } else {
+                document.getElementById("nameErr").innerHTML = ""
+            }
+            if (nameRegex.test(name)) {
+                document.getElementById("nameErr").innerHTML = "Invalid Name"
+            } else {
+                document.getElementById("nameErr").innerHTML = ""
+            }
+        }
+
+        function disFun() {
+            const dis = document.getElementById("product_dis").value
+            if (dis.trim() == '') {
+                document.getElementById("disErr").innerHTML = "Product discription  is require"
+            } else {
+                document.getElementById("disErr").innerHTML = ""
+            }
+        }
+
+        function rpFun() {
+            const rp = document.getElementById("regprice").value
+
+            const regex = /^[0-9]+$/
+
+            if (rp.trim() == '') {
+                document.getElementById("rpErr").innerHTML = "Regular price is require"
+            } else {
+                document.getElementById("rpErr").innerHTML = ""
+            }
+            if (regex.test(rp)) {
+                document.getElementById("rpErr").innerHTML = "Invalid price"
+            } else {
+                document.getElementById("rpErr").innerHTML = ""
+            }
+        }
+
+        function opFun() {
+            const op = document.getElementById("offprice").value
+
+            const regex = /^[0-9]+$/
+
+            if (op.trim() == '') {
+                document.getElementById("opErr").innerHTML = "Regular price is require"
+            } else {
+                document.getElementById("opErr").innerHTML = ""
+            }
+            if (regex.test(op)) {
+                document.getElementById("opErr").innerHTML = "Invalid price"
+            } else {
+                document.getElementById("opErr").innerHTML = ""
+            }
+        }
+
+
+        function stFun() {
+            const st = document.getElementById("stock").value
+
+            const regex = /^[0-9]+$/
+
+            if (st.trim() == '') {
+                document.getElementById("stErr").innerHTML = "Stock is require"
+            } else {
+                document.getElementById("stErr").innerHTML = ""
+            }
+            if (regex.test(st)) {
+                document.getElementById("stErr").innerHTML = "Invalid price"
+            } else {
+                document.getElementById("stErr").innerHTML = ""
+            }
+        }
+
+
+        function ofFun() {
+            const st = document.getElementById("off").value
+
+            const regex = /^[0-9]+$/
+
+            if (st.trim() == '') {
+                document.getElementById("offErr").innerHTML = "Offer Pecentage is require"
+            } else {
+                document.getElementById("offErr").innerHTML = ""
+            }
+            if (regex.test(st)) {
+                document.getElementById("offErr").innerHTML = "Invalid price"
+            } else {
+                document.getElementById("offErr").innerHTML = ""
+            }
+            if(st>100){ 
+                document.getElementById("offErr").innerHTML = "Miximum 100%"
+            }else {
+                document.getElementById("offErr").innerHTML = ""
+            }
+            if(st<=0){
+                document.getElementById("offErr").innerHTML = "Minimum 100%"
+            }else {
+                document.getElementById("offErr").innerHTML = ""
+            }
+        }
+
+        function coFun() {
+            const col = document.getElementById("color").value
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (col.trim() == '') {
+                document.getElementById("coErr").innerHTML = "Color is require"
+            } else {
+                document.getElementById("coErr").innerHTML = ""
+            }
+            if (nameRegex.test(col)) {
+                document.getElementById("coErr").innerHTML = "Invalid Color"
+            } else {
+                document.getElementById("coErr").innerHTML = ""
+            }
+        }
+
+
+        document.getElementById("submitId").addEventListener("submit",(e)=>{
+            nameFun()
+            disFun()
+            rpFun()
+            coFun()
+            ofFun()
+            stFun()
+            opFun()
+
+            const name=document.getElementById("nameErr")
+            const dis=document.getElementById("disErr")
+            const gp=document.getElementById("rpErr")
+            const op=document.getElementById("opErr")
+            const st=document.getElementById("stErr")
+            const of=document.getElementById("offErr")
+            const co=document.getElementById("coErr")
+
+            if(name.innerHTML||dis.innerHTML||gp.innerHTML||op.innerHTML||st.innerHTML||of.innerHTML||co.innerHTML){
+                e.preventDefault()
+            }
+            
+        })
+
+
+        function cancel(){
+            const name = document.getElementById("product_name").value.trim()
+            const dis = document.getElementById("product_dis").value.trim()
+            const rp = document.getElementById("regprice").value.trim()
+            const op = document.getElementById("offprice").value.trim()
+            const st = document.getElementById("stock").value.trim()
+            const sf = document.getElementById("off").value.trim()
+            const col = document.getElementById("color").value.trim()
+
+            if(name==''&&dis==''&&rp==''&&op==''&&st==''&&sf==''&&col==''){
+                window.location.href = "http://localhost:2003/admin/product"
+            }else{
+                //  alert("h")
+                 Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Discard", // Swapping the buttons
+                    cancelButtonText: "Cancel"     // Swapping the buttons
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Cancel!",
+                            text: "Your filed has been removed.",
+                            icon: "success"
+                        }).then(()=>{
+                            window.location.href = "http://localhost:2003/admin/product"
+                        })
+                    }
+                })
+            }
+        }
+
+
+
+
+
+    </script>
+
+
+
+
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+
+</html>
