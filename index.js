@@ -1,5 +1,11 @@
 const mongoose=require("mongoose")
-mongoose.connect("mongodb://localhost:27017/E-commerce")
+
+function connectDb(){
+    mongoose.connect("mongodb://localhost:27017/E-commerce")
+}
+
+connectDb()
+
 require('dotenv').config()
 const session=require("express-session")
 const {v4:uuidv4}=require("uuid")

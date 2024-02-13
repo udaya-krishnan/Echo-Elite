@@ -7,6 +7,7 @@ const generateOTP = require("../controller/otpGenrate");
 const Category = require("../model/categoryModel");
 const Product = require("../model/productModel");
 const Brand = require("../model/brandModel");
+const Adderss=require("../model/addressModel")
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -187,13 +188,16 @@ const verifylogin = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    req.session.email = email;
+  
 
     const userData = await User.findOne({ email: email });
-    // console.log(userData);
-    console.log(userData);
+  
+
     if (userData) {
+      console.log("inside the null")
       if (userData.is_blocked == false) {
+        req.session.email = email;
+        console.log("verify")
         const passwordMatch = await bcrypt.compare(password, userData.password);
         if (passwordMatch) {
           req.session.auth = true;
@@ -320,8 +324,11 @@ const loadForgotOTP = async (req, res) => {
 const loadDash = async (req, res) => {
   try {
     const userData = await User.findById({ _id: req.session.userId });
+    const address=await Product.find({}).populate("users")
+    console.log(address)
+    
     // console.log(user)
-    res.render("userProfile", { userData });
+    res.render("userProfile", { userData ,address});
   } catch (error) {
     console.log(error.message);
   }
@@ -407,6 +414,45 @@ const resendOtp = async (req, res) => {
   }
 };
 
+const loadAddaddress=async(req,res)=>{
+  try {
+    
+   res.render("addAddress")
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+const addAddress=async(req,res)=>{
+  try {
+      // console.log(req.body)
+      const findUser=await User.findOne({email:req.session.email})
+      
+      const {name,phone,pcode,city,address,district,state,landmark,alternate,address_type}=req.body
+
+      const newAddress=new Adderss({
+        userId:findUser._id,
+        name:name,
+        mobile:phone,
+        pinCode:pcode,
+        city:city,
+        address:address,
+        district:district,
+        state:state,
+        landmark:landmark,
+        addressType:address_type,
+        alternateMobile:alternate
+      })
+
+      const addressData=await newAddress.save()
+
+      res.redirect("/dashboard")
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 module.exports = {
   loadLanding,
   loadRegister,
@@ -424,4 +470,6 @@ module.exports = {
   loadProduct,
   PNF,
   resendOtp,
+  loadAddaddress,
+  addAddress
 };

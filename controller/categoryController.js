@@ -22,7 +22,7 @@ const addCate=async(req,res)=>{
         
         const name=req.body.name
         const dis=req.body.dis
-
+    //   console.log(name+"    heloo   "+dis)
         const allData=await Category.find({})
     
    const allName=allData.map((x)=>x.name)
@@ -56,8 +56,12 @@ const addCate=async(req,res)=>{
 
 const listCat=async(req,res)=>{
     try {
-        const id=req.query.id
+        // console.log("list Id"+req.body.catId)
 
+        const id=req.body.catId
+     
+        // console.log(id)
+           
         const findCat=await Category.findById({_id:id})
 
         if(findCat.is_blocked===true){

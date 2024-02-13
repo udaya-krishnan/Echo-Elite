@@ -34,13 +34,18 @@ const isLogOut=async(req,res,next)=>{
 const isBlocked=async(req,res,next)=>{
   try {
     if(req.session.email){
-        const findUser=await User.findOne({email:req.session.email})
+  const findUser=await User.findOne({email:req.session.email})
 
-        if(findUser.is_blocked==true){
+    if(findUser){
+
+      if(findUser?.is_blocked==true){
+          console.log("is blocked")
           res.render("login")
         }else{
           next()
         }
+    }
+    
     }else{
       next()
     }

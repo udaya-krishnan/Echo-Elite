@@ -72,6 +72,12 @@ const blockUser=async(req,res)=>{
        {$set:{
          is_blocked:true
       }})
+   }else{
+      const userData=await User.findByIdAndUpdate({_id:id},
+         {$set:{
+           is_blocked:false
+        }})
+
    }
 
       res.redirect('/admin/sellers')

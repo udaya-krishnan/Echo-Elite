@@ -131,7 +131,7 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">ADD Categories </h2>
+                    <h2 class="content-title card-title">Add Categories </h2>
                     <p>Add, edit or delete a category</p>
                 </div>
                 <div>
@@ -154,14 +154,14 @@
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Name</label>
                                 <input type="text" placeholder="Type here" class="form-control" name="product_name"
-                                    id="product_name" onblur="catFun()">
+                                    id="product_name" onchange="catFun()">
                                 <div id="nameErr" class="text-danger"></div>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Description</label>
                                 <textarea placeholder="Type here" class="form-control" name="description"
-                                    id="description" onblur="catDis()"></textarea>
-                                <div id="disErr" class="text-danger"></div>
+                                    id="description" onchange="catDis()"></textarea>
+                                <div id="disErr" class="text-danger"></div> 
                             </div>
                             <!-- </form> -->
                         </div>
@@ -206,87 +206,101 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
 
-        function catFun() {
-            const catName = document.getElementById("product_name").value
+        // function catFun() {
+        //     const catName = document.getElementById("product_name").value
+        //     const nameRegex = /^[A-Za-z\s]+$/;
+        //     // alert(catName)
+
+        //     if (catName.trim() == '') {
+        //         document.getElementById("nameErr").innerHTML = "Name is required"
+        //     } else {
+        //         document.getElementById("nameErr").innerHTML = ""
+        //     }
+        //     if (!nameRegex.test(catName)) {
+        //         document.getElementById("nameErr").innerHTML = "Invalid Name"
+        //     } else {
+        //         document.getElementById("nameErr").innerHTML = ""
+        //     }
+
+
+        // }
+
+        // function catDis() {
+        //     const dis = document.getElementById("description").value
+
+
+        //     if (dis.trim() == '') {
+        //         document.getElementById("disErr").innerHTML = "   Discription is required"
+        //     } else {
+        //         document.getElementById("disErr").innerHTML = ""
+        //     }
+
+        // }
+
+
+
+        // document.getElementById("submitId").addEventListener("submit", (e) => {
+
+        //     catDis()
+        //     catFun()
+        //     const nameErr = document.getElementById("nameErr")
+        //     const disErr = document.getElementById("disErr")
+        //     if (nameErr.innerHTML || disErr.innerHTML) {
+        //         e.preventDefault()
+        //     } 
+        // })
+        function add() {
+
+            const name = document.getElementById("product_name").value
+            const dis = document.getElementById("description").value
+            
+
+
             const nameRegex = /^[A-Za-z\s]+$/;
 
-            if (catName.trim() == '') {
-                document.getElementById("nameErr").innerHTML = "Name is required"
-            } else {
-                document.getElementById("nameErr").innerHTML = ""
-            }
-            if (!nameRegex.test(catName)) {
+
+            if (name.trim() == '' || dis.trim() == "") {
+                document.getElementById("disErr").innerHTML = "Please fill the field"
+                setTimeout(() => {
+                    document.getElementById("disErr").innerHTML = ""
+                }, 1500);
+            } else if (!nameRegex.test(name)) {
                 document.getElementById("nameErr").innerHTML = "Invalid Name"
-            } else {
-                document.getElementById("nameErr").innerHTML = ""
-            }
+                setTimeout(() => {
+                    document.getElementById("nameErr").innerHTML = ""
+                }, 1500)
+                
+            }  else {
+                // alert("hello")
+                $.ajax({
+                    url: "/admin/addCategoryPost",
+                    method: "post",
+                    data: {
+                        name,
+                        dis
+                    },
+                    success: (response) => {
+                        if (response.status == 'unique') {
+                            nameErr.innerHTML = "uinque"
+                            setTimeout(() => {
+                                nameErr.innerHTML = " "
+                            }, 1500)
 
-
-        }
-
-        function catDis() {
-            const dis = document.getElementById("description").value
-
-
-            if (dis.trim() == '') {
-                document.getElementById("disErr").innerHTML = "   Discription is required"
-            } else {
-                document.getElementById("disErr").innerHTML = ""
-            }
-
-        }
-   
- 
-        
-        document.getElementById("submitId").addEventListener("submit", (e) => {
-
-            catDis()
-            catFun()
-            const nameErr = document.getElementById("nameErr")
-            const disErr = document.getElementById("disErr")
-            if (nameErr.innerHTML || disErr.innerHTML) {
-                e.preventDefault()
-            } 
-        })
-                function add() {
-
-
-
-                    const name = document.getElementById("product_name").value
-                    const dis = document.getElementById("description").value
-                    const nameErr = document.getElementById("nameErr")
-
-
-
-
-                    $.ajax({
-                        url: "/admin/addCategoryPost",
-                        method: "post",
-                        data: {
-                            name,
-                            dis
-                        },
-                        success: (response) => {
-                            if (response.status == 'unique') {
-                                nameErr.innerHTML = "uinque"
-                                setTimeout(() => {
-                                    nameErr.innerHTML = " "
-                                }, 1500)
-
-                            } else if (response.status === true) {
-                                window.location.href = "http://localhost:2003/admin/category"
-                            }
+                        } else if (response.status === true) {
+                            window.location.href = "http://localhost:2003/admin/category"
                         }
+                    }
 
-                    })
+                })
+            }
 
 
-                }
-         
+        }
+
 
 
 
@@ -316,7 +330,7 @@
                             title: "Cancel!",
                             text: "Your filed has been removed.",
                             icon: "success"
-                        }).then(()=>{
+                        }).then(() => {
                             window.location.href = "http://localhost:2003/admin/category"
                         })
                     }

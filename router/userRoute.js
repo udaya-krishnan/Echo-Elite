@@ -26,6 +26,12 @@ user_router.get('/home',userAuth.isBlocked,userAuth.islogin,userController.loadH
 user_router.get('/dashboard',userAuth.isBlocked,userAuth.islogin,userController.loadDash)
 
 
+//"""""""""""""""""""""""""""""""""""""""''UserProfile"""""""""""""""""""""""""""""""""""//
+
+user_router.get("/addAddress",userController.loadAddaddress)
+user_router.post("/addAddress",userController.addAddress)
+
+
 user_router.get("/resendOtp",userController.resendOtp)
 
 user_router.get('/showproduct',userController.loadProduct)

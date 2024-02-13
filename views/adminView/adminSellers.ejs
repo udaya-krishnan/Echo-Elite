@@ -46,7 +46,7 @@
               
                 <li class="menu-item active">
                     <a class="menu-link" href="/admin/sellers"> <i class="icon material-icons md-store"></i>
-                        <span class="text">Sellers</span>
+                        <span class="text">Users</span>
                     </a>
                     <div class="submenu">
                        
@@ -122,7 +122,7 @@
         </header>
         <section class="content-main">
             <div class="content-header">
-                <h2 class="content-title">Sellers list</h2>
+                <h2 class="content-title">Users list</h2>
                 
             </div>
             <div class="card mb-4">
@@ -186,7 +186,7 @@
                                           <% } else { %>
                                             <td><span class="badge rounded-pill alert-danger">Blocked</span></td>
                                             <td class="text-end">
-                                            <a href="/admin/unblock-user?id=<%= userData[i]._id %>" class="btn btn-sm btn-success rounded font-sm mt-15">UNBLOCK</a>
+                                            <a href="/admin/block-user?id=<%= userData[i]._id %>" class="btn btn-sm btn-success rounded font-sm mt-15">UNBLOCK</a>
                                             </td>
                                           <% } %>
                                           

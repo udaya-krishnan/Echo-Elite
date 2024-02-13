@@ -215,14 +215,17 @@
 
     <script>
         function list(id){
-            // alert(id)
-           
+            
+             const catId=id
+        
             $.ajax({
-                url:"/admin/cat-list?id="+id,
-                method:"get",
+                url:"/admin/cat-list",
+                method:"post",
+                data:{
+                    catId
+                },
                success:(response)=>{
                 if(response.status===true){
-
                     window.location.href="http://localhost:2003/admin/category"
                 }
                }
