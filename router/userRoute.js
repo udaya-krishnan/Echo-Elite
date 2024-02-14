@@ -28,23 +28,25 @@ user_router.get('/dashboard',userAuth.isBlocked,userAuth.islogin,userController.
 
 //"""""""""""""""""""""""""""""""""""""""''UserProfile"""""""""""""""""""""""""""""""""""//
 
-user_router.get("/addAddress",userController.loadAddaddress)
-user_router.post("/addAddress",userController.addAddress)
+user_router.get("/addAddress",userAuth.isBlocked,userAuth.islogin,userController.loadAddaddress)
+user_router.post("/addAddress",userAuth.isBlocked,userAuth.islogin,userController.addAddress)
 
 
 user_router.get("/resendOtp",userController.resendOtp)
 
 user_router.get('/showproduct',userController.loadProduct)
-user_router.get('/address-dele',userController.deletAddress)
+user_router.get('/address-dele',userAuth.isBlocked,userAuth.islogin,userController.deletAddress)
 
-user_router.get("/address-edit",userController.loadEditAddress)
-user_router.post("/address-edit",userController.editAddress)
+user_router.get("/address-edit",userAuth.isBlocked,userAuth.islogin,userController.loadEditAddress)
+user_router.post("/address-edit",userAuth.isBlocked,userAuth.islogin,userController.editAddress)
 
-user_router.get('/orders',userController.loadOrder)
-user_router.get('/track-orders',userController.loadTrack)
-user_router.get('/address',userController.loadAddress)
-user_router.get('/change-pass',userController.loadChangePass) 
-user_router.get('/account-detail',userController.loadAccount) 
+user_router.get('/orders',userAuth.isBlocked,userAuth.islogin,userController.loadOrder)
+user_router.get('/track-orders',userAuth.isBlocked,userAuth.islogin,userController.loadTrack)
+user_router.get('/address',userAuth.isBlocked,userAuth.islogin,userController.loadAddress)
+user_router.get('/change-pass',userAuth.isBlocked,userAuth.islogin,userController.loadChangePass) 
+user_router.get('/account-detail',userAuth.isBlocked,userAuth.islogin,userController.loadAccount) 
+
+user_router.post("/change-pass",userAuth.isBlocked,userAuth.islogin ,userController.changePass)
   
 
 

@@ -87,11 +87,11 @@ admin_route.get("/image-delete");
 
 /***************************************Brand Route**************************** */
 
-admin_route.get("/brand", brandControle.loadBrand);
-admin_route.get("/add-brand", brandControle.loadAdd);
+admin_route.get("/brand",isAdmin, brandControle.loadBrand);
+admin_route.get("/add-brand",isAdmin, brandControle.loadAdd);
 
-admin_route.post("/add-brand", upload.single("image"), brandControle.addBrand);
-admin_route.get("/brand-list", brandControle.listBrand);
-admin_route.get("/brand-edit", brandControle.editload);
+admin_route.post("/add-brand",isAdmin, upload.single("image"), brandControle.addBrand);
+admin_route.get("/brand-list",isAdmin, brandControle.listBrand);
+admin_route.get("/brand-edit",isAdmin, brandControle.editload);
 
 module.exports = admin_route;

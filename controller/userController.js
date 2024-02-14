@@ -585,6 +585,47 @@ const loadAccount=async(req,res)=>{
 }
 
 
+const changePass=async(req,res)=>{
+  try {
+    const{current,newPass,conPass}=req.body
+
+    if(newPass==conPass){
+    const email=req.session.email
+
+    const userData=await User.findOne({email:email})
+
+    const passwordMatch = await bcrypt.compare(current, userData.password);
+
+    if(passwordMatch){
+
+      const passwordHash=await securePassword(newPass)
+
+       const updatePass=await User.findByIdAndUpdate({_id:userData._id},{
+        $set:{
+          password:passwordHash
+        }
+       })
+
+       if(updatePass){
+        res.json({status:true})
+       }
+     
+    }else{
+      res.json({status:"wrong"})
+    }
+  }else{
+    res.json({status:"compare"})
+  }
+
+
+
+
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 
 module.exports = {
   loadLanding,
@@ -612,6 +653,7 @@ module.exports = {
   loadAddress,
   loadChangePass,
   loadTrack,
-  editAddress
+  editAddress,
+  changePass
   
 };
