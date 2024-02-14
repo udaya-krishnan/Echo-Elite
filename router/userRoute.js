@@ -38,6 +38,7 @@ user_router.get('/showproduct',userController.loadProduct)
 user_router.get('/address-dele',userController.deletAddress)
 
 user_router.get("/address-edit",userController.loadEditAddress)
+user_router.post("/address-edit",userController.editAddress)
 
 user_router.get('/orders',userController.loadOrder)
 user_router.get('/track-orders',userController.loadTrack)

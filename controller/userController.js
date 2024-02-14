@@ -477,7 +477,9 @@ const loadEditAddress=async(req,res)=>{
     const id=req.query.id
      
     const DataAddre=await Adderss.findById({_id:id})
-
+   
+    req.session.address=DataAddre
+    console.log(DataAddre)
     
       res.render("editAddress",{DataAddre})
     
@@ -491,6 +493,30 @@ const loadEditAddress=async(req,res)=>{
 
 const editAddress=async(req,res)=>{
   try {
+     const{name,phone,pcode,city,address,district,state,landmark,alternate,address_type}=req.body
+     
+     const oldData=req.session.address
+
+     if(name==oldData.name&&phone==oldData.mobile&&pcode==oldData.pinCode&&city==oldData.city&&address==oldData.address&&district==oldData.district&&
+      state==oldData.state&&landmark==oldData.landmark&&address_type==oldData.address_type&&alternate==oldData.alternateMobile){
+      res.json({status:"nothing"})
+      }else{
+        const addData=await Adderss.findByIdAndUpdate({_id:oldData._id},{
+          $set:{
+            name:name,
+            mobile:phone,
+            pinCode:pcode,
+            city:city,
+            address:address,
+            district:district,
+            state:state,
+            landmark:landmark,
+            addressType:address_type,
+            alternateMobile:alternate
+          }
+        })
+        res.json({status:true})
+      }
       
   } catch (error) {
     console.log(error.message)
@@ -586,5 +612,6 @@ module.exports = {
   loadAddress,
   loadChangePass,
   loadTrack,
+  editAddress
   
 };
