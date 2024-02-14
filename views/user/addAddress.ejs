@@ -480,13 +480,16 @@
                                             instead!</a></p> -->
                                             <form method="post" name="enq" style="margin-top: 20px;">
                                                 <div class="row">
+                                                  
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;"> Name <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="name" type="text" style="padding: 10px;" value="udayan">
+                                                        <input required="" class="form-control square" onkeydown="return /[a-zA-Z _]/i.test(event.key)"  id="name" name="name" onblur="nameValidate()" type="text" style="padding: 10px;" >
+                                                        <p id="nameErr" class="text-danger"></p>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;">Mobile Number <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="phone" style="padding: 10px;" value="9338129129">
+                                                        <input required="" class="form-control square" id="mob" name="phone" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" onblur="mobValidate()" style="padding: 10px;" >
+                                                        <p id="mobErr" class="text-danger"></p>
                                                     </div>
                                                     <!-- <div class="form-group col-md-12">
                                                         <label style="font-weight: bold;">Display Name <span class="required">*</span></label>
@@ -510,26 +513,31 @@
                                                     </div> -->
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;">Pin Code</label>
-                                                        <input class="form-control square" name="pcode" type="text" style="padding: 10px;" value="72137">
+                                                        <input class="form-control square" name="pcode" id="pin" type="text" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" onblur="pinValidate()" style="padding: 10px;" value="72137">
+                                                        <p id="pinErr" class="text-danger"></p>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;">City</label>
-                                                        <input class="form-control square" name="city" type="text" style="padding: 10px;" value="qdugqu">
+                                                        <input class="form-control square" name="city" id="city" type="text" onblur="cityValidate()" style="padding: 10px;" value="qdugqu">
+                                                        <p id="cityErr" class="text-danger"></p>
                                                     </div>
                                                     <div class="form-group col-md-12 ">
                                                         <label style="font-weight: bold;">Address/city/district</label>
                                                         <!-- <input class="form-control square" name="address" type="text" style="padding: 10px;"> -->
-                                                        <textarea name="address" id="address" style="padding: 10px;">diaYDYddi</textarea>
+                                                        <textarea name="address" id="address" onblur="addressValidate()" style="padding: 10px;">diaYDYddi</textarea>
+                                                        <p id="addreErr" class="text-danger"></p>
+
                                                     </div>
                                                   
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;">District</label>
-                                                        <input class="form-control square" name="district" type="text" style="padding: 10px;" value="ugugewgfugf">
+                                                        <input class="form-control square" id="dist" onblur="distValidate()" name="district" type="text" style="padding: 10px;" value="ugugewgfugf">
+                                                        <p id="distErr" class="text-danger"></p>
                                                     </div>
       
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;">State</label>
-                                                        <select class="form-control square" name="state" style="padding: 10px;">
+                                                        <select class="form-control square" name="state" onblur="stateValidate()" id="state" style="padding: 10px;">
                                                             <option value="">Select State</option>
                                                             <option value="Andhra Pradesh">Andhra Pradesh</option>
                                                             <option value="Arunachal Pradesh">Arunachal Pradesh</option>
@@ -561,14 +569,17 @@
                                                             <option value="West Bengal">West Bengal</option>
                                                             <!-- Add more options as needed -->
                                                         </select>
+                                                        <p id="stateErr" class="text-danger"></p>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;">Landmark</label>
-                                                        <input class="form-control square" name="landmark" type="text" style="padding: 10px;" value="fduyfuasfu">
+                                                        <input class="form-control square" name="landmark" onblur="landValidate()" id="land" type="text" style="padding: 10px;" value="fduyfuasfu">
+                                                        <p id="landErr" class="text-danger"></p>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;">Alternate Mobile</label>
-                                                        <input class="form-control square" name="alternate" type="text" style="padding: 10px;" value="fduyfuasfu">
+                                                        <input class="form-control square" name="alternate" id="alt" onblur="altValidate()" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" type="text" style="padding: 10px;" value="767868686">
+                                                        <p id="altErr" class="text-danger"></p>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label style="font-weight: bold;">Address Type</label><br>
@@ -576,7 +587,8 @@
                                                         <label><input type="radio" name="address_type" value="work"> Work</label>
                                                     </div>
                                                     <div class="col-md-12 text-center">
-                                                        <button type="submit" class="btn btn-fill-out submit"  value="Submit" style="padding: 10px; font-weight: bold; background-color: #007bff; border-color: #007bff; color: #fff; text-transform: uppercase;">Save</button>
+                                                        <p id="fiiErr" style="display: none;" class="text-danger">Please fill the filed</p>
+                                                        <button type="submit" class="btn btn-fill-out submit" onclick="validate()" id="sub"  value="Submit" style="padding: 10px; font-weight: bold; background-color: #007bff; border-color: #007bff; color: #fff; text-transform: uppercase;">Save</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -745,6 +757,193 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
+
+<script>
+
+
+document.getElementById("sub").addEventListener("submit",(e)=>{
+    nameValidate()
+    mobValidate()
+    pinValidate()
+    cityValidate()
+    addressValidate()
+    distValidate()
+    stateValidate()
+
+   const nameErr= document.getElementById("nameErr").innerHTML
+   const stateErr=  document.getElementById("stateErr").innerHTML
+   const distErr= document.getElementById("distErr").innerHTML
+   const addresErr= document.getElementById("addreErr").innerHTML
+   const cityErr= document.getElementById("cityErr").innerHTML
+   const pinErr= document.getElementById("pinErr").innerHTML
+   const mobErr= document.getElementById("mobErr").innerHTML
+
+
+   if(nameErr||mobErr||pinErr||cityErr||addresErr||distErr||stateErr){
+
+    e.preventDefault()
+   }
+        
+
+    })
+
+
+
+
+
+
+function nameValidate(){
+    const name=document.getElementById("name").value
+
+ 
+
+    if(name.trim()==''){
+        document.getElementById("nameErr").innerHTML="Name is Require"
+      
+    }else{
+        setTimeout(()=>{
+            document.getElementById("nameErr").innerHTML=""
+        },1000)
+    }
+        
+}
+
+   function mobValidate(){
+    const mob=document.getElementById("mob").value
+    
+    
+    if(mob.trim()==''){
+        document.getElementById("mobErr").innerHTML="Mobile is require"
+
+    }else if(mob.trim().length!==10){
+        document.getElementById("mobErr").innerHTML="Mobile Must Be 10 Digits"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("mobErr").innerHTML=""
+        },1000)
+    }
+
+   }
+
+
+   function pinValidate(){
+    const pin=document.getElementById("pin").value
+   
+    
+    if(pin.trim()==''){
+        document.getElementById("pinErr").innerHTML="Pin Code is require"
+
+    }else if(!pin.length==6){
+        document.getElementById("pinErr").innerHTML="Pin code Must Be 6 Digits"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("pinErr").innerHTML=""
+        },1000)
+    }
+
+   }
+  
+
+   function cityValidate(){
+    const city=document.getElementById("city").value
+
+    
+
+    if(name.trim()==''){
+        document.getElementById("cityErr").innerHTML="City is Require"
+      
+    }else{
+        setTimeout(()=>{
+            document.getElementById("nameErr").innerHTML=""
+        },1000)
+    }
+
+   }
+
+
+   function addressValidate(){
+    const address=document.getElementById("address").value
+    if(address.trim()==''){
+        document.getElementById("addreErr").innerHTML="Address is Require"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("addreErr").innerHTML=""
+        },1000)
+    }
+
+   }
+
+   function distValidate(){
+
+    const dist=document.getElementById("dist").value
+
+    if(dist.trim()==''){
+        document.getElementById("distErr").innerHTML="District is require"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("distErr").innerHTML=""
+        },1000)
+        
+    }
+
+   }
+
+   function stateValidate(){
+    const state=document.getElementById("state").value
+
+    if(state.trim()==''){
+        document.getElementById("stateErr").innerHTML="State is Require"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("stateErr").innerHTML=""
+        },1000)
+        
+    }
+   }
+
+//    function altValidate(){
+//     const alt=document.getElementById("alt").value
+
+//     if(alt.trim().length)
+//    }
+
+//    function landValidate(){
+//     const land=document.getElementById("land").value
+//     if(land.trim()==''){
+//         document.getElementById("landErr").innerHTML=" is Require"
+//     }else{
+//         setTimeout(()=>{
+//             document.getElementById("landErr").innerHTML=""
+//         },1000)
+        
+//     }
+//    }
+
+    function validate(){
+       const name= document.getElementById("name").value.trim()
+       const mob= document.getElementById("mob").value.trim()
+       const pin= document.getElementById("pin").value.trim()
+       const city= document.getElementById("city").value.trim()
+       const address= document.getElementById("address").value.trim()
+       const dist= document.getElementById("dist").value.trim()
+       const state= document.getElementById("state").value.trim()
+       const land= document.getElementById("land").value.trim()
+       const alt= document.getElementById("alt").value.trim()
+    //    const land= document.getElementById("land").value
+
+    if(name==''||mob==''||pin==''||city==''||address==''||dist==''||state==''||land==''||alt==''){
+        document.getElementById("fiiErr").style.display='block'
+        setTimeout(()=>{
+            document.getElementById("fiiErr").style.display='none'
+        },2000)
+    }
+
+    }
+
+  
+
+
+</script>
 
 
 

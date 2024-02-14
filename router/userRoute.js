@@ -35,6 +35,15 @@ user_router.post("/addAddress",userController.addAddress)
 user_router.get("/resendOtp",userController.resendOtp)
 
 user_router.get('/showproduct',userController.loadProduct)
+user_router.get('/address-dele',userController.deletAddress)
+
+user_router.get("/address-edit",userController.loadEditAddress)
+
+user_router.get('/orders',userController.loadOrder)
+user_router.get('/track-orders',userController.loadTrack)
+user_router.get('/address',userController.loadAddress)
+user_router.get('/change-pass',userController.loadChangePass) 
+user_router.get('/account-detail',userController.loadAccount) 
   
 
 

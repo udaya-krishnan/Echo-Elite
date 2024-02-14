@@ -470,280 +470,131 @@
                 <div class="row">
                     <div class="col-lg-10 m-auto">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="dashboard-menu">
-                                    <ul class="nav flex-column" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" 
-                                                href="/dashboard" role="tab" aria-controls="dashboard"
-                                                aria-selected="false"><i class="fa fa-atom mr-15"></i>Dashboard</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link"  href="/orders"
-                                                role="tab" aria-controls="orders" aria-selected="false"><i
-                                                    class="fa fa-shopping-basket mr-15"></i>Orders</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" 
-                                                href="/track-orders" role="tab" aria-controls="track-orders"
-                                                aria-selected="false"><i class="fa fa-paper-plane mr-15"></i>Track Your
-                                                Order</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link"  href="/address"
-                                                role="tab" aria-controls="address" aria-selected="true"><i
-                                                    class="fa fa-map-marked mr-15"></i>My Address</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="/change-pass"
-                                                role="tab" aria-controls="change" aria-selected="true"><i
-                                                    class="fa fa-key mr-15"></i>Change Password</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" 
-                                                href="/account-detail" role="tab" aria-controls="account-detail"
-                                                aria-selected="true"><i class="fa fa-user-edit mr-15"></i>Account
-                                                details</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="/logout"><i
-                                                    class="fa fa-lock mr-15"></i>Logout</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="tab-content dashboard-content">
-                                    <div class="tab-pane fade active show" id="dashboard" role="tabpanel"
-                                        aria-labelledby="dashboard-tab">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="mb-0">Hello <%= userData.name %>
-                                                </h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>From your account dashboard. you can easily check &amp; view your <a
-                                                        href="#">recent orders</a>, manage your <a href="#">shipping and
-                                                        billing addresses</a> and <a href="#">edit your password and
-                                                        account details.</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="mb-0">Your Orders</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Order</th>
-                                                                <th>Date</th>
-                                                                <th>Status</th>
-                                                                <th>Total</th>
-                                                                <th>Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>#1357</td>
-                                                                <td>March 45, 2020</td>
-                                                                <td>Processing</td>
-                                                                <td>$125.00 for 2 item</td>
-                                                                <td><a href="#" class="btn-small d-block">View</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>#2468</td>
-                                                                <td>June 29, 2020</td>
-                                                                <td>Completed</td>
-                                                                <td>$364.00 for 5 item</td>
-                                                                <td><a href="#" class="btn-small d-block">View</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>#2366</td>
-                                                                <td>August 02, 2020</td>
-                                                                <td>Completed</td>
-                                                                <td>$280.00 for 3 item</td>
-                                                                <td><a href="#" class="btn-small d-block">View</a></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="tab-pane fade" id="address" role="tabpanel"
-                                        aria-labelledby="address-tab">
                            
-                                                    <div class="col-lg-6">
-                                                    <div class="card mb-3 mb-lg-0"
-                                                    style="border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
-                                                    <div class="card-header"
-                                                        style="background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0;">
-                                                        <h5 class="card-title mb-0"
-                                                            style="color: #333; font-weight: bold;">Address</h5>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Add Address</h5>
+                                </div>
+                                <div class="card-body">
+                                    <!-- <p>Already have an account? <a href="page-login-register.html">Log in
+                                            instead!</a></p> -->
+                                            <form method="post" name="enq" style="margin-top: 20px;">
+                                                <div class="row">
+                                                  
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;"> Name <span class="required">*</span></label>
+                                                        <input required="" class="form-control square" onkeydown="return /[a-zA-Z _]/i.test(event.key)"  id="name" name="name" onblur="nameValidate()" type="text" style="padding: 10px;" value="<%= DataAddre.name %>" >
+                                                        <p id="nameErr" class="text-danger"></p>
                                                     </div>
-                                                    <div class="card-body" style="padding: 20px;">
-                                                        <address class="mb-4"
-                                                    
-                                                
-                                           
-                                            <!-- <div class="col-lg-6">
-                                                <div class="card"
-                                                    style="border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
-                                                    <div class="card-header"
-                                                        style="background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0;">
-                                                        <h5 class="card-title mb-0"
-                                                            style="color: #333; font-weight: bold;">Shipping Address
-                                                        </h5>
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;">Mobile Number <span class="required">*</span></label>
+                                                        <input required="" class="form-control square" id="mob" name="phone" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" onblur="mobValidate()" style="padding: 10px;" value="<%= DataAddre.mobile %>" >
+                                                        <p id="mobErr" class="text-danger"></p>
                                                     </div>
-                                                    <div class="card-body" style="padding: 20px;">
-                                                        <address class="mb-4"
-                                                            style="font-size: 16px; line-height: 1.5;">4299 Express
-                                                            Lane<br> Sarasota, FL 34249 USA <br>Phone: 1.941.227.4444
-                                                        </address>
-                                                        <p class="mb-4">Sarasota</p>
-                                                        <a href="#" class="btn btn-primary btn-sm"
-                                                            style="font-size: 14px; text-transform: uppercase; background-color: #007bff; border-color: #007bff;">Edit</a>
+                                                    <!-- <div class="form-group col-md-12">
+                                                        <label style="font-weight: bold;">Display Name <span class="required">*</span></label>
+                                                        <input required="" class="form-control square" name="dname" type="text" style="padding: 10px;">
+                                                    </div> -->
+                                                    <!-- <div class="form-group col-md-12">
+                                                        <label style="font-weight: bold;">Email Address <span class="required">*</span></label>
+                                                        <input required="" class="form-control square" name="email" type="email" style="padding: 10px;">
+                                                    </div> -->
+                                                    <!-- <div class="form-group col-md-12">
+                                                        <label style="font-weight: bold;">Current Password <span class="required">*</span></label>
+                                                        <input required="" class="form-control square" name="password" type="password" style="padding: 10px;">
+                                                    </div> -->
+                                                    <!-- <div class="form-group col-md-12">
+                                                        <label style="font-weight: bold;">New Password <span class="required">*</span></label>
+                                                        <input required="" class="form-control square" name="npassword" type="password" style="padding: 10px;">
+                                                    </div>
+                                                     <div class="form-group col-md-12"> 
+                                                        <label style="font-weight: bold;">Confirm Password <span class="required">*</span></label>
+                                                        <input required="" class="form-control square" name="cpassword" type="password" style="padding: 10px;">
+                                                    </div> -->
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;">Pin Code</label>
+                                                        <input class="form-control square" name="pcode" id="pin" type="text" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" onblur="pinValidate()" style="padding: 10px;" value="<%= DataAddre.pinCode %>">
+                                                        <p id="pinErr" class="text-danger"></p>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;">City</label>
+                                                        <input class="form-control square" name="city" id="city" type="text" onblur="cityValidate()" style="padding: 10px;" value="<%= DataAddre.city %>">
+                                                        <p id="cityErr" class="text-danger"></p>
+                                                    </div>
+                                                    <div class="form-group col-md-12 ">
+                                                        <label style="font-weight: bold;">Address/city/district</label>
+                                                        <!-- <input class="form-control square" name="address" type="text" style="padding: 10px;"> -->
+                                                        <textarea name="address" id="address" onblur="addressValidate()" style="padding: 10px;"><%= DataAddre.address %></textarea>
+                                                        <p id="addreErr" class="text-danger"></p>
+
+                                                    </div>
+                                                  
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;">District</label>
+                                                        <input class="form-control square" id="dist" onblur="distValidate()" name="district" type="text" style="padding: 10px;" value="<%= DataAddre.district %>">
+                                                        <p id="distErr" class="text-danger"></p>
+                                                    </div>
+      
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;">State</label>
+                                                        <select class="form-control square" name="state" onblur="stateValidate()" id="state" style="padding: 10px;">
+                                                            <option value="">Select State</option>
+                                                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                                            <option value="Assam">Assam</option>
+                                                            <option value="Bihar">Bihar</option>
+                                                            <option value="Chhattisgarh">Chhattisgarh</option>
+                                                            <option value="Goa">Goa</option>
+                                                            <option value="Gujarat">Gujarat</option>
+                                                            <option value="Haryana">Haryana</option>
+                                                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                            <option value="Jharkhand">Jharkhand</option>
+                                                            <option value="Karnataka">Karnataka</option>
+                                                            <option value="Kerala">Kerala</option>
+                                                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                            <option value="Maharashtra">Maharashtra</option>
+                                                            <option value="Manipur">Manipur</option>
+                                                            <option value="Meghalaya">Meghalaya</option>
+                                                            <option value="Mizoram">Mizoram</option>
+                                                            <option value="Nagaland">Nagaland</option>
+                                                            <option value="Odisha">Odisha</option>
+                                                            <option value="Punjab">Punjab</option>
+                                                            <option value="Rajasthan">Rajasthan</option>
+                                                            <option value="Sikkim">Sikkim</option>
+                                                            <option value="Tamil Nadu">Tamil Nadu</option>
+                                                            <option value="Telangana">Telangana</option>
+                                                            <option value="Tripura">Tripura</option>
+                                                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                            <option value="Uttarakhand">Uttarakhand</option>
+                                                            <option value="West Bengal">West Bengal</option>
+                                                            <!-- Add more options as needed -->
+                                                        </select>
+                                                        <p id="stateErr" class="text-danger"></p>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;">Landmark</label>
+                                                        <input class="form-control square" name="landmark" onblur="landValidate()" id="land" type="text" style="padding: 10px;" value="<%= DataAddre.landmark %>">
+                                                        <p id="landErr" class="text-danger"></p>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;">Alternate Mobile</label>
+                                                        <input class="form-control square" name="alternate" id="alt" onblur="altValidate()" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" type="text" style="padding: 10px;" value="<%= DataAddre.alternateMobile %>">
+                                                        <p id="altErr" class="text-danger"></p>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-weight: bold;">Address Type</label><br>
+                                                        <label><input type="radio" name="address_type" value="home"> Home</label>
+                                                        <label><input type="radio" name="address_type" value="work"> Work</label>
+                                                    </div>
+                                                    <div class="col-md-12 text-center">
+                                                        <p id="fiiErr" style="display: none;" class="text-danger">Please fill the filed</p>
+                                                        <button type="submit" class="btn btn-fill-out submit" onclick="validate()" id="sub"  value="Submit" style="padding: 10px; font-weight: bold; background-color: #007bff; border-color: #007bff; color: #fff; text-transform: uppercase;">Save</button>
                                                     </div>
                                                 </div>
-                                            </div> -->
-                                        <!-- </div>
-                                        <div class="row mt-4">
-                                            <div class="col-lg-12 text-center">
-                                                <a href="/addAddress" class="btn btn-primary" 
-                                                    style="font-size: 16px; text-transform: uppercase;">Add New
-                                                    Address</a>
-                                            </div>
-                                        </div>
-                                    </div>  -->
-
-
-
-
-                                    <!-- <div class="tab-pane fade" id="account-detail" role="tabpanel"
-                                        aria-labelledby="change-tab">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5>Account Details</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>Already have an account? <a href="page-login-register.html">Log in
-                                                        instead!</a></p>
-                                                <form method="post" name="enq">
-                                                    <div class="row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>First Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="name"
-                                                                type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Last Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="phone">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Display Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="dname"
-                                                                type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Email Address <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="email"
-                                                                type="email">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Current Password <span
-                                                                    class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="password" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>New Password <span class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="npassword" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Confirm Password <span
-                                                                    class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="cpassword" type="password">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-fill-out submit"
-                                                                name="submit" value="Submit">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-
-
-
-
-
-                                    <!-- <div class="tab-pane fade" id="account-detail" role="tabpanel"
-                                        aria-labelledby="account-detail-tab">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5>Account Details</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>Already have an account? <a href="page-login-register.html">Log in
-                                                        instead!</a></p>
-                                                <form method="post" name="enq">
-                                                    <div class="row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>First Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="name"
-                                                                type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Last Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="phone">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Display Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="dname"
-                                                                type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Email Address <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="email"
-                                                                type="email">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Current Password <span
-                                                                    class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="password" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>New Password <span class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="npassword" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Confirm Password <span
-                                                                    class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="cpassword" type="password">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-fill-out submit"
-                                                                name="submit" value="Submit">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-
-
+                                            </form>
+                                            
+                                            
+                                            
                                 </div>
                             </div>
                         </div>
@@ -906,6 +757,182 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
+
+<script>
+
+
+document.getElementById("sub").addEventListener("submit",(e)=>{
+    nameValidate()
+    mobValidate()
+    pinValidate()
+    cityValidate()
+    addressValidate()
+    distValidate()
+    stateValidate()
+
+   const nameErr= document.getElementById("nameErr").innerHTML
+   const stateErr=  document.getElementById("stateErr").innerHTML
+   const distErr= document.getElementById("distErr").innerHTML
+   const addresErr= document.getElementById("addreErr").innerHTML
+   const cityErr= document.getElementById("cityErr").innerHTML
+   const pinErr= document.getElementById("pinErr").innerHTML
+   const mobErr= document.getElementById("mobErr").innerHTML
+
+
+   if(nameErr||mobErr||pinErr||cityErr||addresErr||distErr||stateErr){
+
+    e.preventDefault()
+   }
+        
+
+    })
+
+
+
+
+
+
+function nameValidate(){
+    const name=document.getElementById("name").value
+
+ 
+
+    if(name.trim()==''){
+        document.getElementById("nameErr").innerHTML="Name is Require"
+      
+    }else{
+        setTimeout(()=>{
+            document.getElementById("nameErr").innerHTML=""
+        },1000)
+    }
+        
+}
+
+   function mobValidate(){
+    const mob=document.getElementById("mob").value
+    
+    
+    if(mob.trim()==''){
+        document.getElementById("mobErr").innerHTML="Mobile is require"
+
+    }else if(mob.trim().length!==10){
+        document.getElementById("mobErr").innerHTML="Mobile Must Be 10 Digits"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("mobErr").innerHTML=""
+        },1000)
+    }
+
+   }
+
+
+   function pinValidate(){
+    const pin=document.getElementById("pin").value
+   
+    
+    if(pin.trim()==''){
+        document.getElementById("pinErr").innerHTML="Pin Code is require"
+
+    }else if(!pin.length==6){
+        document.getElementById("pinErr").innerHTML="Pin code Must Be 6 Digits"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("pinErr").innerHTML=""
+        },1000)
+    }
+
+   }
+  
+
+   function cityValidate(){
+    const city=document.getElementById("city").value
+
+    
+
+    if(name.trim()==''){
+        document.getElementById("cityErr").innerHTML="City is Require"
+      
+    }else{
+        setTimeout(()=>{
+            document.getElementById("nameErr").innerHTML=""
+        },1000)
+    }
+
+   }
+
+
+   function addressValidate(){
+    const address=document.getElementById("address").value
+    if(address.trim()==''){
+        document.getElementById("addreErr").innerHTML="Address is Require"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("addreErr").innerHTML=""
+        },1000)
+    }
+
+   }
+
+   function distValidate(){
+
+    const dist=document.getElementById("dist").value
+
+    if(dist.trim()==''){
+        document.getElementById("distErr").innerHTML="District is require"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("distErr").innerHTML=""
+        },1000)
+        
+    }
+
+   }
+
+   function stateValidate(){
+    const state=document.getElementById("state").value
+
+    if(state.trim()==''){
+        document.getElementById("stateErr").innerHTML="State is Require"
+    }else{
+        setTimeout(()=>{
+            document.getElementById("stateErr").innerHTML=""
+        },1000)
+        
+    }
+   }
+
+   function validate(){
+    const state=document.getElementById("state").value
+    const name=document.getElementById("name").value
+    const mob=document.getElementById("mob").value
+    const pin=document.getElementById("pin").value
+    const city=document.getElementById("city").value
+    const address=document.getElementById("address").value
+    const dist=document.getElementById("dist").value
+    const alt=document.getElementById("alt").value
+
+
+      $.ajax({
+        url:"/address-edit",
+        method:"post",
+        data:{
+            dist,
+            alt,
+            address,
+            pin,
+            mob,
+            name,
+            state,
+            city        
+
+        }
+        
+      })
+   }
+
+
+</script>
+
 
 
 </html>

@@ -324,11 +324,13 @@ const loadForgotOTP = async (req, res) => {
 const loadDash = async (req, res) => {
   try {
     const userData = await User.findById({ _id: req.session.userId });
-    const address=await Product.find({}).populate("users")
-    console.log(address)
+    console.log(userData._id)
+     
+    // const address=await Adderss.find({userId:req.session.userId })
+    // console.log(address)
     
     // console.log(user)
-    res.render("userProfile", { userData ,address});
+    res.render("userProfile", { userData });
   } catch (error) {
     console.log(error.message);
   }
@@ -426,7 +428,11 @@ const loadAddaddress=async(req,res)=>{
 const addAddress=async(req,res)=>{
   try {
       // console.log(req.body)
+        console.log("inside add address")
+      console.log(req.session.email)
       const findUser=await User.findOne({email:req.session.email})
+
+      console.log(findUser)
       
       const {name,phone,pcode,city,address,district,state,landmark,alternate,address_type}=req.body
 
@@ -436,7 +442,7 @@ const addAddress=async(req,res)=>{
         mobile:phone,
         pinCode:pcode,
         city:city,
-        address:address,
+        address:address, 
         district:district,
         state:state,
         landmark:landmark,
@@ -446,12 +452,113 @@ const addAddress=async(req,res)=>{
 
       const addressData=await newAddress.save()
 
-      res.redirect("/dashboard")
+      res.redirect("/address")
 
   } catch (error) {
     console.log(error.message)
   }
 }
+
+const deletAddress=async(req,res)=>{
+  try {
+     const id=req.query.id
+
+    const dele=await Adderss.findByIdAndDelete({_id:id})
+
+    res.redirect("/address")
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+const loadEditAddress=async(req,res)=>{
+  try {
+    const id=req.query.id
+     
+    const DataAddre=await Adderss.findById({_id:id})
+
+    
+      res.render("editAddress",{DataAddre})
+    
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
+
+const editAddress=async(req,res)=>{
+  try {
+      
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+//************************************Dashbord pageLoad******************* */
+
+const loadOrder=async(req,res)=>{
+  try {
+    res.render("Order")
+  } catch (error) {
+
+    console.log(error.message)
+    
+  }
+}
+
+
+const loadTrack=async(req,res)=>{
+  try {
+    res.render("trackOrder")
+  } catch (error) {
+
+    console.log(error.message)
+    
+  }
+}
+
+
+
+const loadAddress=async(req,res)=>{
+  try {
+    console.log("hello");
+    console.log(req.session.email)
+    const address=await Adderss.find({userId:req.session.userId })
+    console.log(address)
+    res.render("adderss",{address})
+  } catch (error) {
+
+    console.log(error.message)
+    
+  }
+}
+
+
+const loadChangePass=async(req,res)=>{
+  try {
+    res.render("changePassword")
+  } catch (error) {
+
+    console.log(error.message)
+    
+  }
+}
+
+
+const loadAccount=async(req,res)=>{
+  try {
+    res.render("accountDetalis")
+  } catch (error) {
+
+    console.log(error.message)
+    
+  }
+}
+
+
 
 module.exports = {
   loadLanding,
@@ -471,5 +578,13 @@ module.exports = {
   PNF,
   resendOtp,
   loadAddaddress,
-  addAddress
+  addAddress,
+  deletAddress,
+  loadEditAddress,
+  loadOrder,
+  loadAccount,
+  loadAddress,
+  loadChangePass,
+  loadTrack,
+  
 };
