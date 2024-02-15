@@ -556,7 +556,6 @@ const loadAddress=async(req,res)=>{
     console.log(address)
     res.render("adderss",{address})
   } catch (error) {
-
     console.log(error.message)
     
   }
@@ -576,7 +575,9 @@ const loadChangePass=async(req,res)=>{
 
 const loadAccount=async(req,res)=>{
   try {
-    res.render("accountDetalis")
+    const findUser=await User.findOne({email:req.session.email})
+
+    res.render("accountDetalis",{findUser})
   } catch (error) {
 
     console.log(error.message)
@@ -626,6 +627,49 @@ const changePass=async(req,res)=>{
   }
 }
 
+const loadEditAccount=async(req,res)=>{
+  try {
+    console.log("hello"+req.session.email)
+    const userData=await User.findOne({email:req.session.email})
+
+    res.render("Editaccount",{userData})
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+const editAccount=async(req,res)=>{
+  try {
+
+     const{name,mobile,dom,gender}=req.body
+
+    //  const userData=await User.findOne({email:req.session.email})
+
+    // console.log(req.session.email)
+
+    const obj={
+      name:name,
+      mobile:mobile,
+      DOB:dom,
+      gender:gender
+    }
+       
+
+
+    const updateUser = await User.findOneAndUpdate({email:req.session.email},obj)
+    
+    
+
+     res.json({status:true})
+     
+
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
 
 module.exports = {
   loadLanding,
@@ -654,6 +698,8 @@ module.exports = {
   loadChangePass,
   loadTrack,
   editAddress,
-  changePass
+  changePass,
+  loadEditAccount,
+  editAccount
   
 };

@@ -47,6 +47,11 @@ user_router.get('/change-pass',userAuth.isBlocked,userAuth.islogin,userControlle
 user_router.get('/account-detail',userAuth.isBlocked,userAuth.islogin,userController.loadAccount) 
 
 user_router.post("/change-pass",userAuth.isBlocked,userAuth.islogin ,userController.changePass)
+
+
+user_router.get("/account-edit",userAuth.isBlocked,userAuth.islogin,userController.loadEditAccount)
+
+user_router.post("/account-edit",userController.editAccount) 
   
 
 

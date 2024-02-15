@@ -17,6 +17,14 @@ const userSchema=new mongoose.Schema({
         type:String,
         require:true
     },
+    DOB:{
+        type:String
+       
+    },
+    gender:{
+        type:String
+       
+    },
     is_verified:{
         type:Number,
         default:0
