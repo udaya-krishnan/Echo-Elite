@@ -6,6 +6,7 @@ user_router.set('view engine','ejs')
 user_router.set('views','./views/user')
 
 const userController=require("../controller/userController")
+const cartController=require("../controller/cartController")
 
 const userAuth=require("../middleware/auth")
 
@@ -52,9 +53,23 @@ user_router.post("/change-pass",userAuth.isBlocked,userAuth.islogin ,userControl
 user_router.get("/account-edit",userAuth.isBlocked,userAuth.islogin,userController.loadEditAccount)
 
 user_router.post("/account-edit",userController.editAccount) 
-  
 
 
+
+//*******************************************************CART***************************88 */
+
+
+  user_router.post("/addCatLoad",userAuth.isBlocked,userAuth.islogin,cartController.loadCart)
+
+  user_router.get("/cart",userAuth.isBlocked,userAuth.islogin,cartController.loadCartpage)
+
+  user_router.post("/cartadd",userAuth.isBlocked,userAuth.islogin,cartController.addCart)
+
+  user_router.post("/decrement",userAuth.islogin,userAuth.isBlocked,cartController.decrement)
+
+  user_router.get("/pro-del",userAuth.islogin,userAuth.isBlocked,cartController.removeCart)
+
+ 
 
 
 

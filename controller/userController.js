@@ -8,6 +8,7 @@ const Category = require("../model/categoryModel");
 const Product = require("../model/productModel");
 const Brand = require("../model/brandModel");
 const Adderss=require("../model/addressModel")
+const Cart=require("../model/cartModel")
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -344,7 +345,14 @@ const loadProduct = async (req, res) => {
 
     const fullData = await Product.find({});
 
-    res.render("product", { proData, fullData });
+    const cartData=await Cart.findOne({"items.productsId":id})
+    if(cartData){
+      res.render("product", { proData, fullData ,cartData});
+    }else{
+      res.render("product", { proData, fullData ,cartData});
+    }
+
+    
   } catch (error) {
     console.log(error.message);
   }

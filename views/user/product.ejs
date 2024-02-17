@@ -759,7 +759,7 @@
                                         </div>
                                         <div class="clearfix product-price-cover">
                                             <div class="product-price primary-color float-left">
-                                                <ins><span class="text-brand">₹<%= proData.offerPrice %></span></ins>
+                                                <ins><span id="offerPrice" class="text-brand">₹<%= proData.offerPrice %></span></ins>
                                                 <ins><span class="old-price font-md ml-15">₹<%= proData.regularPrice %></span></ins>
                                                 <span class="save-price  font-md color3 ml-15"><%= proData.offPercentage %>%</span>
                                             </div>
@@ -784,7 +784,16 @@
                                         <div class="detail-extralink">
                                            
                                             <div class="product-extra-link2">
-                                                <button type="submit" class="button button-add-to-cart">Add to cart</button>
+                                                <!-- <a href="/admin/addProduct" class="btn btn-primary btn-sm rounded">Add to cart</a> -->
+                                                <input type="hidden" id="proId" name="user_id" value="<%=proData._id %>">
+                                                <% if (cartData) { %>
+                                                    <button type="submit" onclick="addCart()"  class="button button-add-to-cart">View Cart</button>
+                                                <% }else{ %>
+                                                    <button type="submit" onclick="addCart()"  class="button button-add-to-cart">Add to cart</button>
+                                             <% }%>
+                                               
+                                                
+                                              
                                                 <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="far fa-heart"></i></a>
                                                 <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="far fa-exchange-alt"></i></a>
                                             </div>
@@ -1263,6 +1272,41 @@
     <!-- Template  JS -->
     <script src="assets/js/main.js"></script>
     <script src="assets/js/shop.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
+
+<script>
+    
+   function addCart(){
+  const id=document.getElementById("proId").value
+  const proPrice=document.getElementById("offerPrice").innerHTML
+
+  alert(proPrice)
+
+ 
+
+//   alert(id)
+
+    $.ajax({
+        url:"/addCatLoad",
+        method:"post",
+        data:{
+            id,
+            proPrice
+        },
+        success:(response)=>{
+            if(response.status==true){
+                window.location.href = "http://localhost:2003/cart"
+            }else if(response.status=="viewCart"){
+                window.location.href = "http://localhost:2003/cart"
+            }
+        }
+
+       })
+
+   }
+</script>
 
 </html>
