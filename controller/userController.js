@@ -343,6 +343,8 @@ const loadProduct = async (req, res) => {
 
     const proData = await Product.findById({ _id: id });
 
+    if(proData){
+
     const fullData = await Product.find({});
 
     const cartData=await Cart.findOne({"items.productsId":id})
@@ -351,6 +353,9 @@ const loadProduct = async (req, res) => {
     }else{
       res.render("product", { proData, fullData ,cartData});
     }
+  }else{
+    res.redirect("/404")
+  }
 
     
   } catch (error) {
@@ -679,6 +684,20 @@ const editAccount=async(req,res)=>{
 
 
 
+const loadShop=async(req,res)=>{
+  try {
+
+    const proData=await Product.find({})
+
+  
+
+    res.render("shop",{proData})
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
 module.exports = {
   loadLanding,
   loadRegister,
@@ -708,6 +727,7 @@ module.exports = {
   editAddress,
   changePass,
   loadEditAccount,
-  editAccount
+  editAccount,
+  loadShop
   
 };

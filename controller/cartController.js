@@ -171,7 +171,6 @@ const removeCart=async(req,res)=>{
         const id=req.body.id
         const sbt=req.body.sbt
         
-
         
         const delePro=await Cart.findOneAndUpdate({userId:req.session.userId},{
             $pull:{ items:{productsId:id}},
