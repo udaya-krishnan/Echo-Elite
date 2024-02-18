@@ -67,7 +67,7 @@ user_router.post("/account-edit",userController.editAccount)
 
   user_router.post("/decrement",userAuth.islogin,userAuth.isBlocked,cartController.decrement)
 
-  user_router.get("/pro-del",userAuth.islogin,userAuth.isBlocked,cartController.removeCart)
+  user_router.post("/pro-del",userAuth.islogin,userAuth.isBlocked,cartController.removeCart)
 
  
 

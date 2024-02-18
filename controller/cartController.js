@@ -97,13 +97,22 @@ const loadCartpage = async (req, res) => {
 const addCart=async(req,res)=>{
     try {
         // console.log(req.body);
-       const {price,proId,index,subTotal,quantity}= req.body
+       const {price,proId,index,subTotal,qty}= req.body
         //  console.log(req.session.userId)
         //  console.log("hello             "+proId);
-
+        const quantity=parseInt(qty)
+        console.log(quantity)
           const proIdString=proId.toString()
-        //   console.log(proIdString)
-    
+
+          const proData=await Product.findById({_id:proIdString})
+
+          console.log(proData);
+
+           const stock=proData.stock
+
+          if(stock>quantity){
+            
+      if(quantity<10){
        const addPrice=await Cart.findOneAndUpdate({userId:req.session.userId,"items.productsId":proIdString},
        {
         $inc:{"items.$.price":price,"items.$.quantity":1,"items.$.subTotal":price,"total":price}
@@ -113,6 +122,14 @@ const addCart=async(req,res)=>{
 
     
        res.json({status:true,total:findCart.total})
+    }else{
+        res.json({status:"minimum"})
+    }
+  }else{
+
+    console.log("out os stocccccccccccck");
+    res.json({status:"stock"})
+  }
 
       
     } catch (error) {
@@ -122,9 +139,14 @@ const addCart=async(req,res)=>{
 
 const decrement=async(req,res)=>{
     try {
-        const {price,proId,index,subTotal,quantity}= req.body
+        const {price,proId,index,subTotal,qty}= req.body
         const proIdString=proId.toString()
+        const quantity=parseInt(qty)
 
+        
+        
+
+        if(quantity>1){
         const addPrice=await Cart.findOneAndUpdate({userId:req.session.userId,"items.productsId":proIdString},
        {
         $inc:{"items.$.price":-price,"items.$.quantity":-1,"items.$.subTotal":-price,"total":-price}
@@ -133,6 +155,9 @@ const decrement=async(req,res)=>{
        const findCart=await Cart.findOne({userId:req.session.userId})
 
        res.json({status:true,total:findCart.total})
+    }else{
+        res.json({status:"minimum"})
+    }
 
         
     } catch (error) {
@@ -144,10 +169,18 @@ const decrement=async(req,res)=>{
 const removeCart=async(req,res)=>{
     try {
         const id=req.body.id
-
-        const delePro=await Cart.findOneAndDelete
+        const sbt=req.body.sbt
         
-        console.log(id)
+
+        
+        const delePro=await Cart.findOneAndUpdate({userId:req.session.userId},{
+            $pull:{ items:{productsId:id}},
+            $inc:{"total":-sbt}
+        })
+        const findPro=await Cart.findOne({userId:req.session.userId})
+
+          res.json({status:true,total:findPro.total})
+        // console.log(id)
     } catch (error) {
         console.log(error.message)
     }

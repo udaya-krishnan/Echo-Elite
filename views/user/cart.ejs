@@ -778,8 +778,9 @@
                                                         <%= cartData.items[i].subTotal %>
                                                     </span>
                                                 </td>
-                                                <td class="action" data-title="Remove"><a onclick="remove('<%=proData[i]._id%>')" class="text-muted"><i
-                                                            class="fa fa-trash-alt"></i></a></td>
+                                                <td class="action" data-title="Remove"><a
+                                                        onclick="remove('<%=proData[i]._id%>','<%= i %>')"
+                                                        class="text-muted"><i class="fa fa-trash-alt"></i></a></td>
                                             </tr>
 
 
@@ -1339,12 +1340,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 <script>
     function increment(proId, quantity, index, price, subtotal) {
 
+
         const qty = document.getElementById("quantity" + index).innerHTML
+
+        // alert(qty)
 
         // alert(qty)
         const sbt = document.getElementById("subtotal" + index).innerHTML
@@ -1362,7 +1367,7 @@
             data: {
                 price,
                 proId,
-                quantity,
+                qty,
                 subtotal,
 
             },
@@ -1374,6 +1379,24 @@
 
                     document.getElementById("cartSub").innerHTML = response.total
                     document.getElementById("total").innerHTML = response.total
+
+                } else if (response.status == "minimum") {
+                    Swal.fire({
+                        icon: "error",
+                        // title: "Oops...",
+                        text: "We're sorry! Only 10 unit(s) allowed in each order!",
+
+                    });
+
+                } else if (response.status == "stock") {
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Out of Stock!",
+
+                    })
+
 
                 }
             }
@@ -1397,7 +1420,7 @@
             method: "post",
             data: {
                 proId,
-                quantity,
+                qty,
                 index,
                 price,
                 subtotal
@@ -1405,11 +1428,22 @@
             success: (response) => {
                 if (response.status == true) {
 
-                    document.getElementById("subtotal" + index).innerHTML = parseInt(sbt)-parseInt(prc)  
+                    document.getElementById("subtotal" + index).innerHTML = parseInt(sbt) - parseInt(prc)
                     document.getElementById("quantity" + index).innerHTML = parseInt(qty) - 1
 
                     document.getElementById("cartSub").innerHTML = response.total
                     document.getElementById("total").innerHTML = response.total
+
+
+                } else if (response.status == "minimum") {
+
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Minimum Quantity!",
+
+                    });
 
                 }
             }
@@ -1420,9 +1454,27 @@
 
 
 
-    function remove(id){
+    function remove(id, index) {
+
+        // alert(id)
+        const sbt = document.getElementById("subtotal" + index).innerHTML
+        // alert(sbt)
         $.ajax({
-            url:"/pro-del"
+            url: "/pro-del",
+            method: "post",
+            data: {
+                id,
+                sbt
+            },
+            success: (response) => {
+                if (response.status == true) {
+
+                    window.location.href = "http://localhost:2003/cart"
+
+                    document.getElementById("total").innerHTML = response.total
+
+                }
+            }
         })
     }
 

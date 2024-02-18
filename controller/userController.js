@@ -300,7 +300,7 @@ const loadHome = async (req, res) => {
   try {
     const catData = await Category.find({});
 
-    const proData = await Product.find({});
+    const proData = await Product.find({stock:{$gt:0}});
 
     const brandData = await Brand.find({});
 
