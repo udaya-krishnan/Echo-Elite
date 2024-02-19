@@ -446,7 +446,7 @@ const addAddress=async(req,res)=>{
       const findUser=await User.findOne({email:req.session.email})
 
       console.log(findUser)
-      
+       
       const {name,phone,pcode,city,address,district,state,landmark,alternate,address_type}=req.body
 
       const newAddress=new Adderss({

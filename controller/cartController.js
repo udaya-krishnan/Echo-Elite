@@ -87,6 +87,8 @@ const loadCartpage = async (req, res) => {
         
     }
 
+    console.log(proData)
+
 
     res.render("cart",{proData,cartData});
   } catch (error) {
