@@ -746,74 +746,77 @@
                                                     value="<%=proData[i]._id %>">
                                                 <td class="image product-thumbnail"><img
                                                         src="/productImages/<%= proData[i].image[1] %>" alt="#">
-                                                    
-                                                    
-                                                        <% if (proData[i].stock<cartData.items[i].quantity) { %>
 
-                                                            <p class="text-warning" >We're sorry! Only <%= proData[i].stock %> unit(s) are Available !</p>                                                         
+
+                                                    <% if (proData[i].stock<cartData.items[i].quantity) { %>
+
+                                                        <p class="text-warning" id="onlyStock">We're sorry! Only <%=
+                                                                proData[i].stock %> unit(s) are Available !</p>
                                                         <% } %>
-                                                    
+
+                                                </td>
+
+
+                                                <% if (proData[i].stock==0) { %>
+                                                    <td>
+                                                        <p class="text-danger" id="ots">Out fo Stock</p>
                                                     </td>
 
-                                                        
-                                                         <% if (proData[i].stock==0) { %>
-                                                            <td>
-                                                                <p class="text-danger" >Out fo Stock</p>  
-                                                            </td>
-                                                             
-                                                          
-                                                         <% }else{ %>
 
-                                                            <td class="product-des product-name">
-                                                                <p class="product-name"><a href="/showproduct?id=<%= proData[i]._id %>">
-                                                                        <%= proData[i].name %>
-                                                                    </a></p>
-                                                                <p class="font-xs">
-                                                                    <%= proData[i].discripiton %><br>
-                                                                </p>
-                                                            </td>
-                                                            <td class="price" data-title="Price">₹<span id="price<%=i%>">
+                                                    <% }else{ %>
+
+                                                        <td class="product-des product-name">
+                                                            <p class="product-name"><a
+                                                                    href="/showproduct?id=<%= proData[i]._id %>">
+                                                                    <%= proData[i].name %>
+                                                                </a></p>
+                                                            <p class="font-xs">
+                                                                <%= proData[i].discripiton %><br>
+                                                            </p>
+                                                        </td>
+                                                        <td class="price" data-title="Price">₹<span id="price<%=i%>">
                                                                 <%= proData[i].offerPrice %>
                                                             </span></td>
-                                                            <td class="text-center" data-title="Stock">
-                                                                <button
-                                                                    onclick="increment('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
-                                                                    style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">+</button>
-                                                                <div class="detail-qty border radius  m-auto">
-            
-                                                                    <span id="quantity<%=i%>">
-                                                                        <%= cartData.items[i].quantity %>
-                                                                    </span>
-            
-            
-                                                                </div>
-                                                                <button
-                                                                    onclick="decrement('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
-                                                                    style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">-</button>
-                                                            </td>
-                                                            <td class="text-right" data-title="Cart">₹
-                                                                <span id="subtotal<%=i%>">
-                                                                    <%= cartData.items[i].subTotal %>
+                                                        <td class="text-center" data-title="Stock">
+                                                            <button
+                                                                onclick="increment('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
+                                                                style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">+</button>
+                                                            <div class="detail-qty border radius  m-auto">
+
+                                                                <span id="quantity<%=i%>">
+                                                                    <%= cartData.items[i].quantity %>
                                                                 </span>
-                                                            </td>
-                                                            
+
+
+                                                            </div>
+                                                            <button
+                                                                onclick="decrement('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
+                                                                style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">-</button>
+                                                        </td>
+                                                        <td class="text-right" data-title="Cart">₹
+                                                            <span id="subtotal<%=i%>">
+                                                                <%= cartData.items[i].subTotal %>
+                                                            </span>
+                                                        </td>
 
 
 
 
 
-                                                            <% } %>
+
+                                                        <% } %>
 
                                                             <td class="action" data-title="Remove"><a
-                                                                onclick="remove('<%=proData[i]._id%>','<%= i %>')"
-                                                                class="text-muted"><i class="fa fa-trash-alt"></i></a></td>
+                                                                    onclick="remove('<%=proData[i]._id%>','<%= i %>')"
+                                                                    class="text-muted"><i
+                                                                        class="fa fa-trash-alt"></i></a></td>
 
 
-                                               
-                                               
-                                              
-                                                
-                                               
+
+
+
+
+
                                             </tr>
 
 
@@ -823,7 +826,7 @@
                                                 <% }else{ %>
 
                                                     <tr>
-                                                        <td colspan="6">Product Not Found</td>
+                                                        <td colspan="6" id="noPro">Product Not Found</td>
                                                     </tr>
 
 
@@ -879,7 +882,8 @@
                         </div>
                         <div class="cart-action text-end">
                             <a class="btn btn-rounded mr-10"><i class="far fa-retweet mr-5"></i>Update Cart</a>
-                            <a href="/shop" class="btn btn-rounded"><i class="far fa-cart-plus mr-5"></i>Continue Shopping</a>
+                            <a href="/shop" class="btn btn-rounded"><i class="far fa-cart-plus mr-5"></i>Continue
+                                Shopping</a>
                         </div>
                         <div class="divider center_icon mt-50 mb-50"><i class="fa fa-gem"></i></div>
                         <div class="row mb-50">
@@ -1211,7 +1215,8 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <a href="/checkOut" class="btn btn-rounded"> <i class="fa fa-share-square mr-10"></i>
+                                    <a onclick="checkOut()" class="btn btn-rounded"> <i
+                                            class="fa fa-share-square mr-10"></i>
                                         Proceed To CheckOut</a>
                                 </div>
                             </div>
@@ -1535,6 +1540,37 @@
 
 
 
+
+    }
+
+
+    function checkOut() {
+
+      
+
+        const noPro = document.getElementById("noPro")
+        alert("1")
+       
+        const ots = document.getElementById("ots")
+        alert("2")
+        const onlyStock = document.getElementById("onlyStock")
+        alert(onlyStock)
+     
+
+
+        if (noPro.innerHTML || onlyStock.innerHTML || ots.innerHTML) {
+
+            alert("kdhdfhk")
+
+            Swal.fire({
+                title: "The Internet?",
+                text: "That thing is still around?",
+                icon: "warning"
+            });
+
+        }else{
+            location.href="/checkOut"
+        }
 
     }
 
