@@ -740,6 +740,7 @@
                                 <tbody>
                                     <% if (proData.length>0) { %>
 
+
                                         <% for( let i=0; i < proData.length; i++ ) { %>
                                             <tr>
                                                 <input type="hidden" id="proId" name="user_id"
@@ -772,7 +773,7 @@
                                                                 </a></p>
                                                             <p class="font-xs">
                                                                 <%= proData[i].discripiton %><br>
-                                                            </p>
+                                                            </p> 
                                                         </td>
                                                         <td class="price" data-title="Price">₹<span id="price<%=i%>">
                                                                 <%= proData[i].offerPrice %>
@@ -1090,7 +1091,7 @@
                                                     <option value="SM">San Marino</option>
                                                     <option value="SA">Saudi Arabia</option>
                                                     <option value="SN">Senegal</option>
-                                                    <option value="RS">Serbia</option>
+                                                     <option value="RS">Serbia</option>
                                                     <option value="SC">Seychelles</option>
                                                     <option value="SL">Sierra Leone</option>
                                                     <option value="SG">Singapore</option>
@@ -1548,29 +1549,26 @@
 
       
 
-        const noPro = document.getElementById("noPro")
-        alert("1")
-       
-        const ots = document.getElementById("ots")
-        alert("2")
-        const onlyStock = document.getElementById("onlyStock")
-        alert(onlyStock)
-     
+       $.ajax({
+        url:"/checkOut",
+        method:"get",
+        success:(response)=>{
+            if(response.status==="checked"){
 
+                Swal.fire({
+                        icon: "warning",
+                        title: "Oops...",
+                        text: "check your Cart!",
 
-        if (noPro.innerHTML || onlyStock.innerHTML || ots.innerHTML) {
+                    });
 
-            alert("kdhdfhk")
-
-            Swal.fire({
-                title: "The Internet?",
-                text: "That thing is still around?",
-                icon: "warning"
-            });
-
-        }else{
-            location.href="/checkOut"
+            }else if(response.status==true){
+                alert("hello")
+                location.href="/checkOutPage"
+            }
         }
+
+       })
 
     }
 

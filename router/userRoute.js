@@ -90,6 +90,8 @@ user_router.post("/account-edit",userController.editAccount)
 
   user_router.get("/checkOut",userAuth.islogin,userAuth.isBlocked,cartController.loadCheckOut)
 
+  user_router.get("/checkOutPage",userAuth.isBlocked,userAuth.islogin,cartController.loadCheckOutPage)
+
  
 
 

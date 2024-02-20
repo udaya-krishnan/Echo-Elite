@@ -1,6 +1,7 @@
 const Cart = require("../model/cartModel");
 const User = require("../model/userModel");
 const Product = require("../model/productModel");
+const Address=require("../model/addressModel")
 
 const loadCart = async (req, res) => {
   try {
@@ -190,9 +191,80 @@ const removeCart=async(req,res)=>{
 
 const loadCheckOut=async(req,res)=>{
   try {
-    res.render("checkOut")
+      
+    const userData=await User.findOne({email:req.session.email})
+
+    const cartData=await Cart.findOne({userId:userData._id})
+    const quantity=[]
+
+    for(let i=0;i<cartData.items.length;i++){
+
+      quantity.push(cartData.items[i].quantity)
+    }
+
+    const proId=[]
+    for(let i=0;i<cartData.items.length;i++){
+
+      proId.push(cartData.items[i].productsId)
+    }
+    const proData=[]
+
+    for(let i=0;i<proId.length;i++){
+
+      proData.push(await Product.findById({_id:proId[i]}))
+    }
+
+
+    for(let i=0;i<proData.length;i++){
+      for(let j=0;j<quantity.length;j++){
+        if(proData[i].stock<quantity[i]){
+          res.json({status:"checked"})
+        }
+      }
+    }
+
+    res.json({status:true})
+  
+
+
   } catch (error) {
     console.log(error.message)
+  }
+}
+
+
+const loadCheckOutPage=async(req,res)=>{
+  try {
+    const userData=await User.findOne({email:req.session.email})
+
+    const cartData=await Cart.findOne({userId:userData._id})
+    const proId=[]
+
+    for(let i=0;i<cartData.items.length;i++){
+      proId.push(cartData.items[i].productsId)
+    }
+
+    const proData=[]
+
+    for(let i=0;i<proId.length;i++){
+      proData.push(await Product.findById({_id:proId[i]}))
+    }
+
+    console.log(proData)
+
+    const cartItems=cartData.items
+
+    const address=await Address.find({userId:userData._id})
+
+
+
+
+    res.render("checkOut",{proData,cartItems,cartData,address})
+
+    
+    
+  } catch (error) {
+    
   }
 }
 
@@ -202,5 +274,6 @@ module.exports = {
   addCart,
   decrement,
   removeCart,
-  loadCheckOut
+  loadCheckOut,
+  loadCheckOutPage
 };

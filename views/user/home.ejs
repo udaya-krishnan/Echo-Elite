@@ -990,9 +990,9 @@
                                                     <span class="old-price">₹<%= proData[i].regularPrice %></span>
                                                 </div>
                                                 <div class="product-action-1 show">
-                                                    <input type="hidden" id="proId" value="<%= proData[i]._id %>">
+                                                    <input type="hidden" id="proId<%=i%>" value="<%= proData[i]._id %>">
                                                     <a aria-label="Add To Cart" class="action-btn hover-up"
-                                                        onclick="addCart()"><i class="far fa-shopping-bag"></i></a>
+                                                        onclick="addCart('<%=i%>')"><i class="far fa-shopping-bag"></i></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1210,8 +1210,8 @@
 
 
 <script>
-    function addCart() {
-        const id = document.getElementById("proId").value
+    function addCart(index) {
+        const id = document.getElementById("proId"+index).value
         const proPrice = document.getElementById("offerPrice").innerHTML
 
 
@@ -1220,7 +1220,7 @@
 
 
 
-        //   alert(id)
+          alert(id)
 
         $.ajax({
             url: "/addCatLoad",
