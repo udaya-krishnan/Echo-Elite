@@ -1,7 +1,7 @@
 const Cart = require("../model/cartModel");
 const User = require("../model/userModel");
 const Product = require("../model/productModel");
-const Address=require("../model/addressModel")
+const Address = require("../model/addressModel");
 
 const loadCart = async (req, res) => {
   try {
@@ -70,203 +70,199 @@ const loadCartpage = async (req, res) => {
     // const userData = req.
     const userData = await User.findOne({ email: email });
 
-    
-
-    const cartData = await Cart.findOne({userId:userData._id});
+    const cartData = await Cart.findOne({ userId: userData._id });
 
     // console.log(cartData)
 
-    const arr=[]
+    const arr = [];
 
-    for(let i=0;i<cartData.items.length;i++){
-        arr.push(cartData.items[i].productsId.toString())
+    for (let i = 0; i < cartData.items.length; i++) {
+      arr.push(cartData.items[i].productsId.toString());
     }
     // console.log(arr);
-    const proData=[]
-    for(let i=0;i<arr.length;i++){
-        proData.push(await Product.findById({_id:arr[i]}) )   
-        
+    const proData = [];
+    for (let i = 0; i < arr.length; i++) {
+      proData.push(await Product.findById({ _id: arr[i] }));
     }
 
-    console.log(proData)
+    console.log(proData);
 
-
-    res.render("cart",{proData,cartData});
+    res.render("cart", { proData, cartData });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-const addCart=async(req,res)=>{
-    try {
-        // console.log(req.body);
-       const {price,proId,index,subTotal,qty}= req.body
-        //  console.log(req.session.userId)
-        //  console.log("hello             "+proId);
-        const quantity=parseInt(qty)
-        console.log(quantity)
-          const proIdString=proId.toString()
-
-          const proData=await Product.findById({_id:proIdString})
-
-          console.log(proData);
-
-           const stock=proData.stock
-
-          if(stock>quantity){
-            
-      if(quantity<10){
-       const addPrice=await Cart.findOneAndUpdate({userId:req.session.userId,"items.productsId":proIdString},
-       {
-        $inc:{"items.$.price":price,"items.$.quantity":1,"items.$.subTotal":price,"total":price}
-       })
-
-       const findCart=await Cart.findOne({userId:req.session.userId})
-
-    
-       res.json({status:true,total:findCart.total})
-    }else{
-        res.json({status:"minimum"})
-    }
-  }else{
-
-    console.log("out os stocccccccccccck");
-    res.json({status:"stock"})
-  }
-
-      
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const decrement=async(req,res)=>{
-    try {
-        const {price,proId,index,subTotal,qty}= req.body
-        const proIdString=proId.toString()
-        const quantity=parseInt(qty)
-
-        
-        
-
-        if(quantity>1){
-        const addPrice=await Cart.findOneAndUpdate({userId:req.session.userId,"items.productsId":proIdString},
-       {
-        $inc:{"items.$.price":-price,"items.$.quantity":-1,"items.$.subTotal":-price,"total":-price}
-       })
-
-       const findCart=await Cart.findOne({userId:req.session.userId})
-
-       res.json({status:true,total:findCart.total})
-    }else{
-        res.json({status:"minimum"})
-    }
-
-        
-    } catch (error) {
-       console.log(error.message) 
-    }
-}
-
-
-const removeCart=async(req,res)=>{
-    try {
-        const id=req.body.id
-        const sbt=req.body.sbt
-        
-        
-        const delePro=await Cart.findOneAndUpdate({userId:req.session.userId},{
-            $pull:{ items:{productsId:id}},
-            $inc:{"total":-sbt}
-        })
-        const findPro=await Cart.findOne({userId:req.session.userId})
-
-          res.json({status:true,total:findPro.total})
-        // console.log(id)
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-
-
-const loadCheckOut=async(req,res)=>{
+const addCart = async (req, res) => {
   try {
-      
-    const userData=await User.findOne({email:req.session.email})
+    // console.log(req.body);
+    const { price, proId, index, subTotal, qty } = req.body;
+    //  console.log(req.session.userId)
+    //  console.log("hello             "+proId);
+    const quantity = parseInt(qty);
+    console.log(quantity);
+    const proIdString = proId.toString();
 
-    const cartData=await Cart.findOne({userId:userData._id})
-    const quantity=[]
+    const proData = await Product.findById({ _id: proIdString });
 
-    for(let i=0;i<cartData.items.length;i++){
+    console.log(proData);
 
-      quantity.push(cartData.items[i].quantity)
+    const stock = proData.stock;
+
+    if (stock > quantity) {
+      if (quantity < 10) {
+        const addPrice = await Cart.findOneAndUpdate(
+          { userId: req.session.userId, "items.productsId": proIdString },
+          {
+            $inc: {
+              "items.$.price": price,
+              "items.$.quantity": 1,
+              "items.$.subTotal": price,
+              total: price,
+            },
+          }
+        );
+
+        const findCart = await Cart.findOne({ userId: req.session.userId });
+
+        res.json({ status: true, total: findCart.total });
+      } else {
+        res.json({ status: "minimum" });
+      }
+    } else {
+      console.log("out os stocccccccccccck");
+      res.json({ status: "stock" });
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const decrement = async (req, res) => {
+  try {
+    const { price, proId, index, subTotal, qty } = req.body;
+    const proIdString = proId.toString();
+    const quantity = parseInt(qty);
+
+    if (quantity > 1) {
+      const addPrice = await Cart.findOneAndUpdate(
+        { userId: req.session.userId, "items.productsId": proIdString },
+        {
+          $inc: {
+            "items.$.price": -price,
+            "items.$.quantity": -1,
+            "items.$.subTotal": -price,
+            total: -price,
+          },
+        }
+      );
+
+      const findCart = await Cart.findOne({ userId: req.session.userId });
+
+      res.json({ status: true, total: findCart.total });
+    } else {
+      res.json({ status: "minimum" });
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const removeCart = async (req, res) => {
+  try {
+    const id = req.body.id;
+    const sbt = req.body.sbt;
+
+    const delePro = await Cart.findOneAndUpdate(
+      { userId: req.session.userId },
+      {
+        $pull: { items: { productsId: id } },
+        $inc: { total: -sbt },
+      }
+    );
+    const findPro = await Cart.findOne({ userId: req.session.userId });
+
+    res.json({ status: true, total: findPro.total });
+    // console.log(id)
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadCheckOut = async (req, res) => {
+  try {
+    const userData = await User.findOne({ email: req.session.email });
+
+    const cartData = await Cart.findOne({ userId: userData._id });
+    const quantity = [];
+
+    for (let i = 0; i < cartData.items.length; i++) {
+      quantity.push(cartData.items[i].quantity);
     }
 
-    const proId=[]
-    for(let i=0;i<cartData.items.length;i++){
-
-      proId.push(cartData.items[i].productsId)
+    const proId = [];
+    for (let i = 0; i < cartData.items.length; i++) {
+      proId.push(cartData.items[i].productsId);
     }
-    const proData=[]
+    const proData = [];
 
-    for(let i=0;i<proId.length;i++){
-
-      proData.push(await Product.findById({_id:proId[i]}))
+    for (let i = 0; i < proId.length; i++) {
+      proData.push(await Product.findById({ _id: proId[i] }));
     }
 
-
-    for(let i=0;i<proData.length;i++){
-      for(let j=0;j<quantity.length;j++){
-        if(proData[i].stock<quantity[i]){
-          res.json({status:"checked"})
+    for (let i = 0; i < proData.length; i++) {
+      for (let j = 0; j < quantity.length; j++) {
+        if (proData[i].stock < quantity[i]) {
+          res.json({ status: "checked" });
         }
       }
     }
 
-    res.json({status:true})
-  
-
-
+    res.json({ status: true });
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
-
-const loadCheckOutPage=async(req,res)=>{
+const loadCheckOutPage = async (req, res) => {
   try {
-    const userData=await User.findOne({email:req.session.email})
+    const userData = await User.findOne({ email: req.session.email });
 
-    const cartData=await Cart.findOne({userId:userData._id})
-    const proId=[]
+    const cartData = await Cart.findOne({ userId: userData._id });
+    
+    const proId = [];
 
-    for(let i=0;i<cartData.items.length;i++){
-      proId.push(cartData.items[i].productsId)
+    for (let i = 0; i < cartData.items.length; i++) {
+      proId.push(cartData.items[i].productsId);
     }
 
-    const proData=[]
+    const proData = [];
 
-    for(let i=0;i<proId.length;i++){
-      proData.push(await Product.findById({_id:proId[i]}))
+    for (let i = 0; i < proId.length; i++) {
+      proData.push(await Product.findById({ _id: proId[i] }));
     }
 
-    console.log(proData)
+    console.log(proData);
 
-    const cartItems=cartData.items
+    const cartItems = cartData.items;
 
-    const address=await Address.find({userId:userData._id})
+    const address = await Address.find({ userId: userData._id });
+
+    res.render("checkOut", { proData, cartItems, cartData, address });
+  } catch (error) {}
+};
+
+const addOrder = async (req, res) => {
+  try {
+    const { addressId, cartid, checkedOption } = req.body;
 
 
 
-
-    res.render("checkOut",{proData,cartItems,cartData,address})
-
-    
-    
+    res.json({ status: true });
   } catch (error) {
-    
+    console.log(error);
   }
-}
+};
 
 module.exports = {
   loadCart,
@@ -275,5 +271,5 @@ module.exports = {
   decrement,
   removeCart,
   loadCheckOut,
-  loadCheckOutPage
+  loadCheckOutPage,
 };
