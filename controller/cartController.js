@@ -2,6 +2,9 @@ const Cart = require("../model/cartModel");
 const User = require("../model/userModel");
 const Product = require("../model/productModel");
 const Address = require("../model/addressModel");
+const Order = require("../model/orderModel");
+const generateOrder = require("../controller/otpGenrate");
+const generateDate=require("../controller/dateGenrator")
 
 const loadCart = async (req, res) => {
   try {
@@ -71,23 +74,30 @@ const loadCartpage = async (req, res) => {
     const userData = await User.findOne({ email: email });
 
     const cartData = await Cart.findOne({ userId: userData._id });
+    const proData = [];
+
+    if (cartData) {
+
+      const arr = [];
+
+      for (let i = 0; i < cartData.items.length; i++) {
+        arr.push(cartData.items[i].productsId.toString());
+      }
+      // console.log(arr);
+    
+      for (let i = 0; i < arr.length; i++) {
+        proData.push(await Product.findById({ _id: arr[i] }));
+      }
+
+      console.log(proData);
+
+     
+    }
+
+    console.log(proData,cartData)
+    res.render("cart", { proData, cartData });
 
     // console.log(cartData)
-
-    const arr = [];
-
-    for (let i = 0; i < cartData.items.length; i++) {
-      arr.push(cartData.items[i].productsId.toString());
-    }
-    // console.log(arr);
-    const proData = [];
-    for (let i = 0; i < arr.length; i++) {
-      proData.push(await Product.findById({ _id: arr[i] }));
-    }
-
-    console.log(proData);
-
-    res.render("cart", { proData, cartData });
   } catch (error) {
     console.log(error.message);
   }
@@ -229,7 +239,7 @@ const loadCheckOutPage = async (req, res) => {
     const userData = await User.findOne({ email: req.session.email });
 
     const cartData = await Cart.findOne({ userId: userData._id });
-    
+
     const proId = [];
 
     for (let i = 0; i < cartData.items.length; i++) {
@@ -256,9 +266,45 @@ const addOrder = async (req, res) => {
   try {
     const { addressId, cartid, checkedOption } = req.body;
 
+    console.log(addressId, cartid, checkedOption);
 
+    const userData = await User.findOne({ email: req.session.email });
+
+    const cartData = await Cart.findOne({ userId: userData._id });
+
+    const proData = [];
+
+    for (let i = 0; i < cartData.items.length; i++) {
+      proData.push(cartData.items[i]);
+    }
+    console.log(proData);
+
+    const orderNum = generateOrder.generateOrder();
+    console.log(orderNum);
+
+    const addressData = await Address.findOne({ _id: addressId });
+
+    console.log(addressData);
+    const date=generateDate()
+
+    const orderData = new Order({
+      userId: userData._id,
+      orderNumber: orderNum,
+      items: proData,
+      totalAmount: cartData.total,
+      orderType: checkedOption,
+      orderDate:date,
+      status: "pending",
+      shippingAddress: addressData,
+    });
+
+    console.log(proData);
+
+    orderData.save();
 
     res.json({ status: true });
+
+    const deleteCart = await Cart.findByIdAndDelete({ _id: cartData._id });
   } catch (error) {
     console.log(error);
   }
@@ -272,4 +318,5 @@ module.exports = {
   removeCart,
   loadCheckOut,
   loadCheckOutPage,
+  addOrder,
 };

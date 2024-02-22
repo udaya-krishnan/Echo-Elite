@@ -789,20 +789,23 @@
                         </div> -->
                         <% for( let i=0; i < address.length; i++ ) { %>
                             <div class="col-lg-10">
-                                <div class="card mb-3 mb-lg-0" style="border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); padding-bottom: 20px; margin-left:25px;">
-                                    <div class="card-header" style="background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0;">
+                                <div class="card mb-3 mb-lg-0"
+                                    style="border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); padding-bottom: 20px; margin-left:25px;">
+                                    <div class="card-header"
+                                        style="background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0;">
                                         <h5 class="card-title mb-0" style="color: #333; font-weight: bold;">Address
                                             &nbsp;
-                                            <input required="" class="square" type="radio" id="address_<%= address[i]._id %>" 
-                                                name="address" value="<%= address[i]._id %>"
-                                                style="height: 15px; width: 15px;" onclick="handleAddressSelection(this)">
+                                            <input required="" class="square" type="radio"
+                                                id="address_<%= address[i]._id %>" name="address"
+                                                value="<%= address[i]._id %>" style="height: 15px; width: 15px;"
+                                                onclick="handleAddressSelection(this)">
                                         </h5>
                                     </div>
                                     <div class="card-body" style="padding: 20px;">
                                         <address class="mb-4" style="font-size: 16px; line-height: 1.5;">
                                             <%= address[i].address %><br>
-                                            <%= address[i].city %><br>
-                                            <%= address[i].district %>,<%= address[i].pinCode %>
+                                                <%= address[i].city %><br>
+                                                    <%= address[i].district %>,<%= address[i].pinCode %>
                                         </address>
                                         <p class="mb-4">
                                             <%= address[i].state %>
@@ -859,7 +862,7 @@
                                                     <th>Total</th>
                                                     <td colspan="2" class="product-subtotal"><span
                                                             class="font-xl text-brand fw-900">₹<%= cartData.total %>
-                                                                </span></td>
+                                                        </span></td>
                                                 </tr>
 
                                     </tbody>
@@ -875,34 +878,34 @@
                                         <input class="form-check-input" required="" type="radio" name="payment_option"
                                             id="exampleRadios3" checked="">
                                         <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse"
-                                            data-target="#bankTranfer" aria-controls="bankTranfer">Direct Bank
-                                            Transfer</label>
+                                            data-target="#bankTranfer" aria-controls="bankTranfer">Cash on Delivery 
+                                            </label>
                                         <div class="form-group collapse in" id="bankTranfer">
                                             <p class="text-muted mt-5">There are many variations of passages of Lorem
                                                 Ipsum available, but the majority have suffered alteration. </p>
                                         </div>
                                     </div>
-                                    <div class="custome-radio">
+                                    <!-- <div class="custome-radio">
                                         <input class="form-check-input" required="" type="radio" name="payment_option"
                                             id="exampleRadios4" checked="">
                                         <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
                                             data-target="#checkPayment" aria-controls="checkPayment">Check
-                                            Payment</label>
+                                            </label>
                                         <div class="form-group collapse in" id="checkPayment">
                                             <p class="text-muted mt-5">Please send your cheque to Store Name, Store
                                                 Street, Store Town, Store State / County, Store Postcode. </p>
                                         </div>
-                                    </div>
-                                    <div class="custome-radio">
+                                    </div> -->
+                                    <!-- <div class="custome-radio">
                                         <input class="form-check-input" required="" type="radio" name="payment_option"
                                             id="exampleRadios5" checked="">
                                         <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse"
-                                            data-target="#paypal" aria-controls="paypal">Paypal</label>
+                                            data-target="#paypal" aria-controls="paypal"></label>
                                         <div class="form-group collapse in" id="paypal">
                                             <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card
                                                 if you don't have a PayPal account.</p>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <a onclick="placeOrder('<%= cartData._id%>')" class="btn btn-fill-out btn-block mt-30">Place
@@ -1067,71 +1070,78 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 <script>
 
-   
+
     var paymentOptions = document.getElementsByName('payment_option');
 
-    
+
     var checkedOption = "";
 
-   
+
     for (var i = 0; i < paymentOptions.length; i++) {
-       
+
         if (paymentOptions[i].checked) {
-           
+
             checkedOption = document.querySelector('label[for="' + paymentOptions[i].id + '"]').innerText;
-            break; 
+            break;
         }
     }
-    
+
 
     let addressId;
 
 
     function handleAddressSelection(radioButton) {
         if (radioButton.checked) {
-             addressId = radioButton.value;
+            addressId = radioButton.value;
 
-            
-         
+
+
             // You can use the addressId here for further processing
         }
-        
+
     }
-    
 
 
 
-   
-  
+
+
+
 
 
     function placeOrder(cartid) {
-    //    alert(addressId)
-    //    alert(cartid)
-    //    alert(checkedOption)
+        //    alert(addressId)
+        //    alert(cartid)
+        //    alert(checkedOption)
 
-       $.ajax({
-        url:"/checkOutData",
-        method:"post",
-        data:{
-            addressId,
-            cartid,
-            checkedOption
-        },
-        success:(response)=>{
-            if(response.status===true){
-                window.location.href="/orderPage"
+        $.ajax({
+            url: "/checkOutData",
+            method: "post",
+            data: {
+                addressId,
+                cartid,
+                checkedOption
+            },
+            success: (response) => {
+                if (response.status === true) {
+                    Swal.fire({
+
+                        icon: "success",
+                        title: "Order Placed",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
             }
-        }
-       })
+        })
 
 
 
-        
+
 
 
 

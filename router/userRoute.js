@@ -92,6 +92,8 @@ user_router.post("/account-edit",userController.editAccount)
 
   user_router.get("/checkOutPage",userAuth.isBlocked,userAuth.islogin,cartController.loadCheckOutPage)
 
+  user_router.post("/checkOutData",userAuth.isBlocked,userAuth.islogin,cartController.addOrder)
+
  
 
 
