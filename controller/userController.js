@@ -10,6 +10,8 @@ const Brand = require("../model/brandModel");
 const Adderss=require("../model/addressModel")
 const Cart=require("../model/cartModel")
 
+const Order =require
+
 const Email = process.env.Email;
 const pass = process.env.Pass;
 
@@ -72,7 +74,7 @@ const insertUser = async (req, res) => {
     console.log(mobile);
 
     // res.redirect('/otp')
-    const otp = generateOTP();
+    const otp = generateOTP.generateOTP();
     console.log(otp);
     //     // console.log(otp);
     //      const {name,email,mobile,password,confirm}=req.body
@@ -255,7 +257,7 @@ const forgot = async (req, res) => {
     const Data = await User.findOne({ email: email });
     if (Data) {
       if (newPass == confirm) {
-        const otp = generateOTP();
+        const otp = generateOTP.generateOTP();
         console.log(otp);
 
         const data = {
@@ -376,7 +378,7 @@ const resendOtp = async (req, res) => {
     console.log("hello");
    
       const email = req.session.Data.email;
-      const resendOtpGen = generateOTP();
+      const resendOtpGen = generateOTP.generateOTP();
       req.session.Data.otp = resendOtpGen;
 
       const mailOptions = await {
@@ -540,6 +542,7 @@ const editAddress=async(req,res)=>{
 
 const loadOrder=async(req,res)=>{
   try {
+
     res.render("Order")
   } catch (error) {
 
