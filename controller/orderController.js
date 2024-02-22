@@ -70,8 +70,22 @@ const loadViewOrder=async(req,res)=>{
 
 
 
+ //*************************************************ADMIN SIDE********************** */
+
+
+ const loadOrder=async(req,res)=>{
+    try {
+        const orderData=await Order.find({})
+
+        res.render("adminOrder",{orderData})
+    } catch (error) {
+        console.log(error.message)
+    }
+ }
+
 
 module.exports={
     loadViewOrder,
-    cancelOrder
+    cancelOrder,
+    loadOrder
 }

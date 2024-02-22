@@ -202,6 +202,7 @@ const verifylogin = async (req, res) => {
         req.session.email = email;
         console.log("verify")
         const passwordMatch = await bcrypt.compare(password, userData.password);
+        console.log("passwordMatched");
         if (passwordMatch) {
           req.session.auth = true;
           req.session.userId = userData._id;
@@ -326,7 +327,8 @@ const loadForgotOTP = async (req, res) => {
 
 const loadDash = async (req, res) => {
   try {
-    const userData = await User.findById({ _id: req.session.userId });
+
+    const userData = await User.findOne({ email: req.session.email });
     console.log(userData._id)
      
     // const address=await Adderss.find({userId:req.session.userId })

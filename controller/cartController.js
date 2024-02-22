@@ -314,6 +314,7 @@ const addOrder = async (req, res) => {
 
     const orderData = new Order({
       userId: userData._id,
+      userEmail:userData.email,
       orderNumber: orderNum,
       items: proData,
       totalAmount: cartData.total,
