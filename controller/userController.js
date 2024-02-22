@@ -10,7 +10,7 @@ const Brand = require("../model/brandModel");
 const Adderss=require("../model/addressModel")
 const Cart=require("../model/cartModel")
 
-const Order =require
+const Order =require("../model/orderModel")
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -542,8 +542,13 @@ const editAddress=async(req,res)=>{
 
 const loadOrder=async(req,res)=>{
   try {
+    const userData=await User.findOne({email:req.session.email})
 
-    res.render("Order")
+  const orderData=await Order.find({userId:userData._id})
+
+  console.log(orderData)
+
+    res.render("Order",{orderData})
   } catch (error) {
 
     console.log(error.message)
