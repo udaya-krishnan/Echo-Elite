@@ -279,6 +279,31 @@ const addOrder = async (req, res) => {
     }
     console.log(proData);
 
+  const quantity=[]
+
+
+    for(let i=0;i<proData.length;i++){
+      quantity.push(proData[i].quantity)
+    }
+
+    const proId=[]
+    
+    for(let i=0;i<proData.length;i++){
+      proId.push(proData[i].productsId)
+    }
+
+    for(let i=0;i<proId.length;i++){
+
+      const product=await Product.findByIdAndUpdate({_id:proId[i]},
+        {
+          $inc:{
+            stock:-quantity[i]
+          }
+        })
+    }
+
+    console.log(" quantityyyyyyyyyyyyyyyyyy"+quantity)
+
     const orderNum = generateOrder.generateOrder();
     console.log(orderNum);
 
@@ -289,12 +314,13 @@ const addOrder = async (req, res) => {
 
     const orderData = new Order({
       userId: userData._id,
+      userEmail:userData.email,
       orderNumber: orderNum,
       items: proData,
       totalAmount: cartData.total,
       orderType: checkedOption,
       orderDate:date,
-      status: "pending",
+      status: "Processing",
       shippingAddress: addressData,
     });
 

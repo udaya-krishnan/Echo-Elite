@@ -10,7 +10,7 @@ const Brand = require("../model/brandModel");
 const Adderss=require("../model/addressModel")
 const Cart=require("../model/cartModel")
 
-const Order =require
+const Order =require("../model/orderModel")
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -202,6 +202,7 @@ const verifylogin = async (req, res) => {
         req.session.email = email;
         console.log("verify")
         const passwordMatch = await bcrypt.compare(password, userData.password);
+        console.log("passwordMatched");
         if (passwordMatch) {
           req.session.auth = true;
           req.session.userId = userData._id;
@@ -306,7 +307,9 @@ const loadHome = async (req, res) => {
 
     const brandData = await Brand.find({});
 
-    res.render("home", { catData, proData, brandData });
+    const newArrivals=await Product.find({}).sort({_id:-1}).limit(6)
+
+    res.render("home", { catData, proData, brandData,newArrivals });
   } catch (error) {
     console.log(error.massage);
   }
@@ -326,7 +329,8 @@ const loadForgotOTP = async (req, res) => {
 
 const loadDash = async (req, res) => {
   try {
-    const userData = await User.findById({ _id: req.session.userId });
+
+    const userData = await User.findOne({ email: req.session.email });
     console.log(userData._id)
      
     // const address=await Adderss.find({userId:req.session.userId })
@@ -542,8 +546,13 @@ const editAddress=async(req,res)=>{
 
 const loadOrder=async(req,res)=>{
   try {
+    const userData=await User.findOne({email:req.session.email})
 
-    res.render("Order")
+  const orderData=await Order.find({userId:userData._id})
+
+  console.log(orderData)
+
+    res.render("Order",{orderData})
   } catch (error) {
 
     console.log(error.message)
@@ -692,9 +701,12 @@ const loadShop=async(req,res)=>{
 
     const proData=await Product.find({})
 
-  
+    const catData=await Category.find({})
+    const newPro=await Product.find({}).sort({_id:-1}).limit(3)
+    const brandData= await Brand.find({})
 
-    res.render("shop",{proData})
+
+    res.render("shop",{proData,catData,newPro,brandData})
   } catch (error) {
     console.log(error.message)
   }

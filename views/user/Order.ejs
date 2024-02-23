@@ -532,27 +532,51 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td>#1357</td>
-                                                                <td>March 45, 2020</td>
-                                                                <td>Processing</td>
-                                                                <td>$125.00 for 2 item</td>
-                                                                <td><a href="#" class="btn-small d-block">View</a></td>
-                                                            </tr>
-                                                            <tr>
+                                                            <% if (orderData) { %>
+
+                                       
+
+                                                                <% for( let i = 0; i < orderData.length; i++ ) { %>
+                                                                    <tr>
+
+                                                                        <td>#<%= orderData[i].orderNumber %></td>
+                                                                        <td><%= orderData[i].orderDate %></td>
+                                                                        <td><%= orderData[i].status %></td>
+                                                                        <td>₹<%= orderData[i].totalAmount %> for <%= orderData[i].items.length %> item</td>
+                                                                        <td><a href="/orderView?id=<%= orderData[i]._id %>" class="btn-small d-block">View</a></td>
+                                                                    </tr>
+
+
+                                                                
+                                                                <% } %>
+                               
+                                                            <% }else{ %>
+
+                                                                <tr>
+                                                                    <td>No order Found</td>
+
+                                                                </tr>
+
+
+
+
+                                                                <% } %>
+                                                            
+                                                           
+                                                            <!-- <tr>
                                                                 <td>#2468</td>
                                                                 <td>June 29, 2020</td>
                                                                 <td>Completed</td>
                                                                 <td>$364.00 for 5 item</td>
                                                                 <td><a href="#" class="btn-small d-block">View</a></td>
-                                                            </tr>
-                                                            <tr>
+                                                            </tr> -->
+                                                            <!-- <tr>
                                                                 <td>#2366</td>
                                                                 <td>August 02, 2020</td>
                                                                 <td>Completed</td>
                                                                 <td>$280.00 for 3 item</td>
                                                                 <td><a href="#" class="btn-small d-block">View</a></td>
-                                                            </tr>
+                                                            </tr> -->
                                                         </tbody>
                                                     </table>
                                                 </div>

@@ -35,6 +35,7 @@ const CategoryControle = require("../controller/categoryController");
 const productControle = require("../controller/productController");
 const brandControle = require("../controller/brandController");
 const isAdmin = require("../middleware/adminAuth");
+const orderController=require("../controller/orderController")
 
 admin_route.get("/", adminController.adminLogin);
 admin_route.post("/login", adminController.verifyAdmin);
@@ -85,6 +86,8 @@ admin_route.get("/block-pro", isAdmin, productControle.blockPro);
 
 admin_route.get("/image-delete");
 
+// admin_route.get("/productDetails",isAdmin)
+
 /***************************************Brand Route**************************** */
 
 admin_route.get("/brand",isAdmin, brandControle.loadBrand);
@@ -93,5 +96,14 @@ admin_route.get("/add-brand",isAdmin, brandControle.loadAdd);
 admin_route.post("/add-brand",isAdmin, upload.single("image"), brandControle.addBrand);
 admin_route.get("/brand-list",isAdmin, brandControle.listBrand);
 admin_route.get("/brand-edit",isAdmin, brandControle.editload);
+
+
+
+//*************************************************Order Route***********************8 */
+ 
+
+admin_route.get("/order",isAdmin,orderController.loadOrder)
+admin_route.get("/order-Detail",isAdmin,orderController.loadOrderDetail)
+admin_route.post("/orderSave",isAdmin,orderController.saveOrder)
 
 module.exports = admin_route;
