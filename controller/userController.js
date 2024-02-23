@@ -307,7 +307,9 @@ const loadHome = async (req, res) => {
 
     const brandData = await Brand.find({});
 
-    res.render("home", { catData, proData, brandData });
+    const newArrivals=await Product.find({}).sort({_id:-1}).limit(6)
+
+    res.render("home", { catData, proData, brandData,newArrivals });
   } catch (error) {
     console.log(error.massage);
   }
@@ -699,9 +701,12 @@ const loadShop=async(req,res)=>{
 
     const proData=await Product.find({})
 
-  
+    const catData=await Category.find({})
+    const newPro=await Product.find({}).sort({_id:-1}).limit(3)
+    const brandData= await Brand.find({})
 
-    res.render("shop",{proData})
+
+    res.render("shop",{proData,catData,newPro,brandData})
   } catch (error) {
     console.log(error.message)
   }

@@ -199,12 +199,12 @@
                                         <tr>
                                             <td><%= orderData[i].orderNumber %></td>
                                             <td><b><%= orderData[i].shippingAddress.name %></b></td>
-                                            <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="97faf6e5e1fef9d7f2eff6fae7fbf2b9f4f8fa"><</a></td>
-                                            <td>$9.00</td>
-                                            <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                                            <td>03.12.2020</td>
+                                            <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="97faf6e5e1fef9d7f2eff6fae7fbf2b9f4f8fa"><%=orderData[i].userEmail%></a></td>
+                                            <td>₹<%=orderData[i].totalAmount %></td>
+                                            <td><span class="badge rounded-pill alert-warning"><%=orderData[i].status %></span></td>
+                                            <td><%=orderData[i].orderDate %></td>
                                             <td class="text-end">
-                                                <a href="#" class="btn btn-md rounded font-sm">Detail</a>
+                                                <a href="/admin/order-Detail?id=<%= orderData[i]._id %>" class="btn btn-md rounded font-sm">Detail</a>
                                                 <div class="dropdown">
                                                     <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                                     <div class="dropdown-menu">

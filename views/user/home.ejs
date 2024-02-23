@@ -879,7 +879,7 @@
                 </div>
             </div>
         </section>
-        <section class="popular-categories bg-grey-9 section-padding-60">
+        <!-- <section class="popular-categories bg-grey-9 section-padding-60">
             <div class="container wow fadeIn animated">
                 <h3 class="section-title mb-30"><span>Popular</span> Categories</h3>
                 <div class="carausel-6-columns-cover position-relative">
@@ -937,7 +937,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="product-tabs pt-40 pb-30 wow fadeIn animated">
             <div class="container">
@@ -1022,6 +1022,65 @@
                 <!--End tab-content-->
             </div>
         </section>
+
+
+        <section class="section-padding-60">
+            <div class="container wow fadeIn animated">
+                <h3 class="section-title style-1 mb-30">New Arrivals</h3>
+                <div class="carausel-6-columns-cover arrow-center position-relative">
+                    <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-2-arrows"></div>
+                    <div class="carausel-6-columns carausel-arrow-center" id="carausel-6-columns-2">
+
+
+                       
+                        <% for( let i = 0; i < newArrivals .length; i++ ) { %>
+
+                            <div class="product-cart-wrap small hover-up">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="/showproduct?id=<%= newArrivals[i]._id %>">
+                                            <img class="default-img" src="/productImages/<%= newArrivals[i].image[3] %>" alt="">
+                                            <img class="hover-img" src="/productImages/<%= newArrivals[i].image[4] %>" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Quick view" class="action-btn small hover-up" tabindex="0"><i class="far fa-search"></i></a>
+                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="far fa-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="far fa-exchange-alt"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="new">New</span>
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap">
+                                    <h2><a href="/showproduct?id=<%= newArrivals[i]._id %>"><%= newArrivals[i].name %></a></h2>
+                                    <div class="rating-result" title="90%">
+                                        <span>
+                                        </span>
+                                    </div>
+                                    <div class="product-price">
+                                        <span>₹<%= newArrivals[i].offerPrice %></span>
+                                        <span class="old-price">₹<%= newArrivals[i].regularPrice %></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        
+                        <% } %>
+
+                       
+                        <!--End product-cart-wrap-2-->
+                        
+                      
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
 
         <section class="section-padding-60">
             <div class="container">

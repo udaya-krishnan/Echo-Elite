@@ -8,7 +8,7 @@ user_router.set('views','./views/user')
 const userController=require("../controller/userController")
 const cartController=require("../controller/cartController")
 const orderController=require("../controller/orderController")
-
+const shopController=require("../controller/shopController")
 const userAuth=require("../middleware/auth")
 
 
@@ -84,6 +84,7 @@ user_router.post("/account-edit",userController.editAccount)
 
 
   user_router.get("/shop",userController.loadShop)
+  user_router.post("/categories",shopController.loadWithCatName)
 
 
   //***************************************************Ckeck Out************************ */

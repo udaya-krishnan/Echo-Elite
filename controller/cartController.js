@@ -320,7 +320,7 @@ const addOrder = async (req, res) => {
       totalAmount: cartData.total,
       orderType: checkedOption,
       orderDate:date,
-      status: "Ordered",
+      status: "Processing",
       shippingAddress: addressData,
     });
 

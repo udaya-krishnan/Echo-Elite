@@ -83,9 +83,33 @@ const loadViewOrder=async(req,res)=>{
     }
  }
 
+ const loadOrderDetail=async(req,res)=>{
+    try {
+        const id=req.query.id
+        const findOrder=await Order.findById({_id:id})
+
+        let proId=[];
+        for(let i=0;i<findOrder.items.length;i++){
+            proId.push(findOrder.items[i].productsId)
+        }
+
+        let proData=[]
+
+        for(let i=0;i<proId.length;i++){
+            proData.push(await Product.findById({_id:proId[i]}))
+        }
+
+
+        res.render("detailOrder",{findOrder,proData})
+    } catch (error) {
+        console.log(error.message)
+    }
+ }
+
 
 module.exports={
     loadViewOrder,
     cancelOrder,
-    loadOrder
+    loadOrder,
+    loadOrderDetail
 }

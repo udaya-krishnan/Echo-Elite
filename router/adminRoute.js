@@ -101,5 +101,6 @@ admin_route.get("/brand-edit",isAdmin, brandControle.editload);
 
 
 admin_route.get("/order",isAdmin,orderController.loadOrder)
+admin_route.get("/order-Detail",isAdmin,orderController.loadOrderDetail)
 
 module.exports = admin_route;

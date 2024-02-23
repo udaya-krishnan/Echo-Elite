@@ -867,25 +867,22 @@
                                 </div>
                                 <div class="">
                                     <ul class="categor-list">
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Jacket</a>(125)
-                                        </li>
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Jeans</a>(68)
-                                        </li>
-                                        <li class="cat-item text-muted"><a
-                                                href="shop-grid-right.html">Sweatshirts</a>(284)</li>
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Trousers</a>(274)
-                                        </li>
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Kitwears</a>(152)
-                                        </li>
-                                        <li class="cat-item text-muted"><a
-                                                href="shop-grid-right.html">Sportswear</a>(302)</li>
-                                        <li class="cat-item text-muted"><a
-                                                href="shop-grid-right.html">Accessories</a>(168)</li>
+
+                                        <% for( let i = 0; i < catData.length; i++ ) { %>
+
+                                            <li class="cat-item text-muted"><a onclick="categories('<%=catData[i]._id%>')"><%= catData[i].name %></a>
+                                            </li>
+
+                                        
+                                        <% } %>
+
+                                        
+                                        
                                     </ul>
                                 </div>
                             </div>
                             <!-- Fillter By Price -->
-                            <div class="sidebar-widget price_range range mb-30">
+                            <!-- <div class="sidebar-widget price_range range mb-30">
                                 <div class="widget-header position-relative mb-20 pb-10">
                                     <h5 class="widget-title mb-10">Fill by price</h5>
                                     <div class="bt-1 border-color-1"></div>
@@ -941,50 +938,32 @@
                                 </div>
                                 <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i
                                         class="fa fa-filter mr-5 ml-0"></i> Fillter</a>
-                            </div>
+                            </div> -->
                             <!-- Product sidebar Widget -->
                             <div class="sidebar-widget product-sidebar  mb-30 p-30 bg-grey border-radius-10">
                                 <div class="widget-header position-relative mb-20 pb-10">
                                     <h5 class="widget-title mb-10">New products</h5>
                                     <div class="bt-1 border-color-1"></div>
                                 </div>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="assets/imgs/shop/thumbnail-3.jpg" alt="#">
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h5><a href="shop-product-detail.html">Chen Cardigan</a></h5>
-                                        <p class="price mb-0 mt-5">$99.50</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width:90%"></div>
+
+                                <% for( let i = 0; i < newPro.length; i++ ) { %>
+                                
+                                    <div class="single-post clearfix">
+                                        <div class="image">
+                                            <img src="/productImages/<%= newPro[i].image[4] %>" alt="#">
+                                        </div>
+                                        <div class="content pt-10">
+                                            <h5><a href="/showproduct?id=<%= newPro[i]._id %>"><%= newPro[i].name %></a></h5>
+                                            <p class="price mb-0 mt-5">₹<%= newPro[i].offerPrice %></p>
+                                            <div class="product-rate">
+                                                <div class="product-rating" style="width:90%"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="assets/imgs/shop/thumbnail-4.jpg" alt="#">
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h6><a href="shop-product-detail.html">Chen Sweater</a></h6>
-                                        <p class="price mb-0 mt-5">$89.50</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width:80%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="assets/imgs/shop/thumbnail-5.jpg" alt="#">
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h6><a href="shop-product-detail.html">Colorful Jacket</a></h6>
-                                        <p class="price mb-0 mt-5">$25</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width:60%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                                <% } %>
+                                
+                                
                             <!--Widget ads-->
                             <div class="sidebar-widget widget-ads mb-30">
                                 <!-- <div class="banner-img banner-1 wow fadeIn  animated" style="visibility: visible; animation-name: fadeIn;">
@@ -1004,16 +983,13 @@
                                 </div>
                                 <div class="">
                                     <ul class="categor-list">
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Adidas</a>(125)
-                                        </li>
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Armani</a>(68)
-                                        </li>
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Burberry</a>(274)
-                                        </li>
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Chanel</a>(152)
-                                        </li>
-                                        <li class="cat-item text-muted"><a href="shop-grid-right.html">Prada</a>(302)
-                                        </li>
+                                        <% for( let i = 0; i < brandData.length; i++ ) { %>
+
+                                            <li class="cat-item text-muted"><a href="shop-grid-right.html"><%= brandData[i].name %></a>
+                                            </li>
+                                        <% } %>
+                                        
+                                       
                                     </ul>
                                 </div>
                             </div>
@@ -1207,6 +1183,17 @@
 
         })
 
+    }
+
+
+    function categories(catid){
+        $.ajax({
+            url:"/categories",
+            method:"post",
+            data:{
+                catid
+            }
+        })
     }
 </script>
 
