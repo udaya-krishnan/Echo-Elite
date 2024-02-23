@@ -143,6 +143,14 @@ const blockPro=async(req,res)=>{
     }
 }
 
+// const productDetails=async(req,res)=>{
+//     try {
+//         // res.render()
+//     } catch (error) {
+//         console.log(error.message)
+//     }
+// }
+
 
 module.exports={
     loadProduct,

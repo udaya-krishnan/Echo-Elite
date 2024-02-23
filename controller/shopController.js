@@ -6,12 +6,19 @@ const Adderss=require("../model/addressModel")
 const Cart=require("../model/cartModel")
 const Order =require("../model/orderModel")
 
-const loadWithCatName=async(req,res)=>{
+const loadWithlowtoHigh=async(req,res)=>{
     try {
 
-        const id =req.body.catId
-        const findCat=await Category.findById({_id:id})
+       const proData=await Product.find({}).sort({offerPrice:1})
 
+    //    const proData=await Product.find({})
+
+    const catData=await Category.find({})
+    const newPro=await Product.find({}).sort({_id:-1}).limit(3)
+    const brandData= await Brand.find({})
+
+      
+    res.render("shop",{proData,catData,newPro,brandData})
     
         
     } catch (error) {
@@ -21,5 +28,5 @@ const loadWithCatName=async(req,res)=>{
 
 
 module.exports={
-    loadWithCatName
+    loadWithlowtoHigh
 }

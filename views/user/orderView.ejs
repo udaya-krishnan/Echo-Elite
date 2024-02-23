@@ -882,17 +882,22 @@
                                         </table>
                                     </div>
 
+
                                     <% if (findOrder.status=="Canceled") { %>
 
                                         <p style="color: rgb(226, 78, 20); font-size: 20px; font-weight: bold;">Canceled</p>
                                      
-                                    <% }else{ %>
+                                    <% }else if(findOrder.status=="Delivered"){ %>
 
+                                        <p style="color: rgb(20, 226, 30); font-size: 20px; font-weight: bold;">Delivered</p>
+
+                                        <% }else{ %>
+
+                                            
                                         <a onclick="cancel('<%= findOrder._id %>')" class="btn btn-rounded"> <i
                                             class="fa fa-share-square mr-10"></i> Cancel Order</a>
 
-
-                                        <% } %>
+                                            <%}%>
                                     
                                 </div>
                             </div>

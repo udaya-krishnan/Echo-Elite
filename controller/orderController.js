@@ -106,10 +106,42 @@ const loadViewOrder=async(req,res)=>{
     }
  }
 
+ const saveOrder=async(req,res)=>{
+    try {
+     
+        const {status,id}=req.body
+
+        console.log(id,status)
+
+       const checking=await Order.findById({_id:id})
+
+       if(checking.status==status){
+        res.json({status:"notChanged"})
+       }else{
+
+        const updateStatus=await Order.findByIdAndUpdate({_id:id},{
+            $set:{
+                status:status
+            }
+        })
+
+        
+
+       }
+       res.json({status:true})
+
+       
+
+    } catch (error) {
+        console.log(error.message)
+    }
+ }
+
 
 module.exports={
     loadViewOrder,
     cancelOrder,
     loadOrder,
-    loadOrderDetail
+    loadOrderDetail,
+    saveOrder
 }

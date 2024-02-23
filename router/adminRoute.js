@@ -86,6 +86,8 @@ admin_route.get("/block-pro", isAdmin, productControle.blockPro);
 
 admin_route.get("/image-delete");
 
+// admin_route.get("/productDetails",isAdmin)
+
 /***************************************Brand Route**************************** */
 
 admin_route.get("/brand",isAdmin, brandControle.loadBrand);
@@ -98,9 +100,10 @@ admin_route.get("/brand-edit",isAdmin, brandControle.editload);
 
 
 //*************************************************Order Route***********************8 */
-
+ 
 
 admin_route.get("/order",isAdmin,orderController.loadOrder)
 admin_route.get("/order-Detail",isAdmin,orderController.loadOrderDetail)
+admin_route.post("/orderSave",isAdmin,orderController.saveOrder)
 
 module.exports = admin_route;
