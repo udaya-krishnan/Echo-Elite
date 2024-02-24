@@ -8,6 +8,7 @@ const generateDate=require("../controller/dateGenrator")
 
 const loadCart = async (req, res) => {
   try {
+    console.log("hrewsuhur")
     const id = req.body.id;
     const price = req.body.proPrice;
 
@@ -17,51 +18,69 @@ const loadCart = async (req, res) => {
 
     const priceOFF = splitPrice.join("");
 
-    console.log(priceOFF);
+    // console.log(priceOFF);
 
-    console.log(req.session.email);
-    const userData = await User.findOne({ email: req.session.email });
+    if(req.session.email){
+    console.log("inside session");
+      const userData = await User.findOne({ email: req.session.email });
 
-    const userCart = await Cart.findOne({ userId: userData._id });
-
-    if (userCart) {
-      const proCart = await Cart.findOne({ "items.productsId": id });
-      if (proCart) {
-        res.json({ status: "viewCart" });
-      } else {
-        const updateCart = await Cart.findOneAndUpdate(
-          { userId: userData._id },
-          {
-            $push: {
-              items: {
-                productsId: id,
-                subTotal: priceOFF,
-                quantity: 1,
-              },
-            },
-            $inc: {
-              total: priceOFF,
-            },
+      const userCart = await Cart.findOne({ userId: userData._id });
+  
+      if (userCart) {
+        let proCart=false
+        for(let i=0;i<userCart.items.length;i++){
+          if(id===userCart.items[i].productsId){
+            console.log("trouuuuuuuuu")
+             proCart =true
+             break;
           }
-        );
+        }
+        console.log("falssssssssssssssssss")
+        // const proCart = await Cart.findOne({ userId:userData._id,"items.productsId": id });
+        if (proCart) {
+          res.json({ status: "viewCart" });
+        } else {
+          const updateCart = await Cart.findOneAndUpdate(
+            { userId: userData._id },
+            {
+              $push: {
+                items: {
+                  productsId: id,
+                  subTotal: priceOFF,
+                  quantity: 1,
+                },
+              },
+              $inc: {
+                total: priceOFF,
+              },
+            }
+          );
+        }
+      } else {
+        const carData = new Cart({
+          userId: userData._id,
+          items: [
+            {
+              productsId: id,
+              subTotal: priceOFF,
+              quantity: 1,
+            },
+          ],
+          total: priceOFF,
+        });
+  
+        const cart = carData.save();
       }
-    } else {
-      const carData = new Cart({
-        userId: userData._id,
-        items: [
-          {
-            productsId: id,
-            subTotal: priceOFF,
-            quantity: 1,
-          },
-        ],
-        total: priceOFF,
-      });
+  
+      res.json({ status: true });
 
-      const cart = carData.save();
+    }else{
+      // console.log("with out session")
+      res.json({status:"login"})
     }
 
-    res.json({ status: true });
+    
+   
   } catch (error) {
     console.log(error.message);
   }
@@ -265,72 +284,82 @@ const loadCheckOutPage = async (req, res) => {
 const addOrder = async (req, res) => {
   try {
     const { addressId, cartid, checkedOption } = req.body;
+    console.log(addressId)
+    if(!addressId||!checkedOption){
 
-    console.log(addressId, cartid, checkedOption);
+      res.json({status:"fill"})
 
-    const userData = await User.findOne({ email: req.session.email });
+    }else{
 
-    const cartData = await Cart.findOne({ userId: userData._id });
+      const userData = await User.findOne({ email: req.session.email });
 
-    const proData = [];
+      const cartData = await Cart.findOne({ userId: userData._id });
+  
+      const proData = [];
+  
+      for (let i = 0; i < cartData.items.length; i++) {
+        proData.push(cartData.items[i]);
+      }
+      console.log(proData);
+  
+    const quantity=[]
+  
+  
+      for(let i=0;i<proData.length;i++){
+        quantity.push(proData[i].quantity)
+      }
+  
+      const proId=[]
+      
+      for(let i=0;i<proData.length;i++){
+        proId.push(proData[i].productsId)
+      }
+  
+      for(let i=0;i<proId.length;i++){
+  
+        const product=await Product.findByIdAndUpdate({_id:proId[i]},
+          {
+            $inc:{
+              stock:-quantity[i]
+            }
+          })
+      }
+  
+      // console.log(" quantityyyyyyyyyyyyyyyyyy"+quantity)
+  
+      const orderNum = generateOrder.generateOrder();
+      console.log(orderNum);
+  
+      const addressData = await Address.findOne({ _id: addressId });
+  
+      console.log(addressData);
+      const date=generateDate()
+  
+      const orderData = new Order({
+        userId: userData._id,
+        userEmail:userData.email,
+        orderNumber: orderNum,
+        items: proData,
+        totalAmount: cartData.total,
+        orderType: checkedOption,
+        orderDate:date,
+        status: "Processing",
+        shippingAddress: addressData,
+      });
+  
+      console.log(proData);
+  
+      orderData.save();
+  
+      res.json({ status: true });
+  
+      const deleteCart = await Cart.findByIdAndDelete({ _id: cartData._id });
 
-    for (let i = 0; i < cartData.items.length; i++) {
-      proData.push(cartData.items[i]);
     }
-    console.log(proData);
 
-  const quantity=[]
+    // console.log(addressId, cartid, checkedOption);
 
-
-    for(let i=0;i<proData.length;i++){
-      quantity.push(proData[i].quantity)
-    }
-
-    const proId=[]
-    
-    for(let i=0;i<proData.length;i++){
-      proId.push(proData[i].productsId)
-    }
-
-    for(let i=0;i<proId.length;i++){
-
-      const product=await Product.findByIdAndUpdate({_id:proId[i]},
-        {
-          $inc:{
-            stock:-quantity[i]
-          }
-        })
-    }
-
-    console.log(" quantityyyyyyyyyyyyyyyyyy"+quantity)
-
-    const orderNum = generateOrder.generateOrder();
-    console.log(orderNum);
-
-    const addressData = await Address.findOne({ _id: addressId });
-
-    console.log(addressData);
-    const date=generateDate()
-
-    const orderData = new Order({
-      userId: userData._id,
-      userEmail:userData.email,
-      orderNumber: orderNum,
-      items: proData,
-      totalAmount: cartData.total,
-      orderType: checkedOption,
-      orderDate:date,
-      status: "Processing",
-      shippingAddress: addressData,
-    });
-
-    console.log(proData);
-
-    orderData.save();
-
-    res.json({ status: true });
-
-    const deleteCart = await Cart.findByIdAndDelete({ _id: cartData._id });
+   
   } catch (error) {
     console.log(error);
   }

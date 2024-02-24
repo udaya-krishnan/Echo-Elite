@@ -18,11 +18,14 @@ const islogin=async(req,res,next)=>{
 
 const isLogOut=async(req,res,next)=>{
     try {
+      // console.log("isLogout rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       
          if(req.session.email){
- 
+            // console.log("sessionnnnnnnnnnnnnnnnnnnnnnn");
            res.redirect("/home")
         }else{
+
+        // console.log("with out sessionssssssssssssssssssssssssssssssssssssss");
           
             next()
         }

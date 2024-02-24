@@ -42,10 +42,13 @@ const loadLanding = async (req, res) => {
   try {
     const catData = await Category.find({});
 
-    const proData = await Product.find({});
+    const proData = await Product.find({stock:{$gt:0}});
 
     const brandData = await Brand.find({});
-    res.render("landing", { catData, proData, brandData });
+
+    const newArrivals=await Product.find({}).sort({_id:-1}).limit(6)
+
+    res.render("landing", { catData, proData, brandData,newArrivals });
   } catch (error) {
     console.log(error.message);
   }
@@ -64,10 +67,11 @@ const loadRegister = async (req, res) => {
 
 const insertUser = async (req, res) => {
   try {
+    // console.log("inssssssssssssssssssssssss");
     const name = req.body.name;
     const email = req.body.email;
-    const mobile = req.body.mobile;
-    const password = req.body.password;
+    const mobile = req.body.mob;
+    const password = req.body.pass;
     const confirm = req.body.confirm;
 
     console.log(email);
@@ -80,6 +84,8 @@ const insertUser = async (req, res) => {
     //      const {name,email,mobile,password,confirm}=req.body
     const existsEmail = await User.findOne({ email: email });
     const existsMobile = await User.findOne({ mobile: mobile });
+
+    console.log("inside insert d                    ddddddddd")
 
     if (existsEmail) {
       res.json({ status: "emailErr" });
@@ -251,7 +257,7 @@ const loadForgot = async (req, res) => {
 
 const forgot = async (req, res) => {
   try {
-    console.log("hello");
+    // console.log("hellosjdhkhccccccccccccccccc");
     const email = req.body.email;
     const newPass = req.body.newPass;
     const confirm = req.body.confirm;
@@ -309,6 +315,19 @@ const loadHome = async (req, res) => {
 
     const newArrivals=await Product.find({}).sort({_id:-1}).limit(6)
 
+    // const findUser=await User.findOne({email:req.session.email}) 
+
+    // const cart=await Cart.findOne({userId:findUser._id})
+    // const proId=[]
+
+    // for(let i=0;i<cart.items.length;i++){
+    //   proId.push(cart.items[i].productsId)
+    // }
+
+    // for(let i=0;i<proId.length;i++){
+    //   proId.push(await Product.findById({_id:proId}))
+    // }
+
     res.render("home", { catData, proData, brandData,newArrivals });
   } catch (error) {
     console.log(error.massage);
@@ -349,16 +368,28 @@ const loadProduct = async (req, res) => {
 
     const proData = await Product.findById({ _id: id });
 
+    const user=req.session.email
+
     if(proData){
-
+     
     const fullData = await Product.find({});
-
-    const cartData=await Cart.findOne({"items.productsId":id})
-    if(cartData){
-      res.render("product", { proData, fullData ,cartData});
+    if(req.session.email){
+      const userData=await User.findOne({email:req.session.email})
+      const cartData=await Cart.findOne({userId:userData._id,"items.productsId":id})
+      // console.log("ctrdddddddddddddddddd",cartData)
+      if(cartData){
+        // console.log("inside cart")
+        res.render("product", { proData, fullData ,cartData,user});
+      }else{
+        res.render("product", { proData, fullData ,cartData,user});
+      }
     }else{
-      res.render("product", { proData, fullData ,cartData});
+      const cartData=null
+      res.render("product", { proData, fullData ,cartData,user});
     }
+
+  
+    
   }else{
     res.redirect("/404")
   }
@@ -548,9 +579,9 @@ const loadOrder=async(req,res)=>{
   try {
     const userData=await User.findOne({email:req.session.email})
 
-  const orderData=await Order.find({userId:userData._id})
+  const orderData=await Order.find({userId:userData._id}).sort({_id:-1})
 
-  console.log(orderData)
+  // console.log(orderData)
 
     res.render("Order",{orderData})
   } catch (error) {
@@ -699,7 +730,7 @@ const editAccount=async(req,res)=>{
 const loadShop=async(req,res)=>{
   try {
 
-    const proData=await Product.find({})
+    const proData=await Product.find({}).limit(6)
 
     const catData=await Category.find({})
     const newPro=await Product.find({}).sort({_id:-1}).limit(3)
