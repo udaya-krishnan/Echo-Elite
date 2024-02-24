@@ -175,7 +175,7 @@
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Regular price</label>
-                                            <input placeholder="$" type="text" class="form-control" name="regprice"
+                                            <input placeholder="$" type="text" class="form-control" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" name="regprice"
                                                 id="regprice" onblur="rpFun()">
                                             <p id="rpErr" class="text-danger"></p>
                                         </div>
@@ -183,7 +183,7 @@
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Offer price</label>
-                                            <input placeholder="$" type="text" class="form-control" name="offprice"
+                                            <input placeholder="$" type="text" class="form-control" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" name="offprice"
                                                 id="offprice" onblur="opFun()">
                                             <p id="opErr" class="text-danger"></p>
                                         </div>
@@ -191,7 +191,7 @@
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Stock</label>
-                                            <input placeholder="" type="text" class="form-control" name="stock"
+                                            <input placeholder="" type="text" class="form-control" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" name="stock"
                                                 id="stock" onblur="stFun()">
                                             <p id="stErr" class="text-danger"></p>
                                         </div>
@@ -199,7 +199,7 @@
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">offer Percentage</label>
-                                    <input type="text" placeholder="%" class="form-control" id="off" name="off"
+                                    <input type="text" placeholder="%" class="form-control" id="off" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" name="off"
                                         onblur="ofFun()">
                                     <p id="offErr" class="text-danger"></p>
                                 </div>
@@ -214,7 +214,11 @@
                             <div class="card-body">
                                 <div class="input-upload">
                                     <img src="/admin_assets/imgs/theme/upload.svg" alt="">
-                                    <input class="form-control" name="proImage" type="file" multiple>
+
+                                    <input class="form-control" name="proImage" type="file" id="product_images" onkeyup="imageValidation()" multiple>
+                                    <p class="text-danger text-center mb-15 mt-15 " id="imageError"></p>
+
+
                                 </div>
                             </div>
                         </div>
@@ -251,7 +255,8 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label">Color</label>
-                                    <input type="text" class="form-control" name="color" id="color" onblur="coFun()">
+                                    <input type="text" class="form-control" name="color" id="color" onKeyDown="return /[a-zA-Z]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'"
+                                    onblur="coFun()">
                                     <p id="coErr" class="text-danger"></p>
                                 </div>
                             </div>
@@ -416,6 +421,20 @@
         }
 
 
+        function imageValidation() {
+            const selectImages = document.getElementById("product_images").files;
+            const imageError = document.getElementById("imageError");
+
+            if (selectImages.length !== 5) {
+                imageError.textContent = "Images must need exactly 5 images";
+                return false;
+            }
+            imageError.textContent = "";
+            return true;
+        }
+
+
+
         document.getElementById("submitId").addEventListener("submit",(e)=>{
             nameFun()
             disFun()
@@ -424,6 +443,7 @@
             ofFun()
             stFun()
             opFun()
+            imageValidation()
 
             const name=document.getElementById("nameErr")
             const dis=document.getElementById("disErr")
@@ -432,8 +452,9 @@
             const st=document.getElementById("stErr")
             const of=document.getElementById("offErr")
             const co=document.getElementById("coErr")
+            const imageError = document.getElementById("imageError")
 
-            if(name.innerHTML||dis.innerHTML||gp.innerHTML||op.innerHTML||st.innerHTML||of.innerHTML||co.innerHTML){
+            if(name.innerHTML||dis.innerHTML||gp.innerHTML||op.innerHTML||st.innerHTML||of.innerHTML||co.innerHTML||imageError.innerHTML){
                 e.preventDefault()
             }
             

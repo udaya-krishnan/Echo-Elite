@@ -702,7 +702,8 @@
                                     <h2 class="animated fw-900">Supper Value Deals</h2>
                                     <h1 class="animated fw-900 text-brand">On All Products</h1>
                                     <p class="animated">Save more with coupons & up to 70% off</p>
-                                    <a class="animated btn btn-default btn-rounded" href="shop-product-right.html"> SHOP NOW <i class="fa fa-arrow-right"></i> </a>
+                                    <a class="animated btn btn-default btn-rounded" href="shop-product-right.html"> SHOP
+                                        NOW <i class="fa fa-arrow-right"></i> </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
@@ -722,7 +723,8 @@
                                     <h2 class="animated fw-900">Tech Trending</h2>
                                     <h1 class="animated fw-900 text-brand">Great Collection</h1>
                                     <p class="animated">Save more with coupons & up to 20% off</p>
-                                    <a class="animated btn btn-default btn-rounded" href="shop-product-right.html"> DISCOVER NOW <i class="fa fa-arrow-right"></i> </a>
+                                    <a class="animated btn btn-default btn-rounded" href="shop-product-right.html">
+                                        DISCOVER NOW <i class="fa fa-arrow-right"></i> </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
@@ -742,7 +744,8 @@
                                     <h2 class="animated fw-900">Big Deals From</h2>
                                     <h1 class="animated fw-900 text-brand">Manufacturer</h1>
                                     <p class="animated">Headphone, Gaming Laptop, PC and more...</p>
-                                    <a class="animated btn btn-default btn-rounded" href="shop-product-right.html"> SHOP NOW <i class="fa fa-arrow-right"></i> </a>
+                                    <a class="animated btn btn-default btn-rounded" href="shop-product-right.html"> SHOP
+                                        NOW <i class="fa fa-arrow-right"></i> </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
@@ -806,11 +809,12 @@
                 </div>
             </div>
         </section>
-        <section class="popular-categories bg-grey-9 section-padding-60">
+        <!-- <section class="popular-categories bg-grey-9 section-padding-60">
             <div class="container wow fadeIn animated">
                 <h3 class="section-title mb-30"><span>Popular</span> Categories</h3>
                 <div class="carausel-6-columns-cover position-relative">
-                    <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>
+                    <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows">
+                    </div>
                     <div class="carausel-6-columns" id="carausel-6-columns">
                         <div class="card-1 border-radius-10 hover-up p-30">
                             <figure class="mb-30 img-hover-scale overflow-hidden">
@@ -863,72 +867,84 @@
                     </div>
                 </div>
             </div>
-        </section>
-        
+        </section> -->
+
         <section class="product-tabs pt-40 pb-30 wow fadeIn animated">
             <div class="container">
                 <div class="tab-content wow fadeIn animated" id="myTabContent">
                     <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
                         <div class="row product-grid-4">
-                            
-                <% for( let i = 0; i < proData.length; i++ ) { %>
-                
-                         <% if (proData[i].is_blocked==false) { %>
-                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                                <div class="product-cart-wrap mb-30">
-                                    <div class="product-img-action-wrap">
-                                        <div class="product-img product-img-zoom">
-                                            <a href="/showproduct?id=<%= proData[i]._id %>">
-                                                <img class="default-img "  src="/productImages/<%= proData[i].image[4] %>" alt="">
-                                                <img class="hover-img"  src="/productImages/<%= proData[i].image[3] %>" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="product-action-1">
-                                            <a aria-label="Quick view" class="action-btn hover-up"><i class="far fa-search"></i></a>
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="far fa-heart"></i></a>
-                                            <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="far fa-exchange-alt"></i></a>
-                                        </div>
-                                        <div class="product-badges product-badges-position product-badges-mrg">
-                                            <span class="hot">Hot</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-content-wrap">
-                                        <div class="product-category">
-                                            <a href="/showproduct">Music</a>
-                                        </div>
-                                        <h2><a href="/showproduct"><%= proData[i].name %></a></h2>
-                                        <div class="rating-result" title="90%">
-                                            <span>
-                                                <span><%= proData[i].offPercentage %>%</span>
-                                            </span>
-                                        </div>
-                                        <div class="product-price">
-                                            <span>₹<%= proData[i].offerPrice %> </span>
-                                            <span class="old-price">₹<%= proData[i].regularPrice %></span>
-                                        </div>
-                                        <div class="product-action-1 show">
-                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="far fa-shopping-bag"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                         <% } %>
-                                
 
-                <% } %>
-               
-               
-                            
-                             
-                            
-                        <!--End product-grid-4-->
-                    </div>
-                    <!--En tab one (Featured)-->
-                    <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
-                        
-                    <!--En tab two (Popular)-->
-                    
-                            
+                            <% for( let i=0; i < proData.length; i++ ) { %>
+
+                                <% if (proData[i].is_blocked==false) { %>
+                                    <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                        <div class="product-cart-wrap mb-30">
+                                            <div class="product-img-action-wrap">
+                                                <div class="product-img product-img-zoom">
+                                                    <a  href="/showproduct?id=<%= proData[i]._id %>">
+                                                        <img class="default-img "
+                                                            src="/productImages/<%= proData[i].image[4] %>" alt="">
+                                                        <img class="hover-img"
+                                                            src="/productImages/<%= proData[i].image[3] %>" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="product-action-1">
+                                                    <a aria-label="Quick view" class="action-btn hover-up"><i
+                                                            class="far fa-search"></i></a>
+                                                    <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                        href="shop-wishlist.html"><i class="far fa-heart"></i></a>
+                                                    <a aria-label="Compare" class="action-btn hover-up"
+                                                        href="shop-compare.html"><i class="far fa-exchange-alt"></i></a>
+                                                </div>
+                                                <div class="product-badges product-badges-position product-badges-mrg">
+                                                    <span class="hot">Hot</span>
+                                                </div>
+                                            </div>
+                                            <div class="product-content-wrap">
+                                                <div class="product-category">
+                                                    <a href="/showproduct">Music</a>
+                                                </div>
+                                                <h2><a href="/showproduct">
+                                                        <%= proData[i].name %>
+                                                    </a></h2>
+                                                <div class="rating-result" title="90%">
+                                                    <span>
+                                                        <span>
+                                                            <%= proData[i].offPercentage %>%
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                                <div class="product-price">
+                                                    <span id="offerPrice">₹<%= proData[i].offerPrice %> </span>
+                                                    <span class="old-price">₹<%= proData[i].regularPrice %></span>
+                                                </div>
+                                                <div class="product-action-1 show">
+                                                    <input type="hidden" id="proId<%=i%>" value="<%= proData[i]._id %>">
+                                                    
+                                                    <a aria-label="Add To Cart" class="action-btn hover-up"
+                                                        onclick="addCart('<%=i%>')"><i class="far fa-shopping-bag"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+
+                                        <% } %>
+
+
+
+
+
+                                            <!--End product-grid-4-->
+                        </div>
+                        <!--En tab one (Featured)-->
+                        <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
+
+                            <!--En tab two (Popular)-->
+
+
                         </div>
                         <!--End product-grid-4-->
                     </div>
@@ -937,38 +953,94 @@
                 <!--End tab-content-->
             </div>
         </section>
-        
+
+
         <section class="section-padding-60">
-            <div class="container">
-                <h3 class="section-title style-1 mb-30 wow fadeIn animated">Featured Brands</h3>
-                <div class="carausel-6-columns-cover arrow-center position-relative wow fadeIn animated">
-                    <div class="slider-arrow slider-arrow-3 carausel-6-columns-arrow" id="carausel-6-columns-3-arrows"></div>
-                    <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
+            <div class="container wow fadeIn animated">
+                <h3 class="section-title style-1 mb-30">New Arrivals</h3>
+                <div class="carausel-6-columns-cover arrow-center position-relative">
+                    <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-2-arrows"></div>
+                    <div class="carausel-6-columns carausel-arrow-center" id="carausel-6-columns-2">
 
-                     
 
-                            <% for( let i = 0; i < brandData.length; i++ ) { %>
-                                <% if (brandData[i].is_blocked==false) { %> 
-                                    <div class="brand-logo">
-                                        
-                                        <img class="img-grey-hover" style="width: 80px; height: 250px;" src="/brandImages/<%= brandData[i].image %>" alt="">
-                                       
+                       
+                        <% for( let i = 0; i < newArrivals .length; i++ ) { %>
+
+                            <div class="product-cart-wrap small hover-up" style="margin-left: 10px;">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="/showproduct?id=<%= newArrivals[i]._id %>">
+                                            <img class="default-img" src="/productImages/<%= newArrivals[i].image[3] %>" alt="">
+                                            <img class="hover-img" src="/productImages/<%= newArrivals[i].image[4] %>" alt="">
+                                        </a>
                                     </div>
-                                    <% } %>
-                               
-                               
+                                    <div class="product-action-1">
+                                        <a aria-label="Quick view" class="action-btn small hover-up" tabindex="0"><i class="far fa-search"></i></a>
+                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="far fa-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="far fa-exchange-alt"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="new">New</span>
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap">
+                                    <h2><a href="/showproduct?id=<%= newArrivals[i]._id %>"><%= newArrivals[i].name %></a></h2>
+                                    <div class="rating-result" title="90%">
+                                        <span>
+                                        </span>
+                                    </div>
+                                    <div class="product-price">
+                                        <span>₹<%= newArrivals[i].offerPrice %></span>
+                                        <span class="old-price">₹<%= newArrivals[i].regularPrice %></span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <% } %>
-                    
-
-
-                   
                         
+                        <% } %>
+
+                       
+                        <!--End product-cart-wrap-2-->
+                        
+                      
                     </div>
                 </div>
             </div>
         </section>
-            </main>
+
+
+
+
+
+
+        <section class="section-padding-60">
+            <div class="container">
+                <h3 class="section-title style-1 mb-30 wow fadeIn animated">Featured Brands</h3>
+                <div class="carausel-6-columns-cover arrow-center position-relative wow fadeIn animated">
+                    <div class="slider-arrow slider-arrow-3 carausel-6-columns-arrow" id="carausel-6-columns-3-arrows">
+                    </div>
+                    <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
+
+
+
+                        <% for( let i=0; i < brandData.length; i++ ) { %>
+                            <% if (brandData[i].is_blocked==false) { %>
+                                <div class="brand-logo">
+
+                                    <img class="img-grey-hover" style="width: 80px; height: 250px;"
+                                        src="/brandImages/<%= brandData[i].image %>" alt="">
+
+                                </div>
+                                <% } %>
+
+
+
+                                    <% } %>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
     <footer class="main">
         <section class="newsletter bg-brand p-30 text-white wow fadeIn animated">
             <div class="container">

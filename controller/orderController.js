@@ -75,7 +75,7 @@ const loadViewOrder=async(req,res)=>{
 
  const loadOrder=async(req,res)=>{
     try {
-        const orderData=await Order.find({})
+        const orderData=await Order.find({}).sort({_id:-1})
 
         res.render("adminOrder",{orderData})
     } catch (error) {
