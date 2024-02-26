@@ -665,14 +665,11 @@
 
 
 
-                                                                        <a aria-label="Add To Wishlist"
-                                                                            class="action-btn hover-up"
-                                                                            href="shop-wishlist.html"><i
-                                                                                class="far fa-heart"></i></a>
-                                                                        <a aria-label="Compare"
+                                                                        <a aria-label="Add To Wishlist"class="action-btn hover-up" onclick="addWishList('<%=proData._id%>')" ><i class="far fa-heart"></i></a>
+                                                                        <!-- <a aria-label="Compare"
                                                                             class="action-btn hover-up"
                                                                             href="shop-compare.html"><i
-                                                                                class="far fa-exchange-alt"></i></a>
+                                                                                class="far fa-exchange-alt"></i></a> -->
                                             </div>
                                         </div>
                                         <ul class="product-meta font-xs color-grey mt-50">
@@ -1022,7 +1019,7 @@
                                                         <a aria-label="Quick view" class="action-btn small hover-up"
                                                             tabindex="0"><i class="far fa-search"></i></a>
                                                         <a aria-label="Add To Wishlist"
-                                                            class="action-btn small hover-up" href="shop-wishlist.html"
+                                                            class="action-btn small hover-up" href="/addWishlist"
                                                             tabindex="0"><i class="far fa-heart"></i></a>
                                                         <a aria-label="Compare" class="action-btn small hover-up"
                                                             href="shop-compare.html" tabindex="0"><i
@@ -1244,12 +1241,12 @@
                     }).then((result) => {
                         window.location.href = "http://localhost:2003/cart"
                     })
-                   
+
                 } else if (response.status == "viewCart") {
                     window.location.href = "http://localhost:2003/cart"
                 } else if (response.status == "login") {
                     Swal.fire({
-                        
+
                         text: "You want to login the page?!",
                         icon: "warning",
                         showCancelButton: true,
@@ -1280,6 +1277,24 @@
 
     function viewCart() {
         location.href = "/cart"
+    }
+
+
+
+    function addWishList(id){
+        // alert(id)
+        $.ajax({
+            url:'/addWishlist',
+            method:'post',
+            data:{
+                id
+            },
+            success:(response)=>{
+                if(response.status==true){
+                    window.location.href="/wishlist"
+                }
+            }
+        })
     }
 
 

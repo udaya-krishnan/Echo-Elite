@@ -7,10 +7,10 @@ const generateOTP = require("../controller/otpGenrate");
 const Category = require("../model/categoryModel");
 const Product = require("../model/productModel");
 const Brand = require("../model/brandModel");
-const Adderss=require("../model/addressModel")
-const Cart=require("../model/cartModel")
+const Adderss = require("../model/addressModel");
+const Cart = require("../model/cartModel");
 
-const Order =require("../model/orderModel")
+const Order = require("../model/orderModel");
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -42,13 +42,13 @@ const loadLanding = async (req, res) => {
   try {
     const catData = await Category.find({});
 
-    const proData = await Product.find({stock:{$gt:0}});
+    const proData = await Product.find({ stock: { $gt: 0 } });
 
     const brandData = await Brand.find({});
 
-    const newArrivals=await Product.find({}).sort({_id:-1}).limit(6)
+    const newArrivals = await Product.find({}).sort({ _id: -1 }).limit(6);
 
-    res.render("landing", { catData, proData, brandData,newArrivals });
+    res.render("landing", { catData, proData, brandData, newArrivals });
   } catch (error) {
     console.log(error.message);
   }
@@ -85,7 +85,7 @@ const insertUser = async (req, res) => {
     const existsEmail = await User.findOne({ email: email });
     const existsMobile = await User.findOne({ mobile: mobile });
 
-    console.log("inside insert d                    ddddddddd")
+    console.log("inside insert d                    ddddddddd");
 
     if (existsEmail) {
       res.json({ status: "emailErr" });
@@ -197,22 +197,19 @@ const verifylogin = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-  
-
     const userData = await User.findOne({ email: email });
-  
 
     if (userData) {
-      console.log("inside the null")
+      console.log("inside the null");
       if (userData.is_blocked == false) {
         req.session.email = email;
-        console.log("verify")
+        console.log("verify");
         const passwordMatch = await bcrypt.compare(password, userData.password);
         console.log("passwordMatched");
         if (passwordMatch) {
           req.session.auth = true;
           req.session.userId = userData._id;
-          
+
           // console.log(req.session.userId)
           // res.redirect('/home')
           res.json({ status: "home" });
@@ -309,13 +306,13 @@ const loadHome = async (req, res) => {
   try {
     const catData = await Category.find({});
 
-    const proData = await Product.find({stock:{$gt:0}});
+    const proData = await Product.find({ stock: { $gt: 0 } });
 
     const brandData = await Brand.find({});
 
-    const newArrivals=await Product.find({}).sort({_id:-1}).limit(6)
+    const newArrivals = await Product.find({}).sort({ _id: -1 }).limit(6);
 
-    // const findUser=await User.findOne({email:req.session.email}) 
+    // const findUser=await User.findOne({email:req.session.email})
 
     // const cart=await Cart.findOne({userId:findUser._id})
     // const proId=[]
@@ -328,7 +325,7 @@ const loadHome = async (req, res) => {
     //   proId.push(await Product.findById({_id:proId}))
     // }
 
-    res.render("home", { catData, proData, brandData,newArrivals });
+    res.render("home", { catData, proData, brandData, newArrivals });
   } catch (error) {
     console.log(error.massage);
   }
@@ -348,13 +345,12 @@ const loadForgotOTP = async (req, res) => {
 
 const loadDash = async (req, res) => {
   try {
-
     const userData = await User.findOne({ email: req.session.email });
-    console.log(userData._id)
-     
+    console.log(userData._id);
+
     // const address=await Adderss.find({userId:req.session.userId })
     // console.log(address)
-    
+
     // console.log(user)
     res.render("userProfile", { userData });
   } catch (error) {
@@ -368,33 +364,30 @@ const loadProduct = async (req, res) => {
 
     const proData = await Product.findById({ _id: id });
 
-    const user=req.session.email
+    const user = req.session.email;
 
-    if(proData){
-     
-    const fullData = await Product.find({});
-    if(req.session.email){
-      const userData=await User.findOne({email:req.session.email})
-      const cartData=await Cart.findOne({userId:userData._id,"items.productsId":id})
-      // console.log("ctrdddddddddddddddddd",cartData)
-      if(cartData){
-        // console.log("inside cart")
-        res.render("product", { proData, fullData ,cartData,user});
-      }else{
-        res.render("product", { proData, fullData ,cartData,user});
+    if (proData) {
+      const fullData = await Product.find({});
+      if (req.session.email) {
+        const userData = await User.findOne({ email: req.session.email });
+        const cartData = await Cart.findOne({
+          userId: userData._id,
+          "items.productsId": id,
+        });
+        // console.log("ctrdddddddddddddddddd",cartData)
+        if (cartData) {
+          // console.log("inside cart")
+          res.render("product", { proData, fullData, cartData, user });
+        } else {
+          res.render("product", { proData, fullData, cartData, user });
+        }
+      } else {
+        const cartData = null;
+        res.render("product", { proData, fullData, cartData, user });
       }
-    }else{
-      const cartData=null
-      res.render("product", { proData, fullData ,cartData,user});
+    } else {
+      res.redirect("/404");
     }
-
-  
-    
-  }else{
-    res.redirect("/404")
-  }
-
-    
   } catch (error) {
     console.log(error.message);
   }
@@ -411,29 +404,26 @@ const PNF = async (req, res) => {
 const resendOtp = async (req, res) => {
   try {
     console.log("hello");
-   
-      const email = req.session.Data.email;
-      const resendOtpGen = generateOTP.generateOTP();
-      req.session.Data.otp = resendOtpGen;
 
-      const mailOptions = await {
-        form: Email,
-        to: email,
-        subject: "Your OTP for Verification",
-        text: `your otp ${resendOtpGen}`,
-      };
-      if (mailOptions) {
-        transporter.sendMail(mailOptions, (err) => {
-          if (err) {
-            console.log(err.message);
-          } else {
-            console.log("mail send sucessfull");
-          }
-        });
-      }
-     
+    const email = req.session.Data.email;
+    const resendOtpGen = generateOTP.generateOTP();
+    req.session.Data.otp = resendOtpGen;
 
-
+    const mailOptions = await {
+      form: Email,
+      to: email,
+      subject: "Your OTP for Verification",
+      text: `your otp ${resendOtpGen}`,
+    };
+    if (mailOptions) {
+      transporter.sendMail(mailOptions, (err) => {
+        if (err) {
+          console.log(err.message);
+        } else {
+          console.log("mail send sucessfull");
+        }
+      });
+    }
 
     // if (req.session.forgotData) {
     //   const email = req.session.forgotData.email;
@@ -466,283 +456,319 @@ const resendOtp = async (req, res) => {
   }
 };
 
-const loadAddaddress=async(req,res)=>{
+const loadAddaddress = async (req, res) => {
   try {
-    
-   res.render("addAddress")
-  } catch (error) {
-    console.log(error.message)
-  }
-}
-
-const addAddress=async(req,res)=>{
-  try {
-      // console.log(req.body)
-        console.log("inside add address")
-      console.log(req.session.email)
-      const findUser=await User.findOne({email:req.session.email})
-
-      console.log(findUser)
-       
-      const {name,phone,pcode,city,address,district,state,landmark,alternate,address_type}=req.body
-
-      const newAddress=new Adderss({
-        userId:findUser._id,
-        name:name,
-        mobile:phone,
-        pinCode:pcode,
-        city:city,
-        address:address, 
-        district:district,
-        state:state,
-        landmark:landmark,
-        addressType:address_type,
-        alternateMobile:alternate
-      })
-
-      const addressData=await newAddress.save()
-
-      res.redirect("/address")
-
-  } catch (error) {
-    console.log(error.message)
-  }
-}
-
-const deletAddress=async(req,res)=>{
-  try {
-     const id=req.query.id
-
-    const dele=await Adderss.findByIdAndDelete({_id:id})
-
-    res.redirect("/address")
-
-  } catch (error) {
-    console.log(error.message)
-  }
-}
-
-const loadEditAddress=async(req,res)=>{
-  try {
-    const id=req.query.id
-     
-    const DataAddre=await Adderss.findById({_id:id})
-   
-    req.session.address=DataAddre
-    console.log(DataAddre)
-    
-      res.render("editAddress",{DataAddre})
-    
-
-  } catch (error) {
-    console.log(error.message)
-  }
-}
-
-
-
-const editAddress=async(req,res)=>{
-  try {
-     const{name,phone,pcode,city,address,district,state,landmark,alternate,address_type}=req.body
-     
-     const oldData=req.session.address
-
-     if(name==oldData.name&&phone==oldData.mobile&&pcode==oldData.pinCode&&city==oldData.city&&address==oldData.address&&district==oldData.district&&
-      state==oldData.state&&landmark==oldData.landmark&&address_type==oldData.address_type&&alternate==oldData.alternateMobile){
-      res.json({status:"nothing"})
-      }else{
-        const addData=await Adderss.findByIdAndUpdate({_id:oldData._id},{
-          $set:{
-            name:name,
-            mobile:phone,
-            pinCode:pcode,
-            city:city,
-            address:address,
-            district:district,
-            state:state,
-            landmark:landmark,
-            addressType:address_type,
-            alternateMobile:alternate
-          }
-        })
-        res.json({status:true})
-      }
-      
-  } catch (error) {
-    console.log(error.message)
-  }
-}
-
-//************************************Dashbord pageLoad******************* */
-
-const loadOrder=async(req,res)=>{
-  try {
-    const userData=await User.findOne({email:req.session.email})
-
-  const orderData=await Order.find({userId:userData._id}).sort({_id:-1})
-
-  // console.log(orderData)
-
-    res.render("Order",{orderData})
-  } catch (error) {
-
-    console.log(error.message)
-    
-  }
-}
-
-
-const loadTrack=async(req,res)=>{
-  try {
-    res.render("trackOrder")
-  } catch (error) {
-
-    console.log(error.message)
-    
-  }
-}
-
-
-
-const loadAddress=async(req,res)=>{
-  try {
-    console.log("hello");
-    console.log(req.session.email)
-    const address=await Adderss.find({userId:req.session.userId })
-    console.log(address)
-    res.render("adderss",{address})
-  } catch (error) {
-    console.log(error.message)
-    
-  }
-}
-
-
-const loadChangePass=async(req,res)=>{
-  try {
-    res.render("changePassword")
-  } catch (error) {
-
-    console.log(error.message)
-    
-  }
-}
-
-
-const loadAccount=async(req,res)=>{
-  try {
-    const findUser=await User.findOne({email:req.session.email})
-
-    res.render("accountDetalis",{findUser})
-  } catch (error) {
-
-    console.log(error.message)
-    
-  }
-}
-
-
-const changePass=async(req,res)=>{
-  try {
-    const{current,newPass,conPass}=req.body
-
-    if(newPass==conPass){
-    const email=req.session.email
-
-    const userData=await User.findOne({email:email})
-
-    const passwordMatch = await bcrypt.compare(current, userData.password);
-
-    if(passwordMatch){
-
-      const passwordHash=await securePassword(newPass)
-
-       const updatePass=await User.findByIdAndUpdate({_id:userData._id},{
-        $set:{
-          password:passwordHash
-        }
-       })
-
-       if(updatePass){
-        res.json({status:true})
-       }
-     
-    }else{
-      res.json({status:"wrong"})
-    }
-  }else{
-    res.json({status:"compare"})
-  }
-
-
-
-
-
+    res.render("addAddress");
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
-const loadEditAccount=async(req,res)=>{
+const addAddress = async (req, res) => {
   try {
-    console.log("hello"+req.session.email)
-    const userData=await User.findOne({email:req.session.email})
+    // console.log(req.body)
+    console.log("inside add address");
+    console.log(req.session.email);
+    const findUser = await User.findOne({ email: req.session.email });
 
-    res.render("Editaccount",{userData})
+    console.log(findUser);
+
+    const {
+      name,
+      phone,
+      pcode,
+      city,
+      address,
+      district,
+      state,
+      landmark,
+      alternate,
+      address_type,
+    } = req.body;
+
+    const newAddress = new Adderss({
+      userId: findUser._id,
+      name: name,
+      mobile: phone,
+      pinCode: pcode,
+      city: city,
+      address: address,
+      district: district,
+      state: state,
+      landmark: landmark,
+      addressType: address_type,
+      alternateMobile: alternate,
+    });
+
+    const addressData = await newAddress.save();
+
+    res.redirect("/address");
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
-const editAccount=async(req,res)=>{
+const deletAddress = async (req, res) => {
   try {
+    const id = req.query.id;
 
-     const{name,mobile,dom,gender}=req.body
+    const dele = await Adderss.findByIdAndDelete({ _id: id });
+
+    res.redirect("/address");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadEditAddress = async (req, res) => {
+  try {
+    const id = req.query.id;
+
+    const DataAddre = await Adderss.findById({ _id: id });
+
+    req.session.address = DataAddre;
+    console.log(DataAddre);
+
+    res.render("editAddress", { DataAddre });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const editAddress = async (req, res) => {
+  try {
+    const {
+      name,
+      phone,
+      pcode,
+      city,
+      address,
+      district,
+      state,
+      landmark,
+      alternate,
+      address_type,
+    } = req.body;
+
+    const oldData = req.session.address;
+
+    if (
+      name == oldData.name &&
+      phone == oldData.mobile &&
+      pcode == oldData.pinCode &&
+      city == oldData.city &&
+      address == oldData.address &&
+      district == oldData.district &&
+      state == oldData.state &&
+      landmark == oldData.landmark &&
+      address_type == oldData.address_type &&
+      alternate == oldData.alternateMobile
+    ) {
+      res.json({ status: "nothing" });
+    } else {
+      const addData = await Adderss.findByIdAndUpdate(
+        { _id: oldData._id },
+        {
+          $set: {
+            name: name,
+            mobile: phone,
+            pinCode: pcode,
+            city: city,
+            address: address,
+            district: district,
+            state: state,
+            landmark: landmark,
+            addressType: address_type,
+            alternateMobile: alternate,
+          },
+        }
+      );
+      res.json({ status: true });
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+//************************************Dashbord pageLoad******************* */
+
+const loadOrder = async (req, res) => {
+  try {
+    const userData = await User.findOne({ email: req.session.email });
+
+    const orderData = await Order.find({ userId: userData._id }).sort({
+      _id: -1,
+    });
+
+    // console.log(orderData)
+
+    res.render("Order", { orderData });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadTrack = async (req, res) => {
+  try {
+    res.render("trackOrder");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadAddress = async (req, res) => {
+  try {
+    console.log("hello");
+    console.log(req.session.email);
+    const address = await Adderss.find({ userId: req.session.userId });
+    console.log(address);
+    res.render("adderss", { address });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadChangePass = async (req, res) => {
+  try {
+    res.render("changePassword");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadAccount = async (req, res) => {
+  try {
+    const findUser = await User.findOne({ email: req.session.email });
+
+    res.render("accountDetalis", { findUser });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const changePass = async (req, res) => {
+  try {
+    const { current, newPass, conPass } = req.body;
+
+    if (newPass == conPass) {
+      const email = req.session.email;
+
+      const userData = await User.findOne({ email: email });
+
+      const passwordMatch = await bcrypt.compare(current, userData.password);
+
+      if (passwordMatch) {
+        const passwordHash = await securePassword(newPass);
+
+        const updatePass = await User.findByIdAndUpdate(
+          { _id: userData._id },
+          {
+            $set: {
+              password: passwordHash,
+            },
+          }
+        );
+
+        if (updatePass) {
+          res.json({ status: true });
+        }
+      } else {
+        res.json({ status: "wrong" });
+      }
+    } else {
+      res.json({ status: "compare" });
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadEditAccount = async (req, res) => {
+  try {
+    console.log("hello" + req.session.email);
+    const userData = await User.findOne({ email: req.session.email });
+
+    res.render("Editaccount", { userData });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const editAccount = async (req, res) => {
+  try {
+    const { name, mobile, dom, gender } = req.body;
 
     //  const userData=await User.findOne({email:req.session.email})
 
     // console.log(req.session.email)
 
-    const obj={
-      name:name,
-      mobile:mobile,
-      DOB:dom,
-      gender:gender
-    }
-       
+    const obj = {
+      name: name,
+      mobile: mobile,
+      DOB: dom,
+      gender: gender,
+    };
 
+    const updateUser = await User.findOneAndUpdate(
+      { email: req.session.email },
+      obj
+    );
 
-    const updateUser = await User.findOneAndUpdate({email:req.session.email},obj)
-    
-    
-
-     res.json({status:true})
-     
-
-
+    res.json({ status: true });
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
-
-
-const loadShop=async(req,res)=>{
+const loadShop = async (req, res) => {
   try {
+    const sort = req.query.sort;
+    console.log(sort);
 
-    const proData=await Product.find({}).limit(6)
+    if (sort == "lowToHigh") {
 
-    const catData=await Category.find({})
-    const newPro=await Product.find({}).sort({_id:-1}).limit(3)
-    const brandData= await Brand.find({})
+      const proData = await Product.find({}).sort({ offerPrice: 1 }).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData });
+
+    } else if (sort == "highToLow") {
+
+      const proData = await Product.find({}).sort({ offerPrice: -1 }).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData });
+
+    }else if(sort=='aA-zZ'){
+
+      const proData=await Product.find({}).sort({name:1}).limit(6) 
+      const catData=await Category.find({})
+      const newPro=await Product.find({}).sort({_id:-1}).limit(3)
+      const brandData= await Brand.find({})
+      res.render("shop",{proData,catData,newPro,brandData})
 
 
-    res.render("shop",{proData,catData,newPro,brandData})
+    }else if(sort=='zZ-aA'){
+
+      const proData=await Product.find({}).sort({name:-1}).limit(6) 
+      const catData=await Category.find({})
+      const newPro=await Product.find({}).sort({_id:-1}).limit(3)
+      const brandData= await Brand.find({})
+      res.render("shop",{proData,catData,newPro,brandData})
+
+    }
+    
+    const proData = await Product.find({}).limit(6);
+    const catData = await Category.find({});
+    const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+    const brandData = await Brand.find({});
+    res.render("shop", { proData, catData, newPro, brandData });
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
-
+};
 
 module.exports = {
   loadLanding,
@@ -774,6 +800,5 @@ module.exports = {
   changePass,
   loadEditAccount,
   editAccount,
-  loadShop
-  
+  loadShop,
 };

@@ -4,7 +4,7 @@ const User = require("../model/userModel");
 
 const adminEmail=process.env.ADMINEMAIL
 
-const adminPass=process.env.ADMINPASS
+const adminPass=process.env.ADMINPASS  
 
 
 const adminLogin=async(req,res)=>{
@@ -64,7 +64,10 @@ const loadSellers=async(req,res)=>{
 
 const blockUser=async(req,res)=>{
    try {
-     const id=req.query.id
+     const id=req.body.id
+
+     console.log("inssssssssssssssssssssssssssssssssss")
+
      const findUser=await User.findById({_id:id})
      
      if(findUser.is_blocked==false){
@@ -72,41 +75,44 @@ const blockUser=async(req,res)=>{
        {$set:{
          is_blocked:true
       }})
+      res.json({status:"blocked"})
    }else{
       const userData=await User.findByIdAndUpdate({_id:id},
          {$set:{
            is_blocked:false
         }})
 
+        res.json({status:"unblocked"})
+
    }
 
-      res.redirect('/admin/sellers')
+   //    res.redirect('/admin/sellers')
      
    } catch (error) {
      console.log(error.message)
    }
  }
 
- const unblockUser=async(req,res)=>{
-   try {
-      const id=req.query.id
+//  const unblockUser=async(req,res)=>{
+//    try {
+//       const id=req.query.id
       
-      const findUser=await User.findById({_id:id})
+//       const findUser=await User.findById({_id:id})
      
-     if(findUser.is_blocked==true){
-       const userData=await User.findByIdAndUpdate({_id:id},
-       {$set:{
-         is_blocked:false
-      }})
+//      if(findUser.is_blocked==true){
+//        const userData=await User.findByIdAndUpdate({_id:id},
+//        {$set:{
+//          is_blocked:false
+//       }})
 
-   }
-   res.redirect('/admin/sellers')
+//    }
+//    res.redirect('/admin/sellers')
      
 
-   } catch (error) {
-      console.log(error.message)
-   }
- }
+//    } catch (error) {
+//       console.log(error.message)
+//    }
+//  }
 
  const logout=async(req,res)=>{
    try {
@@ -125,7 +131,7 @@ module.exports={
    loadDash,
    loadSellers,
    blockUser,
-   unblockUser,
+  
    logout
    
 }  

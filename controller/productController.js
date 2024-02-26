@@ -30,7 +30,7 @@ const addProduct = async (req, res) => {
 
     console.log(req.body);
 
-    const catData=await Category.find({name:req.body.catName})
+    const catData=await Category.findOne({name:req.body.catName})
     //  console.log(req.files);
     const imageName = req.files.map((x) => x.originalname);
 
@@ -77,9 +77,12 @@ const editPro = async (req, res) => {
   try {
     const id = req.body.id;
 
+
     console.log(id);
     if (req.files.length > 0) {
 
+      const catData=await Category.findOne({name:req.body.catName})
+ 
         // console.log(req.files,"ffffffffffffffffffffffffffffffffffffffff")
       const imageName    = req.files.map((x) => x.originalname);
       const updatePro = await Product.findByIdAndUpdate(
@@ -93,7 +96,7 @@ const editPro = async (req, res) => {
             stock: req.body.stock,
             offPercentage: req.body.off,
             image: imageName,
-            category: req.body.catName,
+            category: catData._id,
             brand: req.body.brandName,
             color: req.body.color,
           },
@@ -103,6 +106,8 @@ const editPro = async (req, res) => {
         res.redirect("/admin/product");
       }
     } else {
+      console.log(req.body.catName+"catttttttttttttttttttttttttttttttt")
+      const catData=await Category.findOne({name:req.body.catName})
       const updatePro = await Product.findByIdAndUpdate(
         { _id: id },
         {
@@ -113,8 +118,7 @@ const editPro = async (req, res) => {
             offerPrice: req.body.offprice,
             stock: req.body.stock,
             offPercentage: req.body.off,
-
-            category: req.body.catName,
+            category: catData._id,
             brand: req.body.brandName,
             color: req.body.color,
           },

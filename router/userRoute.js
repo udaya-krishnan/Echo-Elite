@@ -84,11 +84,14 @@ user_router.post("/account-edit",userController.editAccount)
 
 
   user_router.get("/shop",userController.loadShop)
-  user_router.get("/lowTohigh",shopController.loadWithlowtoHigh)
-  user_router.get("/highTolow",shopController.highTolow)
-  user_router.get("/aAzZ",shopController.AtoZ)
-  user_router.get("/zZaA",shopController.ZtoA)
+  // user_router.get("/lowTohigh",shopController.loadWithlowtoHigh)
+  // user_router.get("/highTolow",shopController.highTolow)
+  // user_router.get("/aAzZ",shopController.AtoZ)
+  // user_router.get("/zZaA",shopController.ZtoA)
   user_router.post("/next-page",shopController.nextPage)
+
+  user_router.get("/filter",shopController.categoryfilter)
+  user_router.get("/brandFiter",shopController.brandFilter)
 
 
 
@@ -109,6 +112,13 @@ user_router.post("/account-edit",userController.editAccount)
   user_router.get("/orderView",userAuth.isBlocked,userAuth.islogin,orderController.loadViewOrder)
 
   user_router.post("/cancelOrder",userAuth.isBlocked,userAuth.islogin,orderController.cancelOrder)
+
+
+  //****************************************Wishlist*************88 */
+
+
+  user_router.get('/wishlist',shopController.loadWishlist)
+  user_router.post("/addWishlist",shopController.addWishlist)
 
  
 

@@ -8,7 +8,7 @@ const generateDate=require("../controller/dateGenrator")
 
 const loadCart = async (req, res) => {
   try {
-    console.log("hrewsuhur")
+    // console.log("hrewsuhur")
     const id = req.body.id;
     const price = req.body.proPrice;
 
@@ -21,7 +21,7 @@ const loadCart = async (req, res) => {
     // console.log(priceOFF);
 
     if(req.session.email){
-    console.log("inside session");
+    // console.log("inside session");
       const userData = await User.findOne({ email: req.session.email });
 
       const userCart = await Cart.findOne({ userId: userData._id });
@@ -30,7 +30,7 @@ const loadCart = async (req, res) => {
         let proCart=false
         for(let i=0;i<userCart.items.length;i++){
           if(id===userCart.items[i].productsId){
-            console.log("trouuuuuuuuu")
+            // console.log("trouuuuuuuuu")
              proCart =true
              break;
           }
@@ -213,7 +213,7 @@ const removeCart = async (req, res) => {
 
     res.json({ status: true, total: findPro.total });
     // console.log(id)
-  } catch (error) {
+  } catch (error) { 
     console.log(error.message);
   }
 };

@@ -70,15 +70,20 @@ const listCat=async(req,res)=>{
                     is_blocked:false
                 }
             })
+            console.log("unlisssssssssssssssssssssssssssssssssssssssyttttttttttt")
+            res.json({status:"unlist"})
         }else{
             const catData= await Category.findByIdAndUpdate({_id:id},{
                 $set:{
                     is_blocked:true
                 }
             })
+
+            console.log("listttttttttttttttttttttttttttttt")
+            res.json({status:"list"})
         }
 
-        res.json({status:true})
+        // res.json({status:true})
 
         
 

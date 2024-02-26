@@ -159,19 +159,25 @@
                                                 <tr>
                                                     <td><b><%= catData[i].name %></b></td>
                                                     <td><%= catData[i].discription %></td>
-                                                    <% if (catData[i].is_blocked==false) { %>
-                                                        <td><span class="badge rounded-pill alert-success">Unlist</span></td>
-                                                        <td class="text-end">
+                                                    <% if (catData[i].is_blocked==true) { %>
+                                                        <td><span class="badge  rounded-pill alert-success" id="status<%=i%>">List</span></td>
+                                                        <td class="text-end"> 
+                                                            <div class="button-container">
+                                                                <a href="/admin/cat-edit?id=<%= catData[i]._id %>" id="edit<%=i%>" class="btn btn-info rounded font-sm mt-6 p-10" style="display: inline-block; margin-right: 10px;">EDIT</a>
+                                                                <button type="button" class="btn btn-primary" style="padding: 10px; display: inline-block;" id="listButton<%=i%>" onclick="list('<%= catData[i]._id %>','<%=i%>')">LIST</button>
+                                                            </div>
                                                             
-                                                            <a href="/admin/cat-edit?id=<%= catData[i]._id %>" class="btn btn-sm btn-success rounded font-sm mt-6 p-10">Edit</a>
-                                                            <button type="button" class="btn btn-danger" onclick="list('<%= catData[i]._id %>')">List</button>
-
-   
                                                         </td>
                                                     <% } else{%>
-                                                        <td><span class="badge rounded-pill alert-danger">List</span></td>
+                                                      
+                                                        <td><span id="status<%=i%>" class="badge rounded-pill alert-success">UnList</span></td>
                                                         <td class="text-end">
-                                                            <button type="button" class="btn btn-danger" onclick="list('<%= catData[i]._id %>')">Unlist</button>
+                                                            <div class="button-container">
+                                                            
+                                                                <a href="/admin/cat-edit?id=<%= catData[i]._id %>" id="edit<%=i%>" class="btn btn-info rounded font-sm mt-6 p-10" style="display: inline-block; margin-right: 10px;">EDIT</a>
+                                                                <button type="button" class="btn btn-primary" style="padding: 10px; display: inline-block;" id="listButton<%=i%>" onclick="list('<%= catData[i]._id %>','<%=i%>')">LIST</button>
+                                                            </div>
+                                                            
                                                         </td>
 
                                                         <% } %>
@@ -219,9 +225,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        function list(id){
+        function list(id,index){
             
              const catId=id
+            //  alert(catId)
         
             $.ajax({
                 url:"/admin/cat-list",
@@ -230,8 +237,17 @@
                     catId
                 },
                success:(response)=>{
-                if(response.status===true){
-                    window.location.href="http://localhost:2003/admin/category"
+                if(response.status==="unlist"){
+                    // alert("unlist")
+                    document.getElementById("edit"+index).style.display="inline-block"
+                    document.getElementById("listButton"+index).innerHTML='LIST'
+                    document.getElementById('status'+index).innerHTML='UNLIST'
+
+                }else if(response.status=='list'){
+                    // alert("list")
+                    document.getElementById("edit"+index).style.display="none"
+                    document.getElementById("listButton"+index).innerHTML='UNLIST'
+                    document.getElementById('status'+index).innerHTML='LIST'
                 }
                }
             })

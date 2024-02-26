@@ -43,10 +43,10 @@ admin_route.get("/logout", isAdmin, adminController.logout);
 admin_route.get("/dashboard", isAdmin, adminController.loadDash);
 admin_route.get("/sellers", isAdmin, adminController.loadSellers);
 
-admin_route.get("/block-user", isAdmin, adminController.blockUser);
+admin_route.post("/block-user", isAdmin, adminController.blockUser);
 
 //  admin_route.get('/block-user',adminController.unblockUser)
-admin_route.get("/unblock-user", isAdmin, adminController.unblockUser);
+// admin_route.get("/unblock-user", isAdmin, adminController.unblockUser);
 
 //*********************************Category Controller*********************** */
 admin_route.get("/category", isAdmin, CategoryControle.loadCategory);
