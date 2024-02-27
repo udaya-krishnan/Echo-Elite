@@ -664,9 +664,46 @@
                                                                     <%}%>
 
 
+                                                                        <% if (findWish) { %>
+                                                                            <a aria-label="Add To Wishlist"
+                                                                                style="display:inline-block; width: 40px; height: 40px; line-height: 42px;  text-align: center; "
+                                                                                id="removeWish"
+                                                                                class="action-btn hover-up"
+                                                                                onclick="removeWishlist('<%=proData._id%>')"><i
+                                                                                    class="fas fa-heart" id="remove"
+                                                                                    style="color: #ff0000;  font-size: 20px; "></i></a>
 
-                                                                        <a aria-label="Add To Wishlist"class="action-btn hover-up" onclick="addWishList('<%=proData._id%>')" ><i class="far fa-heart"></i></a>
-                                                                        <!-- <a aria-label="Compare"
+                                                                            <a aria-label="Add To Wishlist"
+                                                                                style="display: none; width: 40px; height: 40px; line-height: 42px;  text-align: center;"
+                                                                                id="addWishlist"
+                                                                                class="action-btn hover-up"
+                                                                                onclick="addWishList('<%=proData._id%>')">
+                                                                                <i class="far fa-heart"
+                                                                                    style="font-size: 20px;"></i>
+                                                                            </a>
+
+                                                                            <% }else{ %>
+                                                                                <a aria-label="Add To Wishlist"
+                                                                                    style="display: none;width: 40px; height: 40px; line-height: 42px;  text-align: center;"
+                                                                                    id="removeWish"
+                                                                                    class="action-btn hover-up"
+                                                                                    onclick="removeWishlist('<%=proData._id%>')"><i
+                                                                                        class="fas fa-heart" id="remove"
+                                                                                        style="color: #ff0000;  font-size: 20px;"></i></a>
+
+                                                                                <a aria-label="Add To Wishlist"
+                                                                                    style="display: inline-block; width: 40px; height: 40px; line-height: 42px;  text-align: center;"
+                                                                                    id="addWishlist"
+                                                                                    class="action-btn hover-up"
+                                                                                    onclick="addWishList('<%=proData._id%>')">
+                                                                                    <i class="far fa-heart"
+                                                                                        style="font-size: 20px;"></i>
+                                                                                </a>
+
+                                                                                <% } %>
+
+
+                                                                                    <!-- <a aria-label="Compare"
                                                                             class="action-btn hover-up"
                                                                             href="shop-compare.html"><i
                                                                                 class="far fa-exchange-alt"></i></a> -->
@@ -1245,6 +1282,7 @@
                 } else if (response.status == "viewCart") {
                     window.location.href = "http://localhost:2003/cart"
                 } else if (response.status == "login") {
+
                     Swal.fire({
 
                         text: "You want to login the page?!",
@@ -1281,18 +1319,68 @@
 
 
 
-    function addWishList(id){
+    function addWishList(id) {
         // alert(id)
         $.ajax({
-            url:'/addWishlist',
-            method:'post',
-            data:{
+            url: '/addWishlist',
+            method: 'post',
+            data: {
                 id
             },
-            success:(response)=>{
-                if(response.status==true){
-                    window.location.href="/wishlist"
+            success: (response) => {
+                if (response.status == true) {
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Add to Wishlist",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then((result) => {
+                        document.getElementById("addWishlist").style.display = "none"
+                        document.getElementById("removeWish").style.display = "inline-block"
+                        //    alert('hello')
+                    })
+                } else if (response.status == "login") {
+                    Swal.fire({
+
+                        text: "You want to login the page?!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Go to login!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/login"
+                        }
+                    })
                 }
+            }
+        })
+    }
+
+    function removeWishlist(id) {
+
+        $.ajax({
+            url: "/removeWish",
+            method: "post",
+            data: {
+                id
+            },
+            success: (response) => {
+                if (response.status == true) {
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Remove from Wishlist",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then((result) => {
+                        document.getElementById("addWishlist").style.display = "inline-block"
+                        document.getElementById("removeWish").style.display = "none"
+                        //    alert('hello')
+                    })
+                } 
             }
         })
     }

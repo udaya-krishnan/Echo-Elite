@@ -119,6 +119,7 @@ user_router.post("/account-edit",userController.editAccount)
 
   user_router.get('/wishlist',shopController.loadWishlist)
   user_router.post("/addWishlist",shopController.addWishlist)
+  user_router.post("/removeWish",shopController.removeWish)
 
  
 

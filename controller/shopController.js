@@ -144,47 +144,82 @@ const loadWishlist = async (req, res) => {
 const addWishlist = async (req, res) => {
   try {
     const id = req.body.id;
-
+//    console.log("hello")
     const findUer = await User.findOne({ email: req.session.email });
-
-
+    // console.log(("find Usernnnnnnnnnnnnnnnnnnnn",findUer));
+    const findProData = await Product.findById({ _id: id });
+        // console.log("proDataaaaaaaaaaaaaaaaaaaaaa",findProData)
     if (findUer) {
+      const userFind = await Wishlist.findOne({ user_id: findUer._id });
+    //   console.log("usrFinddddddddddddddddddddddddddddd",userFind )
 
-        const userFind=await Wishlist.findOne({user_id:findUer._id})
-
-        if(userFind){
-            let proWish=false
-            for(let i=0;i<userFind.products.length;i++){
-               
-            }
-
-        }else{
-
+      if (userFind) {
+        let proWish = false;
+        for (let i = 0; i < userFind.products.length; i++) {
+          if (findProData._id === userFind.products[i].productId) {
+            proWish = true;
+            break;
+          }
         }
+        // console.log(proWish,"prrrrrrrrrrowwwwwwwwwwwwissssssssssssh")
+        if (proWish) {
+          res.json({ status: "already" });
+        } else {
+            // console.log("eeeeeeeeeeeelseeeeeeeeeeeeeeeeeeeeeeeessssssss")
+          const updateWish = await Wishlist.findOneAndUpdate(
+            { user_id: findUer._id },
+            {
+              $push: {
+                products: {
+                  productId: findProData._id,
+                },
+              },
+            }
+          );
+        }
+      } else {
 
-      const proData = await Product.findOne({ _id: id });
-
-      const already=await Wishlist.findOne({user_id:findUer._id,"products.productId":proData._id})
-
-        
-      const wishList = new Wishlist({
-        user_id: findUer._id,
-        products: [
-          {
-            productId: proData._id,
-          },
-        ],
-      });
-      const wishlist = wishList.save();
-
+        // console.log("userfind else worked")
+        const wishList = new Wishlist({
+          user_id: findUer._id,
+          products: [
+            {
+              productId: findProData._id,
+            },
+          ],
+        });
+        const wishlist = wishList.save();
+      }
       res.json({ status: true });
+      
     } else {
-        res.json({status:"login"})
+      res.json({ status: "login" });
     }
   } catch (error) {
     console.log(error.message);
   }
 };
+
+
+const removeWish=async(req,res)=>{
+    try {
+        const id=req.body.id
+        const findUser=await User.findOne({email:req.session.email})
+
+        const dalePro=await Wishlist.findOneAndUpdate(
+            {user_id:findUser._id},
+            {
+                $pull:{products:{productId:id}}
+            }
+
+        )
+
+        res.json({status:true})
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 module.exports = {
   nextPage,
@@ -192,4 +227,5 @@ module.exports = {
   brandFilter,
   loadWishlist,
   addWishlist,
+  removeWish
 };

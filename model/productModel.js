@@ -24,7 +24,7 @@ const productSchema=new mongoose.Schema({
     offPercentage:{
         type:Number,
         require:true
-    },
+    }, 
     image:{
         type:Array,
         require:true
