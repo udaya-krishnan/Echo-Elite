@@ -137,11 +137,41 @@ const loadViewOrder=async(req,res)=>{
     }
  }
 
+ const returnRequest=async(req,res)=>{
+    try {
+
+        const reason=req.body.reasonValue
+        const id=req.body.id
+
+        // console.log("ooooooooorddddddderuid",id)
+        const findOrder=await Order.findByIdAndUpdate({_id:id},
+            {
+                $set:{
+                    status:"Return proccess"
+                }
+            })
+
+
+
+
+        
+
+        res.json({status:true})
+
+
+
+
+    } catch (error) {
+      console.log(error.message)  
+    }
+ }
+
 
 module.exports={
     loadViewOrder,
     cancelOrder,
     loadOrder,
     loadOrderDetail,
-    saveOrder
+    saveOrder,
+    returnRequest
 }

@@ -3,7 +3,7 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const generateOTP = require("../controller/otpGenrate");
-
+const Wishlist=require("../model/wishlistModel")
 const Category = require("../model/categoryModel");
 const Product = require("../model/productModel");
 const Brand = require("../model/brandModel");
@@ -361,8 +361,9 @@ const loadDash = async (req, res) => {
 const loadProduct = async (req, res) => {
   try {
     const id = req.query.id;
-
+   console.log(id,"heloooooooooooooooooooooooooooooooooooooooooooooo")
     const proData = await Product.findById({ _id: id });
+    console.log(proData)
 
     const user = req.session.email;
 
@@ -377,13 +378,19 @@ const loadProduct = async (req, res) => {
         // console.log("ctrdddddddddddddddddd",cartData)
         if (cartData) {
           // console.log("inside cart")
-          res.render("product", { proData, fullData, cartData, user });
+          const findWish=await Wishlist.findOne({user_id:userData._id,"products.productId":proData._id})
+
+
+          res.render("product", { proData, fullData, cartData, user ,findWish});
         } else {
-          res.render("product", { proData, fullData, cartData, user });
+          const findWish=await Wishlist.findOne({user_id:userData._id,"products.productId":proData._id})
+
+          res.render("product", { proData, fullData, cartData, user ,findWish});
         }
       } else {
         const cartData = null;
-        res.render("product", { proData, fullData, cartData, user });
+        const findWish=null
+        res.render("product", { proData, fullData, cartData, user,findWish });
       }
     } else {
       res.redirect("/404");
