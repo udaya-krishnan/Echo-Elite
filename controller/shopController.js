@@ -135,7 +135,35 @@ const brandFilter = async (req, res) => {
 
 const loadWishlist = async (req, res) => {
   try {
-    res.render("wishList");
+    const findUser=await User.findOne({email:req.session.email})
+ 
+    const wishData=await Wishlist.findOne({user_id:findUser._id})
+     
+    let proId=[]
+
+    for(let i=0;i<wishData.products.length;i++){
+        proId.push(wishData.products[i].productId)
+    }
+
+    let proData=[]
+
+    for(let i=0;i<proId.length;i++){
+        proData.push(await Product.findById({_id:proId[i]}))
+    }
+
+    console.log(proData)
+
+    const cartData=[]
+
+    for(let i=0;i< proId.length;i++){
+        cartData.push(await Cart.findOne({userId:findUser._id,"items.productsId":proId[i]}))
+    }
+
+    console.log(cartData,"caaaaaaaaaaartttttttttt")
+
+
+    res.render("wishList",{wishData,proData});
+
   } catch (error) {
     console.log(error.message);
   }
@@ -221,11 +249,33 @@ const removeWish=async(req,res)=>{
     }
 }
 
+const removeFromwishlist=async(req,res)=>{
+    try {
+
+        const id=req.body.id
+        const findUser=await User.findOne({email:req.session.email})
+
+        const dalePro=await Wishlist.findOneAndUpdate(
+            {user_id:findUser._id},
+            {
+                $pull:{products:{productId:id}}
+            }
+
+        )
+
+        res.json({status:true})
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 module.exports = {
   nextPage,
   categoryfilter,
   brandFilter,
   loadWishlist,
   addWishlist,
-  removeWish
+  removeWish,
+  removeFromwishlist
 };

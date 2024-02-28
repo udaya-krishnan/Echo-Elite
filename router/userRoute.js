@@ -113,6 +113,8 @@ user_router.post("/account-edit",userController.editAccount)
 
   user_router.post("/cancelOrder",userAuth.isBlocked,userAuth.islogin,orderController.cancelOrder)
 
+  user_router.post("/return",userAuth.isBlocked,userAuth.islogin,orderController.returnRequest)
+
 
   //****************************************Wishlist*************88 */
 
@@ -120,6 +122,7 @@ user_router.post("/account-edit",userController.editAccount)
   user_router.get('/wishlist',shopController.loadWishlist)
   user_router.post("/addWishlist",shopController.addWishlist)
   user_router.post("/removeWish",shopController.removeWish)
+  user_router.post("/remove-Wishlist",shopController.removeFromwishlist)
 
  
 

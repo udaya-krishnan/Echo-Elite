@@ -1330,32 +1330,41 @@
             success: (response) => {
                 if (response.status == true) {
 
-                    Swal.fire({
-                        icon: "success",
-                        title: "Add to Wishlist",
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "bottom",
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 1500,
+                        // timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: "Add to wishlist"
                     }).then((result) => {
                         document.getElementById("addWishlist").style.display = "none"
                         document.getElementById("removeWish").style.display = "inline-block"
                         //    alert('hello')
                     })
-                } else if (response.status == "login") {
-                    Swal.fire({
+        } else if (response.status == "login") {
+            Swal.fire({
 
-                        text: "You want to login the page?!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Go to login!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "/login"
-                        }
-                    })
+                text: "You want to login the page?!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Go to login!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/login"
                 }
-            }
+            })
+        }
+    }
         })
     }
 
@@ -1370,17 +1379,27 @@
             success: (response) => {
                 if (response.status == true) {
 
-                    Swal.fire({
-                        icon: "success",
-                        title: "Remove from Wishlist",
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "bottom",
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 1500,
+                        
+                        // timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: "Remove from wishlist"
                     }).then((result) => {
                         document.getElementById("addWishlist").style.display = "inline-block"
                         document.getElementById("removeWish").style.display = "none"
                         //    alert('hello')
                     })
-                } 
+                }
             }
         })
     }

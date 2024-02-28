@@ -4076,8 +4076,8 @@ table .product-thumbnail img {
 }
 
 .product-extra-link2 a:hover {
-  background-color: #5897fb;
-  color: #fff;
+  background-color: #fff;
+  color: #5897fb;
 }
 
 .tab-style3 .nav-tabs .nav-item a.active {
