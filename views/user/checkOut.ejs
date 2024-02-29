@@ -972,7 +972,7 @@
                             // alert(response.address)
                             // alert(response.orderNum)
                             
-                            verifyPayment(response,response)
+                            verifyPayment(response,response.order)
                         },
                         "prefill": {
                             "name": "Gaurav Kumar",
@@ -999,7 +999,7 @@
     }
 
 
-    function verifyPayment(payment,order,addressId,orderNum){
+    function verifyPayment(payment,order){
         // alert(payment)
         // alert(order)
         $.ajax({
@@ -1008,8 +1008,8 @@
             data:{
                 payment,
                 order,
-                addressId,
-                orderNum
+                // addressId,
+                // orderNum
             },
             success:(response)=>{
                 if(response.status==true){

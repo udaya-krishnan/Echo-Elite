@@ -417,7 +417,7 @@ const addOrder = async (req, res) => {
       instance.orders.create(options,async(error,razorpayOrder)=>{
         if(!error){
           console.log("hello"+razorpayOrder)
-          res.json({status:"rezorpay",order:razorpayOrder,address:addressData,orderNum:orderNum})
+          res.json({status:"rezorpay",order:razorpayOrder})
         }else{
           console.log(error.message)
         }
