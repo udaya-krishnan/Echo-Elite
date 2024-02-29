@@ -5,6 +5,18 @@ const Address = require("../model/addressModel");
 const Order = require("../model/orderModel");
 const generateOrder = require("../controller/otpGenrate");
 const generateDate=require("../controller/dateGenrator")
+const Razorpay=require("razorpay")
+
+const key_id=process.env.RAZORPAYID
+const key_secret=process.env.RAZORPAYSECRET
+
+
+var instance = new Razorpay({
+    key_id: key_id,
+    key_secret: key_secret,
+  });
+
+
 
 const loadCart = async (req, res) => {
   try {
@@ -283,14 +295,18 @@ const loadCheckOutPage = async (req, res) => {
 
 const addOrder = async (req, res) => {
   try {
-    const { addressId, cartid, checkedOption } = req.body;
-    console.log(addressId)
-    if(!addressId||!checkedOption){
+
+    // console.log("inside aaaaaaaaaddddddddddOrder");
+    const { addressId, cartid, paymentOption } = req.body;
+    // console.log(addressId)
+    // console.log("inside aaaaaaaaaddddddddddOrder",paymentOption);
+
+    if(!addressId||!paymentOption){
 
       res.json({status:"fill"})
 
-    }else{
-
+    }else if(paymentOption=="Cash on Delivery"){
+      // console.log("inside eeeeeeelse aaaaaaaaaddddddddddOrder");
       const userData = await User.findOne({ email: req.session.email });
 
       const cartData = await Cart.findOne({ userId: userData._id });
@@ -341,7 +357,7 @@ const addOrder = async (req, res) => {
         orderNumber: orderNum,
         items: proData,
         totalAmount: cartData.total,
-        orderType: checkedOption,
+        orderType: paymentOption,
         orderDate:date,
         status: "Processing",
         shippingAddress: addressData,
@@ -354,6 +370,59 @@ const addOrder = async (req, res) => {
       res.json({ status: true });
   
       const deleteCart = await Cart.findByIdAndDelete({ _id: cartData._id });
+
+    }else if(paymentOption=="Razorpay"){
+
+      const userData = await User.findOne({ email: req.session.email });
+      const cartData = await Cart.findOne({ userId: userData._id });
+
+      const proData = [];
+      for (let i = 0; i < cartData.items.length; i++) {
+        proData.push(cartData.items[i]);
+      }
+      console.log(proData);
+      const quantity=[]
+      
+      for(let i=0;i<proData.length;i++){
+        quantity.push(proData[i].quantity)
+      }
+  
+      const proId=[]
+      
+      for(let i=0;i<proData.length;i++){
+        proId.push(proData[i].productsId)
+      }
+  
+      // for(let i=0;i<proId.length;i++){
+  
+      //   const product=await Product.findByIdAndUpdate({_id:proId[i]},
+      //     {
+      //       $inc:{
+      //         stock:-quantity[i]
+      //       }
+      //     })
+      // }
+      const orderNum = generateOrder.generateOrder();
+      const stringOrder_id=orderNum.toString()
+      console.log(orderNum);
+      const addressData = await Address.findOne({ _id: addressId });
+      const date=generateDate()
+
+      var options={
+        amount:cartData.total*10,
+        currency:"INR",
+        receipt:stringOrder_id
+      }
+
+      instance.orders.create(options,async(error,razorpayOrder)=>{
+        if(!error){
+          console.log("hello"+razorpayOrder)
+          res.json({status:"rezorpay",order:razorpayOrder,address:addressData,orderNum:orderNum})
+        }else{
+          console.log(error.message)
+        }
+      })
+
 
     }
 

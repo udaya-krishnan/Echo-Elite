@@ -15,6 +15,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favico.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
+    
 </head>
 
 <body>
@@ -637,7 +638,7 @@
                                         </p>
                                         <a href="/address-edit?id=<%= address[i]._id %>" class="btn btn-primary btn-sm"
                                             style="font-size: 14px; text-transform: uppercase; background-color: #007bff; border-color: #007bff;">Edit</a>
-                                       
+
                                     </div>
                                 </div>
                             </div>
@@ -698,38 +699,23 @@
                                     <h5>Payment</h5>
                                 </div>
                                 <div class="payment_option">
-                                    <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option"
-                                            id="exampleRadios3" checked="">
-                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse"
-                                            data-target="#bankTranfer" aria-controls="bankTranfer">Cash on Delivery
-                                        </label>
-                                        <div class="form-group collapse in" id="bankTranfer">
+                                    <div class="custom-radio">
+                                        <input class="form-check-input" required type="radio" name="payment_option"
+                                            id="cashOnDelivery" value="Cash on Delivery" checked>
+                                        <label class="form-check-label" for="cashOnDelivery" data-bs-toggle="collapse"
+                                            data-target="#bankTranfer" aria-controls="bankTranfer">Cash on
+                                            Delivery</label>
+
+                                        <input class="form-check-input" required type="radio" name="payment_option"
+                                            id="razorpay" value="Razorpay">
+                                        <label class="form-check-label" for="razorpay" data-bs-toggle="collapse"
+                                            data-target="#bankTranfer" aria-controls="bankTranfer">Razorpay</label>
+
+                                        <div class="form-group collapse" id="bankTranfer">
                                             <p class="text-muted mt-5">There are many variations of passages of Lorem
-                                                Ipsum available, but the majority have suffered alteration. </p>
+                                                Ipsum available, but the majority have suffered alteration.</p>
                                         </div>
                                     </div>
-                                    <!-- <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option"
-                                            id="exampleRadios4" checked="">
-                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
-                                            data-target="#checkPayment" aria-controls="checkPayment">Check
-                                            </label>
-                                        <div class="form-group collapse in" id="checkPayment">
-                                            <p class="text-muted mt-5">Please send your cheque to Store Name, Store
-                                                Street, Store Town, Store State / County, Store Postcode. </p>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option"
-                                            id="exampleRadios5" checked="">
-                                        <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse"
-                                            data-target="#paypal" aria-controls="paypal"></label>
-                                        <div class="form-group collapse in" id="paypal">
-                                            <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card
-                                                if you don't have a PayPal account.</p>
-                                        </div>
-                                    </div> -->
                                 </div>
                             </div>
                             <a onclick="placeOrder('<%= cartData._id%>')" class="btn btn-fill-out btn-block mt-30">Place
@@ -895,36 +881,18 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
 </body>
 
 <script>
 
 
-    var paymentOptions = document.getElementsByName('payment_option');
-
-
-    var checkedOption = "";
-
-
-    for (var i = 0; i < paymentOptions.length; i++) {
-
-        if (paymentOptions[i].checked) {
-
-            checkedOption = document.querySelector('label[for="' + paymentOptions[i].id + '"]').innerText;
-            break;
-        }
-    }
-
-
     let addressId;
-
 
     function handleAddressSelection(radioButton) {
         if (radioButton.checked) {
             addressId = radioButton.value;
-
-
-
             // You can use the addressId here for further processing
         }
 
@@ -932,15 +900,32 @@
 
 
 
+    let selectedPaymentOption = '';
+
+    document.querySelectorAll('input[name="payment_option"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            if (this.checked) {
+                selectedPaymentOption = this.value;
+                console.log(selectedPaymentOption + ' is selected.');
+                // You can do further processing with the selected option here
+            }
+        });
+    });
 
 
 
+
+
+   
 
 
     function placeOrder(cartid) {
-        //    alert(addressId)
+
         //    alert(cartid)
+        //    alert(addressId)
         //    alert(checkedOption)
+        var paymentOption = document.querySelector('input[name="payment_option"]:checked').value;
+        // alert(paymentOption)
 
         $.ajax({
             url: "/checkOutData",
@@ -948,17 +933,13 @@
             data: {
                 addressId,
                 cartid,
-                checkedOption
+                paymentOption
             },
             success: (response) => {
                 if (response.status === true) {
-                    Swal.fire({
 
-                        icon: "success",
-                        title: "Order Placed",
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+                    window.location.href = "/orderSuccess"
+                 
                 } else if (response.status == "fill") {
                     Swal.fire({
 
@@ -967,16 +948,75 @@
                         showConfirmButton: false,
                         timer: 1500
                     })
+                } else if (response.status == "rezorpay") {
+
+                    // alert("inside hello")
+                    // alert(response.order.amount)
+                    // alert(response.order.id)
+                    // alert(response.order)
+                    
+
+                    var options = {
+                        "key": "rzp_test_iPZZ7eS2qqkR1R", // Enter the Key ID generated from the Dashboard
+                        "amount": response.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "currency": "INR",
+                        "name": "Echo Elite",
+                        "description": "Test Transaction",
+                        "image": "https://example.com/your_logo",
+                        "order_id": response.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                        "handler": function (response) {
+                            alert("heeeei")
+                            // alert(response.razorpay_payment_id);
+                            // alert(response.razorpay_order_id);
+                            // alert(response.razorpay_signature)
+                            // alert(response.address)
+                            // alert(response.orderNum)
+                            
+                            verifyPayment(response,response)
+                        },
+                        "prefill": {
+                            "name": "Gaurav Kumar",
+                            "email": "gaurav.kumar@example.com",
+                            "contact": "9000090000"
+                        },
+                        "notes": {
+                            "address": "Razorpay Corporate Office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
+
+
+                    var rzp=new Razorpay(options);
+                    rzp.open();
+
+
                 }
             }
         })
 
+    }
 
 
-
-
-
-
+    function verifyPayment(payment,order,addressId,orderNum){
+        // alert(payment)
+        // alert(order)
+        $.ajax({
+            url:'/verify-payment',
+            method:"post",
+            data:{
+                payment,
+                order,
+                addressId,
+                orderNum
+            },
+            success:(response)=>{
+                if(response.status==true){
+                    window.location.href="/orderSuccess"
+                }
+            }
+        })
     }
 
 </script>

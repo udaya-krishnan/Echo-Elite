@@ -104,6 +104,10 @@ user_router.post("/account-edit",userController.editAccount)
 
   user_router.post("/checkOutData",userAuth.isBlocked,userAuth.islogin,cartController.addOrder)
 
+  user_router.get("/orderSuccess",userAuth.isBlocked,userAuth.islogin,orderController.orderSuccess)
+
+  user_router.post("/verify-payment",userAuth.isBlocked,userAuth.islogin,orderController.rezopayment)
+
 
 
   //***********************************************Order**************************** */
@@ -112,6 +116,8 @@ user_router.post("/account-edit",userController.editAccount)
   user_router.get("/orderView",userAuth.isBlocked,userAuth.islogin,orderController.loadViewOrder)
 
   user_router.post("/cancelOrder",userAuth.isBlocked,userAuth.islogin,orderController.cancelOrder)
+
+  user_router.post("/cancelReturn",userAuth.isBlocked,userAuth.islogin,orderController.cancelReturn)
 
   user_router.post("/return",userAuth.isBlocked,userAuth.islogin,orderController.returnRequest)
 

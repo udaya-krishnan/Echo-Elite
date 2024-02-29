@@ -706,7 +706,7 @@
                                             <% }else if(findOrder.status=="Return proccess" ){ %>
 
 
-                                                <a onclick="cancel('<%= findOrder._id %>')" class="btn btn-rounded"> <i
+                                                <a onclick="cancelReturn('<%= findOrder._id %>')" class="btn btn-rounded"> <i
                                                         class="fa fa-share-square mr-10"></i> Cancel Return</a>
 
                                                 <%}else if(findOrder.status=="Returned"){%>
@@ -988,6 +988,21 @@
         }
 
 
+    }
+
+    function cancelReturn(id){
+        $.ajax({
+            url:"/cancelReturn",
+            method:"post",
+            data:{
+                id
+            },
+            success:(response)=>{
+                if(response.status==true){
+                    location.href = "/orders"
+                }
+            }
+        })
     }
 
 
