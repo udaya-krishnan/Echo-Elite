@@ -51,7 +51,7 @@ user_router.get("/address-edit",userAuth.isBlocked,userAuth.islogin,userControll
 user_router.post("/address-edit",userAuth.isBlocked,userAuth.islogin,userController.editAddress)
 
 user_router.get('/orders',userAuth.isBlocked,userAuth.islogin,userController.loadOrder)
-user_router.get('/track-orders',userAuth.isBlocked,userAuth.islogin,userController.loadTrack)
+user_router.get('/wallet',userAuth.isBlocked,userAuth.islogin,userController.loadTrack)
 user_router.get('/address',userAuth.isBlocked,userAuth.islogin,userController.loadAddress)
 user_router.get('/change-pass',userAuth.isBlocked,userAuth.islogin,userController.loadChangePass) 
 user_router.get('/account-detail',userAuth.isBlocked,userAuth.islogin,userController.loadAccount) 
@@ -129,6 +129,15 @@ user_router.post("/account-edit",userController.editAccount)
   user_router.post("/addWishlist",shopController.addWishlist)
   user_router.post("/removeWish",shopController.removeWish)
   user_router.post("/remove-Wishlist",shopController.removeFromwishlist)
+
+
+
+  //**************************************************************Wallet*************88 */
+
+
+  user_router.post("/addCash",userAuth.isBlocked,userAuth.islogin,orderController.addWalletCash)
+
+  user_router.post("/addAmount",userAuth.isBlocked,userAuth.islogin,orderController.addCash)
 
  
 

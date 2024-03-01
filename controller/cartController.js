@@ -6,15 +6,16 @@ const Order = require("../model/orderModel");
 const generateOrder = require("../controller/otpGenrate");
 const generateDate=require("../controller/dateGenrator")
 const Razorpay=require("razorpay")
+const Wallet=require("../model/walletModel")
 
 const key_id=process.env.RAZORPAYID
 const key_secret=process.env.RAZORPAYSECRET
 
 
-var instance = new Razorpay({
-    key_id: key_id,
-    key_secret: key_secret,
-  });
+  var instance = new Razorpay({
+      key_id: key_id,
+      key_secret: key_secret,
+    });
 
 
 
@@ -340,7 +341,7 @@ const addOrder = async (req, res) => {
             }
           })
       }
-  
+
       // console.log(" quantityyyyyyyyyyyyyyyyyy"+quantity)
   
       const orderNum = generateOrder.generateOrder();
@@ -366,6 +367,8 @@ const addOrder = async (req, res) => {
       console.log(proData);
   
       orderData.save();
+
+    
   
       res.json({ status: true });
   
@@ -409,7 +412,7 @@ const addOrder = async (req, res) => {
       const date=generateDate()
 
       var options={
-        amount:cartData.total*10,
+        amount:cartData.total*100,
         currency:"INR",
         receipt:stringOrder_id
       }
@@ -417,7 +420,7 @@ const addOrder = async (req, res) => {
       instance.orders.create(options,async(error,razorpayOrder)=>{
         if(!error){
           console.log("hello"+razorpayOrder)
-          res.json({status:"rezorpay",order:razorpayOrder})
+          res.json({status:"rezorpay",order:razorpayOrder,address:addressId,orderNumber:orderNum})
         }else{
           console.log(error.message)
         }

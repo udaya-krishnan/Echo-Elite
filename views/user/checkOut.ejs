@@ -954,8 +954,15 @@
                     // alert(response.order.amount)
                     // alert(response.order.id)
                     // alert(response.order)
-                    
 
+                    let orderId=response.order.id
+                    let address=response.address
+                    
+                    // alert(address)
+                    let order_id=response.orderNumber
+                    // alert(order_id)
+                    
+                    
                     var options = {
                         "key": "rzp_test_iPZZ7eS2qqkR1R", // Enter the Key ID generated from the Dashboard
                         "amount": response.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -965,14 +972,17 @@
                         "image": "https://example.com/your_logo",
                         "order_id": response.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                         "handler": function (response) {
-                            alert("heeeei")
+                            // alert(addressId)
+                            // alert(order_id)
+                            // alert("heeeei")
                             // alert(response.razorpay_payment_id);
                             // alert(response.razorpay_order_id);
                             // alert(response.razorpay_signature)
                             // alert(response.address)
                             // alert(response.orderNum)
+                            // alert(orderId)
                             
-                            verifyPayment(response,response.order)
+                            verifyPayment(response,orderId,addressId,order_id)
                         },
                         "prefill": {
                             "name": "Gaurav Kumar",
@@ -989,6 +999,7 @@
 
 
                     var rzp=new Razorpay(options);
+                    // alert(response.order.id)
                     rzp.open();
 
 
@@ -999,7 +1010,7 @@
     }
 
 
-    function verifyPayment(payment,order){
+    function verifyPayment(payment,order,addressId,order_id){
         // alert(payment)
         // alert(order)
         $.ajax({
@@ -1008,8 +1019,9 @@
             data:{
                 payment,
                 order,
-                // addressId,
-                // orderNum
+                addressId,
+                order_id
+               
             },
             success:(response)=>{
                 if(response.status==true){
