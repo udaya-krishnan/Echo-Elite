@@ -46,7 +46,7 @@ const loadViewOrder = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
   try {
-    const id = req.body.id;
+    const id = req.body.id; 
     console.log(id)
 
     const findOrder = await Order.findById({ _id: id });
