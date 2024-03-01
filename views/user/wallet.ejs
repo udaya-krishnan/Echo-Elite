@@ -566,9 +566,9 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link active" 
-                                                href="/track-orders" role="tab" aria-controls="track-orders"
-                                                aria-selected="false"><i class="fa fa-paper-plane mr-15"></i>Track Your
-                                                Order</a>
+                                                href="/wallet" role="tab" aria-controls="track-orders"
+                                                aria-selected="false"><i class="fa fa-paper-plane mr-15"></i>Wallet
+                                                </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link"  href="/address"
@@ -594,36 +594,75 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
-                                
-                                <!-- <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab"> -->
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Orders tracking</h5>
-                                        </div>
-                                        <div class="card-body contact-from-area">
-                                            <p>To track your order please enter your OrderID in the box below and press "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</p>
-                                            <div class="row">
-                                                <div class="col-lg-8">
-                                                    <form class="contact-form-style mt-30 mb-50" action="#" method="post">
-                                                        <div class="input-style mb-20">
-                                                            <label>Order ID</label>
-                                                            <input name="order-id" placeholder="Found in your order confirmation email" type="text" class="square">
-                                                        </div>
-                                                        <div class="input-style mb-20">
-                                                            <label>Billing email</label>
-                                                            <input name="billing-email" placeholder="Email you used during checkout" type="email" class="square">
-                                                        </div>
-                                                        <button class="submit submit-auto-width" type="submit">Track</button>
-                                                    </form>
-                                                </div>
-                                            </div>
+                                <div class="wallet-page" style="margin-top: 20px;">
+                                    <div class="wallet-header">
+                                        <h1 style="text-align: center;">Welcome to Your Wallet</h1>
+                                    </div>
+                                    <div class="wallet-content" style="margin-top: 20px;">
+                                        <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+                                            <tr>
+                                                <th>Transaction ID</th>
+                                                <th>Amount</th>
+                                                <th>Date</th>
+                                            </tr>
+                                            <% if (userWallet) { %>
+
+                                                <% for( let i = 0; i < userWallet.transactions.length; i++ ) { %>
+
+                                                    <tr>
+                                                        <td><%= userWallet.transactions[i].id%></td>
+                                                        <td>₹<%= userWallet.transactions[i].amount%></td>
+                                                        <td><%= userWallet.transactions[i].date %></td>
+                                                    </tr>
+
+                                                <% } %>
+
+                                                
+                                            <% }else{ %>
+
+                                                <tr>
+                                                    <td>No Transactions</td>
+                                                </tr>
+
+                                                <% } %>
+                                            
+                                            <!-- <tr>
+                                                <td>2</td>
+                                                <td>₹100</td>
+                                                <td>2024-02-29</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>₹150</td>
+                                                <td>2024-02-28</td>
+                                            </tr> -->
+                                        </table>
+                                        <div class="wallet-section" style="margin-top: 20px; border: 2px solid #0d6efd; background-color: #f1f1f1; border-radius: 10px; padding: 20px;">
+                                            <h2 style="color: #0d6efd; text-align: center; font-size: 24px; margin-bottom: 10px;">Balance</h2>
+                                            <% if (userWallet) { %>
+
+                                                <p style="text-align: center; font-size: 18px; color: #333;">Your current balance is <span style="font-weight: bold; font-size: 22px;">₹<%= userWallet.balance %></span>.</p>
+                                            <% } else{ %>
+
+                                                
+                                                <p style="text-align: center; font-size: 18px; color: #333;">Your current balance is <span style="font-weight: bold; font-size: 22px;">₹0</span>.</p>
+                                                <% } %>
+
                                         </div>
                                     </div>
-                                <!-- </div> -->
-
-
+                                    <div class="wallet-footer" style="text-align: center; margin-top: 20px;">
+                                        <p>© 2024 My Wallet. All rights reserved.</p>
+                                    </div>
+                                    <div style="text-align: center; margin-top: 20px;">
+                                        <label for="add-money" style="font-size: 18px;">Add Money to Wallet:</label>
+                                        <p style="display: none;"class="text-danger" id="input">Enter Your Amount</p>
+                                        <input type="number" id="add-money"  name="add-money" style="padding: 8px; margin-left: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                                        <button type="button" onclick="addMoney()" style="padding: 8px 15px; background-color: #0d6efd; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Add</button>
+                                    </div>
+                                    
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -783,7 +822,106 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
+
+<script>
+    function addMoney(){
+        const Amount=document.getElementById("add-money").value.trim()
+        if(Amount==""){
+            document.getElementById("input").style.display="block"
+            setTimeout(()=>{
+                document.getElementById("input").style.display="none"
+            },2000)
+        }else{
+             $.ajax({
+                url:"/addCash",
+                method:"post",
+                data:{
+                    Amount
+                },
+                success:(response)=>{
+                    if(response.status==true){
+                        // alert(response.wallet.amount)
+                        let wallet_id=response.wallet.id
+                        let amount=response.Amount
+
+                        // alert(amount)
+
+
+
+                        
+                    var options = {
+                        "key": "rzp_test_iPZZ7eS2qqkR1R", // Enter the Key ID generated from the Dashboard
+                        "amount": response.wallet.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "currency": "INR",
+                        "name": "Echo Elite",
+                        "description": "Test Transaction",
+                        "image": "https://example.com/your_logo",
+                        "order_id": response.wallet.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                        "handler": function (response) {
+                            // alert(addressId)
+                            // alert(order_id)
+                            // alert("heeeei")
+                            // alert(response.razorpay_payment_id);
+                            // alert(response.razorpay_order_id);
+                            // alert(response.razorpay_signature)
+                            // alert(response.address)
+                            // alert(response.orderNum)
+                            // alert(orderId)
+                            
+                            verifyWallet(response,wallet_id,amount)
+                        },
+                        "prefill": {
+                            "name": "Gaurav Kumar",
+                            "email": "gaurav.kumar@example.com",
+                            "contact": "9000090000"
+                        },
+                        "notes": {
+                            "address": "Razorpay Corporate Office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
+
+                    
+                    var rzp=new Razorpay(options);
+                    
+                    rzp.open();
+
+
+
+
+
+                    }
+                }
+
+             })
+        }
+    }
+
+
+   function verifyWallet(wallet,id,amount){
+    $.ajax({
+        url:"/addAmount",
+        method:"post",
+        data:{
+            wallet,
+            id,
+            amount
+        },
+        success:(response)=>{
+            if(response.status==true){
+                window.location.href="/wallet"
+            }
+        }
+    })
+   }
+
+
+
+</script>
 
 
 </html>

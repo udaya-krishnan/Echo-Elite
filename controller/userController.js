@@ -9,7 +9,7 @@ const Product = require("../model/productModel");
 const Brand = require("../model/brandModel");
 const Adderss = require("../model/addressModel");
 const Cart = require("../model/cartModel");
-
+const Wallet=require("../model/walletModel")
 const Order = require("../model/orderModel");
 
 const Email = process.env.Email;
@@ -617,7 +617,11 @@ const loadOrder = async (req, res) => {
 
 const loadTrack = async (req, res) => {
   try {
-    res.render("trackOrder");
+    const userData=await User.findOne({email:req.session.email})
+    const userWallet=await Wallet.findOne({userId:userData._id})
+    console.log(userWallet)
+    
+    res.render("wallet",{userWallet});
   } catch (error) {
     console.log(error.message);
   }
