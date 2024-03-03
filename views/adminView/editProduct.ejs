@@ -153,36 +153,42 @@
                                 <div class="mb-4">
                                     <input type="hidden" id="id" name="id" value="<%=proData._id%>">
                                     <label for="product_name" class="form-label">Product title</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="product_name" name="product_name" value="<%= proData.name %>">
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_name" onblur="nameFun()" name="product_name" value="<%= proData.name %>">
+                                   
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Full description</label>
-                                    <textarea placeholder="Type here" class="form-control" name="product_dis" rows="4" ><%= proData.discripiton %></textarea>
+                                    <textarea placeholder="Type here" class="form-control" id="product_dis" name="product_dis" onblur="disFun()" rows="4" ><%= proData.discripiton %></textarea>
+                                    <p id="disErr" class="text-danger"></p>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Regular price</label>
-                                            <input placeholder="$" type="text" class="form-control" name="regprice" value="<%= proData.regularPrice %>">
+                                            <input placeholder="$" type="text" class="form-control" onblur="rpFun()" id="regprice" name="regprice" value="<%= proData.regularPrice %>">
+                                            <p id="rpErr" class="text-danger"></p>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Offer price</label>
-                                            <input placeholder="$" type="text" class="form-control" name="offprice" value="<%= proData.offerPrice %>">
+                                            <input placeholder="$" type="text" class="form-control" onblur="opFun()" id="offprice" name="offprice" value="<%= proData.offerPrice %>">
+                                            <p id="opErr" class="text-danger"></p>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Stock</label>
-                                            <input placeholder="" type="text" class="form-control" name="stock" value="<%= proData.stock %>">
+                                            <input placeholder="" type="text" class="form-control" onblur="stFun()" id="stock" name="stock" value="<%= proData.stock %>">
+                                            <p id="stErr" class="text-danger"></p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-4">
+                                <!-- <div class="mb-4">
                                     <label class="form-label">Tax rate</label>
-                                    <input type="text" placeholder="%" class="form-control" id="product_name" name="off" value="<%= proData.offPercentage %>">
-                                </div>
+                                    <input type="text" placeholder="%" class="form-control" id="product_name" name="off" value="">
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -195,7 +201,8 @@
                                 <div class="input-upload">
                                     <img src="/admin_assets/imgs/theme/upload.svg" alt="">
                                
-                                        <input class="form-control" name="proImage" type="file" multiple>
+                                        <input class="form-control" name="proImage" id="product_images" onblur="imageValidation()" type="file" multiple>
+                                        <p id="imageError" class="text-danger"></p>
                                 </div>
                             </div>
                         </div>
@@ -207,7 +214,7 @@
                                 <div class="row gx-2">
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label">Category</label>
-                                        <select class="form-select" name="catName">
+                                        <select class="form-select"  name="catName">
                                             <% for( let i = 0; i < catData.length; i++ ) { %>
                                             <% if (catData[i].is_blocked===false) { %>
                                             <option > <%= catData[i].name %> </option>
@@ -227,8 +234,9 @@
                                     </div>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="product_name" class="form-label">Color</label>
-                                    <input type="text" class="form-control" name="color" value="black">
+                                    <label for="product_name"  class="form-label">Color</label>
+                                    <input type="text" onblur="coFun()" id="color" class="form-control" name="color" value="black">
+                                    <p id="coErr" class="text-danger"></p>
                                 </div>
                             </div>
                         </div>
@@ -279,6 +287,173 @@
  
 </body>
 
+<script>
+    
+    function nameFun() {
+            const name = document.getElementById("product_name").value
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (name.trim() == '') {
+                document.getElementById("nameErr").innerHTML = "Product name is require"
+            } else {
+                document.getElementById("nameErr").innerHTML = ""
+            }
+            if (!nameRegex.test(name)) {
+                document.getElementById("nameErr").innerHTML = "Invalid Name"
+            } else {
+                document.getElementById("nameErr").innerHTML = ""
+            }
+        }
+
+        function disFun() {
+            const dis = document.getElementById("product_dis").value
+            if (dis.trim() == '') {
+                document.getElementById("disErr").innerHTML = "Product discription  is require"
+            } else {
+                document.getElementById("disErr").innerHTML = ""
+            }
+        }
+
+        function rpFun() {
+            const rp = document.getElementById("regprice").value
+
+            const regex = /^[0-9]+$/
+
+            if (rp.trim() == '') {
+                document.getElementById("rpErr").innerHTML = "Regular price is require"
+            } else {
+                document.getElementById("rpErr").innerHTML = ""
+            }
+            if (!regex.test(rp)) {
+                document.getElementById("rpErr").innerHTML = "Invalid price"
+            } else {
+                document.getElementById("rpErr").innerHTML = ""
+            }
+        }
+
+        function opFun() {
+            const op = document.getElementById("offprice").value
+            const rp= document.getElementById("regprice").value
+
+            const regex = /^[0-9]+$/
+
+            // if (op.trim() == '') {
+            //     document.getElementById("opErr").innerHTML = "Regular price is require"
+            // } else {
+            //     document.getElementById("opErr").innerHTML = ""
+            // }
+            if (!regex.test(op)) {
+                document.getElementById("opErr").innerHTML = "Invalid price"
+            } else {
+                document.getElementById("opErr").innerHTML = ""
+            }
+            if(op>rp){
+                document.getElementById("opErr").innerHTML = "Offer price Can't be grater than regular price"
+            }else{
+                document.getElementById("opErr").innerHTML=""
+            }
+        }
+
+
+        function stFun() {
+            const st = document.getElementById("stock").value
+
+            const regex = /^[0-9]+$/
+
+            if (st.trim() == '') {
+                document.getElementById("stErr").innerHTML = "Stock is require"
+            } else {
+                document.getElementById("stErr").innerHTML = ""
+            }
+            if (!regex.test(st)) {
+                document.getElementById("stErr").innerHTML = "Invalid price"
+            } else {
+                document.getElementById("stErr").innerHTML = ""
+            }
+        }
+
+
+        // function ofFun() {
+        //     const st = document.getElementById("off").value
+
+        //     const regex = /^[0-9]+$/
+
+        //     if (st.trim() == '') {
+        //         document.getElementById("offErr").innerHTML = "Offer Pecentage is require"
+        //     } else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if (!regex.test(st)) {
+        //         document.getElementById("offErr").innerHTML = "Invalid price"
+        //     } else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if(st>100){ 
+        //         document.getElementById("offErr").innerHTML = "Miximum 100%"
+        //     }else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if(st<=0){
+        //         document.getElementById("offErr").innerHTML = "Minimum 100%"
+        //     }else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        // }
+
+        function coFun() {
+            const col = document.getElementById("color").value
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (col.trim() == '') {
+                document.getElementById("coErr").innerHTML = "Color is require"
+            } else {
+                document.getElementById("coErr").innerHTML = ""
+            }
+            if (!nameRegex.test(col)) {
+                document.getElementById("coErr").innerHTML = "Invalid Color"
+            } else {
+                document.getElementById("coErr").innerHTML = ""
+            }
+        }
+
+
+        function imageValidation() {
+            const selectImages = document.getElementById("product_images").files;
+            const imageError = document.getElementById("imageError");
+
+            if (selectImages.length !== 5) {
+                imageError.textContent = "Images must need exactly 5 images";
+                return false;
+            }
+            imageError.textContent = "";
+            return true;
+        }
+
+
+
+        document.getElementById("submitId").addEventListener("submit",(e)=>{
+            nameFun()
+            disFun()
+            rpFun()
+            coFun()
+            // ofFun()
+            stFun()
+            opFun()
+            imageValidation()
+
+            const name=document.getElementById("nameErr")
+            const dis=document.getElementById("disErr")
+            const gp=document.getElementById("rpErr")
+            const op=document.getElementById("opErr")
+            const st=document.getElementById("stErr")
+            // const of=document.getElementById("offErr")
+            const co=document.getElementById("coErr")
+            const imageError = document.getElementById("imageError")
+
+            if(name.innerHTML||dis.innerHTML||gp.innerHTML||op.innerHTML||st.innerHTML||co.innerHTML||imageError.innerHTML){
+                e.preventDefault()
+            }
+            
+        })
+</script>
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
 </html>

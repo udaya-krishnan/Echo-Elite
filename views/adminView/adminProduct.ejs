@@ -193,7 +193,12 @@
                                     <a href="#" class="img-wrap"> <img style="width: 200px; height: 250px;" src="/productImages/<%= proData[i].image[4] %>" alt="Product" > </a>
                                     <div class="info-wrap">
                                         <a href="#" class="title text-truncate"><%= proData[i].name %></a>
-                                        <div class="price mb-2">$<%= proData[i].offerPrice %></div> 
+                                        <% if (proData[i].offerPrice) { %>
+                                            <div class="price mb-2">$<%= proData[i].offerPrice %></div>
+                                        <% }else{ %>
+                                            <div class="price mb-2">$<%= proData[i].regularPrice %></div>
+                                            <% } %>
+           
                                         <div class="price mb-2">Stock:<%= proData[i].stock %></div>
                                         <% if (proData[i].is_blocked==true ) { %>
                                             <a href="/admin/block-pro?id=<%= proData[i]._id %>" class="btn btn-sm font-sm btn-light rounded">

@@ -783,6 +783,7 @@ const loadShop = async (req, res) => {
 
 const loadCoupon=async(req,res)=>{
   try {
+    const userCoupon=await 
     res.render("coupon")
   } catch (error) {
     console.log(error.message)

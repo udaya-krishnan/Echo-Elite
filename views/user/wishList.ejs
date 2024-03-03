@@ -570,9 +570,17 @@
                                                         <%= proData[i].discripiton %>
                                                     </p>
                                                 </td>
-                                                <td class="price" data-title="Price">₹<span id="offerPrice<%=i%>">
+                                                <% if (proData[i].offerPrice) { %>
+                                                    <td class="price" data-title="Price">₹<span id="offerPrice<%=i%>">
                                                         <%= proData[i].offerPrice %>
                                                     </span></td>
+                                                <% }else{ %>
+                                                    <td class="price" data-title="Price">₹<span id="offerPrice<%=i%>">
+                                                        <%= proData[i].regularPrice %>
+                                                    </span></td>
+                                                    <% } %>
+                                               
+
                                                 <td class="text-center" data-title="Stock">
                                                     <% if (proData[i].stock<=0) { %>
                                                         <span class="color3 font-weight-bold">Out Stock</span>
