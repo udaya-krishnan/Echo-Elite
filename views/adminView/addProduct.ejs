@@ -197,12 +197,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-4">
+                                <!-- <div class="mb-4">
                                     <label class="form-label">offer Percentage</label>
                                     <input type="text" placeholder="%" class="form-control" id="off" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" name="off"
                                         onblur="ofFun()">
                                     <p id="offErr" class="text-danger"></p>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -378,32 +378,32 @@
         }
 
 
-        function ofFun() {
-            const st = document.getElementById("off").value
+        // function ofFun() {
+        //     const st = document.getElementById("off").value
 
-            const regex = /^[0-9]+$/
+        //     const regex = /^[0-9]+$/
 
-            if (st.trim() == '') {
-                document.getElementById("offErr").innerHTML = "Offer Pecentage is require"
-            } else {
-                document.getElementById("offErr").innerHTML = ""
-            }
-            if (!regex.test(st)) {
-                document.getElementById("offErr").innerHTML = "Invalid price"
-            } else {
-                document.getElementById("offErr").innerHTML = ""
-            }
-            if(st>100){ 
-                document.getElementById("offErr").innerHTML = "Miximum 100%"
-            }else {
-                document.getElementById("offErr").innerHTML = ""
-            }
-            if(st<=0){
-                document.getElementById("offErr").innerHTML = "Minimum 100%"
-            }else {
-                document.getElementById("offErr").innerHTML = ""
-            }
-        }
+        //     if (st.trim() == '') {
+        //         document.getElementById("offErr").innerHTML = "Offer Pecentage is require"
+        //     } else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if (!regex.test(st)) {
+        //         document.getElementById("offErr").innerHTML = "Invalid price"
+        //     } else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if(st>100){ 
+        //         document.getElementById("offErr").innerHTML = "Miximum 100%"
+        //     }else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if(st<=0){
+        //         document.getElementById("offErr").innerHTML = "Minimum 100%"
+        //     }else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        // }
 
         function coFun() {
             const col = document.getElementById("color").value

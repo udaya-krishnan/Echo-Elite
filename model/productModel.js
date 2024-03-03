@@ -15,16 +15,13 @@ const productSchema=new mongoose.Schema({
     },
     offerPrice:{
         type:Number,
-        require:true
+        
     },
     stock:{
         type:Number,
         require:true
     },
-    offPercentage:{
-        type:Number,
-        require:true
-    }, 
+  
     image:{
         type:Array,
         require:true

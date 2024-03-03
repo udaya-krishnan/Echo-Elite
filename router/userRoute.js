@@ -141,7 +141,7 @@ user_router.post("/account-edit",userController.editAccount)
 
  
 
-
+user_router.get("/coupon",userAuth.isBlocked,userAuth.islogin,userController.loadCoupon)
 
 
 

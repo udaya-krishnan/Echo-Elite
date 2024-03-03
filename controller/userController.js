@@ -618,7 +618,7 @@ const loadOrder = async (req, res) => {
 const loadTrack = async (req, res) => {
   try {
     const userData=await User.findOne({email:req.session.email})
-    const userWallet=await Wallet.findOne({userId:userData._id})
+    const userWallet=await Wallet.findOne({userId:userData._id}).sort({"date":1}).limit(5)
     console.log(userWallet)
     
     res.render("wallet",{userWallet});
@@ -781,6 +781,14 @@ const loadShop = async (req, res) => {
   }
 };
 
+const loadCoupon=async(req,res)=>{
+  try {
+    res.render("coupon")
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 module.exports = {
   loadLanding,
   loadRegister,
@@ -812,4 +820,5 @@ module.exports = {
   loadEditAccount,
   editAccount,
   loadShop,
+  loadCoupon
 };

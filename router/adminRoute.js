@@ -36,6 +36,7 @@ const productControle = require("../controller/productController");
 const brandControle = require("../controller/brandController");
 const isAdmin = require("../middleware/adminAuth");
 const orderController=require("../controller/orderController")
+const couponController=require("../controller/couponController")
 
 admin_route.get("/", adminController.adminLogin);
 admin_route.post("/login", adminController.verifyAdmin);
@@ -105,5 +106,12 @@ admin_route.get("/brand-edit",isAdmin, brandControle.editload);
 admin_route.get("/order",isAdmin,orderController.loadOrder)
 admin_route.get("/order-Detail",isAdmin,orderController.loadOrderDetail)
 admin_route.post("/orderSave",isAdmin,orderController.saveOrder)
+
+
+  //******************************************Coupon********************************* */
+admin_route.get("/coupon",isAdmin,couponController.loadCouponPage)
+admin_route.get("/addCoupon",isAdmin,couponController.addCouponLoad)
+admin_route.post("/addCoupon",isAdmin,couponController.addCoupon)
+admin_route.post("/coupon-block",isAdmin,couponController.blockCoupon)
 
 module.exports = admin_route;
