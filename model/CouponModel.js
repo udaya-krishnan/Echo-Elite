@@ -37,7 +37,6 @@ const couponSchema = new mongoose.Schema(
 
     users:{
       type:Array,
-      
     }
     
   },

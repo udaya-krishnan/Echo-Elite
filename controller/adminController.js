@@ -1,5 +1,8 @@
 
 const User = require("../model/userModel");
+const Order=require("../model/orderModel")
+const Product=require("../model/productModel")
+const Category=require("../model/categoryModel")
 // const bcrypt=require('bcrypt')
 
 const adminEmail=process.env.ADMINEMAIL
@@ -46,15 +49,29 @@ const verifyAdmin=async(req,res)=>{
 
 const loadDash=async(req,res)=>{
    try {
-      res.render('adminDash')
+      const orderData=await Order.find({status:'Delivered'})
+     let sum=0
+     for(let i=0;i<orderData.length;i++){
+      sum=sum+orderData[i].totalAmount
+     }
+     const product=await Product.find({})
+     const category=await Category.find({})
+     const order=await Order.find({$or:[]})
+     const proLength=product.length
+     const catLength=category.length
+   
+    
+
+      res.render('adminDash',{sum,proLength,catLength})
    } catch (error) {
       console.log(error.message)
    }
-}
+} 
 
 const loadSellers=async(req,res)=>{
    try {
       const userData=await User.find({})
+      
       // console.log(userData)
       res.render('adminSellers',{userData})
    } catch (error) {

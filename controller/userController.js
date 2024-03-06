@@ -3,16 +3,19 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const generateOTP = require("../controller/otpGenrate");
-const Wishlist=require("../model/wishlistModel")
+const Wishlist = require("../model/wishlistModel");
 const Category = require("../model/categoryModel");
 const Product = require("../model/productModel");
 const Brand = require("../model/brandModel");
 const Adderss = require("../model/addressModel");
 const Cart = require("../model/cartModel");
-const Wallet=require("../model/walletModel")
+const Wallet = require("../model/walletModel");
 const Order = require("../model/orderModel");
-const Coupon =require("../model/CouponModel");
+const Coupon = require("../model/CouponModel");
 const CouponModel = require("../model/CouponModel");
+const referralCode = require("../controller/refferalCode");
+const generateDate = require("../controller/dateGenrator");
+const generateTransaction=require("../controller/transationId")
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -75,9 +78,11 @@ const insertUser = async (req, res) => {
     const mobile = req.body.mob;
     const password = req.body.pass;
     const confirm = req.body.confirm;
+    const reffer = req.body.reffer;
+    console.log("reffer"+reffer)
 
-    console.log(email);
-    console.log(mobile);
+    // console.log(email);
+    // console.log(mobile);
 
     // res.redirect('/otp')
     const otp = generateOTP.generateOTP();
@@ -87,24 +92,53 @@ const insertUser = async (req, res) => {
     const existsEmail = await User.findOne({ email: email });
     const existsMobile = await User.findOne({ mobile: mobile });
 
-    console.log("inside insert d                    ddddddddd");
+    console.log("inside insert d   ddddddddd");
 
     if (existsEmail) {
       res.json({ status: "emailErr" });
     } else if (existsMobile) {
       res.json({ status: "mobilErr" });
     } else {
-      res.json({ status: true });
-      const data = {
-        name,
-        email,
-        mobile,
-        password,
-        confirm,
-        otp,
-      };
-      req.session.Data = data;
-      req.session.save();
+      if (reffer != "") {
+        console.log("inside reffer")
+        const searchReffer = await User.findOne({ referralCode: reffer });
+        console.log(searchReffer)
+        if (searchReffer) {
+          console.log("inside search reff")
+          const data = {
+            name,
+            email,
+            mobile,
+            password,
+            confirm,
+            reffer,
+            otp,
+          };
+          res.json({ status: true });
+          req.session.Data = data;
+          req.session.save();
+        } else {
+          res.json({status:"reffer"})
+        }
+          
+      }else{
+        console.log("hello")
+        res.json({ status: true });
+          const data = {
+            name,
+            email,
+            mobile,
+            password,
+            confirm,
+            otp,
+          };
+          req.session.Data = data;
+          req.session.save();
+        }
+    }
+    
+
+     
 
       const mailOptions = await {
         form: Email,
@@ -121,7 +155,7 @@ const insertUser = async (req, res) => {
           }
         });
       }
-    }
+    
   } catch (error) {
     console.log(error);
   }
@@ -143,15 +177,19 @@ const getOtp = async (req, res) => {
   try {
     //  console.log(req.session,'this is session data')
     //  console.log('hello')
+    const date = generateDate();
+    const Tid= generateTransaction()
+
+
     const gotOtp = req.body.otp;
-    // console.log(gotOtp)
-    // console.log(req.session.Data.otp);
+
     console.log(gotOtp);
     if (req.session.Data) {
-      // console.log('hello');
-      //  console.log(req.session.Data.otp)
       if (gotOtp == req.session.Data.otp) {
         const passwordHash = await securePassword(req.session.Data.password);
+        if(passwordHash){
+        const refferal=referralCode(8)
+        console.log(refferal)
         const user = new User({
           name: req.session.Data.name,
           email: req.session.Data.email,
@@ -159,8 +197,67 @@ const getOtp = async (req, res) => {
           password: passwordHash,
           is_admin: 0,
           is_verified: 1,
+          referralCode:refferal
         });
         const userData = await user.save();
+      }
+        if (req.session.Data.reffer) {
+          const findUser=await User.findOne({referralCode:req.session.Data.reffer})
+          const findUserWallet=await Wallet.findOne({userId:findUser._id})
+          if(findUserWallet){
+            const updateWallet=await Wallet.findOneAndUpdate({userId:findUser._id},
+              {
+                $inc:{
+                  balance:100
+                },
+                $push:{
+                  transactions:{
+                    id:Tid,
+                    date:date,
+                    amount:100
+                  }
+                }
+              })
+
+              const newUser=await User.findOne({email:req.session.Data.email})
+              const forNewWallet =new Wallet({
+                userId:newUser._id,
+                balance:100,
+                transactions:[{
+                  id:Tid,
+                  date:date,
+                  amount:100
+                }]
+              })
+              await forNewWallet.save()
+
+          }else{
+            console.log("else worked");
+            const createWallet=new Wallet({
+              userId:findUser._id,
+              balance:100,
+              transactions:[{
+                id:Tid,
+                date:date,
+                amount:100
+              }]
+            })
+
+            await createWallet.save()
+            const newUser=await User.findOne({email:req.session.Data.email})
+            const forNewWallet =new Wallet({
+              userId:newUser._id,
+              balance:100,
+              transactions:[{
+                id:Tid,
+                date:date,
+                amount:100
+              }]
+            })
+            await forNewWallet.save()
+          }
+          }
+
         res.json({ status: true });
       } else {
         res.json({ status: "wroung" });
@@ -348,7 +445,7 @@ const loadForgotOTP = async (req, res) => {
 const loadDash = async (req, res) => {
   try {
     const userData = await User.findOne({ email: req.session.email });
-    console.log(userData._id);
+    // console.log(userData._id);
 
     // const address=await Adderss.find({userId:req.session.userId })
     // console.log(address)
@@ -363,9 +460,9 @@ const loadDash = async (req, res) => {
 const loadProduct = async (req, res) => {
   try {
     const id = req.query.id;
-   console.log(id,"heloooooooooooooooooooooooooooooooooooooooooooooo")
+    //  console.log(id,"heloooooooooooooooooooooooooooooooooooooooooooooo")
     const proData = await Product.findById({ _id: id });
-    console.log(proData)
+    // console.log(proData)
 
     const user = req.session.email;
 
@@ -380,19 +477,36 @@ const loadProduct = async (req, res) => {
         // console.log("ctrdddddddddddddddddd",cartData)
         if (cartData) {
           // console.log("inside cart")
-          const findWish=await Wishlist.findOne({user_id:userData._id,"products.productId":proData._id})
+          const findWish = await Wishlist.findOne({
+            user_id: userData._id,
+            "products.productId": proData._id,
+          });
 
-
-          res.render("product", { proData, fullData, cartData, user ,findWish});
+          res.render("product", {
+            proData,
+            fullData,
+            cartData,
+            user,
+            findWish,
+          });
         } else {
-          const findWish=await Wishlist.findOne({user_id:userData._id,"products.productId":proData._id})
+          const findWish = await Wishlist.findOne({
+            user_id: userData._id,
+            "products.productId": proData._id,
+          });
 
-          res.render("product", { proData, fullData, cartData, user ,findWish});
+          res.render("product", {
+            proData,
+            fullData,
+            cartData,
+            user,
+            findWish,
+          });
         }
       } else {
         const cartData = null;
-        const findWish=null
-        res.render("product", { proData, fullData, cartData, user,findWish });
+        const findWish = null;
+        res.render("product", { proData, fullData, cartData, user, findWish });
       }
     } else {
       res.redirect("/404");
@@ -412,7 +526,7 @@ const PNF = async (req, res) => {
 
 const resendOtp = async (req, res) => {
   try {
-    console.log("hello");
+    // console.log("hello");
 
     const email = req.session.Data.email;
     const resendOtpGen = generateOTP.generateOTP();
@@ -476,8 +590,8 @@ const loadAddaddress = async (req, res) => {
 const addAddress = async (req, res) => {
   try {
     // console.log(req.body)
-    console.log("inside add address");
-    console.log(req.session.email);
+    // console.log("inside add address");
+    // console.log(req.session.email);
     const findUser = await User.findOne({ email: req.session.email });
 
     console.log(findUser);
@@ -536,7 +650,7 @@ const loadEditAddress = async (req, res) => {
     const DataAddre = await Adderss.findById({ _id: id });
 
     req.session.address = DataAddre;
-    console.log(DataAddre);
+    // console.log(DataAddre);
 
     res.render("editAddress", { DataAddre });
   } catch (error) {
@@ -619,11 +733,13 @@ const loadOrder = async (req, res) => {
 
 const loadTrack = async (req, res) => {
   try {
-    const userData=await User.findOne({email:req.session.email})
-    const userWallet=await Wallet.findOne({userId:userData._id}).sort({"date":1}).limit(5)
-    console.log(userWallet)
-    
-    res.render("wallet",{userWallet});
+    const userData = await User.findOne({ email: req.session.email });
+    const userWallet = await Wallet.findOne({ userId: userData._id })
+      .sort({ date: 1 })
+      .limit(5);
+    // console.log(userWallet);
+
+    res.render("wallet", { userWallet });
   } catch (error) {
     console.log(error.message);
   }
@@ -631,10 +747,10 @@ const loadTrack = async (req, res) => {
 
 const loadAddress = async (req, res) => {
   try {
-    console.log("hello");
+    // console.log("hello");
     console.log(req.session.email);
     const address = await Adderss.find({ userId: req.session.userId });
-    console.log(address);
+    // console.log(address);
     res.render("adderss", { address });
   } catch (error) {
     console.log(error.message);
@@ -698,7 +814,7 @@ const changePass = async (req, res) => {
 
 const loadEditAccount = async (req, res) => {
   try {
-    console.log("hello" + req.session.email);
+    // console.log("hello" + req.session.email);
     const userData = await User.findOne({ email: req.session.email });
 
     res.render("Editaccount", { userData });
@@ -736,43 +852,34 @@ const editAccount = async (req, res) => {
 const loadShop = async (req, res) => {
   try {
     const sort = req.query.sort;
-    console.log(sort);
+    // console.log(sort);
 
     if (sort == "lowToHigh") {
-
       const proData = await Product.find({}).sort({ offerPrice: 1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
       res.render("shop", { proData, catData, newPro, brandData });
-
     } else if (sort == "highToLow") {
-
       const proData = await Product.find({}).sort({ offerPrice: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
       res.render("shop", { proData, catData, newPro, brandData });
-
-    }else if(sort=='aA-zZ'){
-
-      const proData=await Product.find({}).sort({name:1}).limit(6) 
-      const catData=await Category.find({})
-      const newPro=await Product.find({}).sort({_id:-1}).limit(3)
-      const brandData= await Brand.find({})
-      res.render("shop",{proData,catData,newPro,brandData})
-
-
-    }else if(sort=='zZ-aA'){
-
-      const proData=await Product.find({}).sort({name:-1}).limit(6) 
-      const catData=await Category.find({})
-      const newPro=await Product.find({}).sort({_id:-1}).limit(3)
-      const brandData= await Brand.find({})
-      res.render("shop",{proData,catData,newPro,brandData})
-
+    } else if (sort == "aA-zZ") {
+      const proData = await Product.find({}).sort({ name: 1 }).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData });
+    } else if (sort == "zZ-aA") {
+      const proData = await Product.find({}).sort({ name: -1 }).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData });
     }
-    
+
     const proData = await Product.find({}).limit(6);
     const catData = await Category.find({});
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
@@ -783,44 +890,28 @@ const loadShop = async (req, res) => {
   }
 };
 
-const loadCoupon=async(req,res)=>{
+const loadCoupon = async (req, res) => {
   try {
-    const findUser= await User.findOne({email:req.session.email})
+    const findUser = await User.findOne({ email: req.session.email });
 
-  // const couponId=[]
-  //   console.log("hello");
-  // for(let i=0;i<findUser.coupons.length;i++){
-  //   couponId.push(findUser.coupons[i])
-  // }
-  // let CouponData=[]
-  // if(couponId.length>0){
-  //   console.log("fuck")
-   
-  //   for(let i=0;i<couponId.length;i++){
-  //     CouponData.push(await Coupon.findById({_id:couponId[i]}))
-  //   }
-  // }
-
-    // console.log(userCoupon)
-
-    const CouponDataArray = await Coupon.find({
-     
-      users: { $nin: [findUser._id] },
-      // isActive: true
-  });
-
-  const readeemCoupon=await Coupon.find({
-    users:{$in:[findUser._id]}
-  })
     
 
-    console.log(readeemCoupon)
-  
-    res.render("coupon",{CouponDataArray,readeemCoupon})
+    const CouponDataArray = await Coupon.find({
+      users: { $nin: [findUser._id] },
+      // isActive: true
+    });
+
+    const readeemCoupon = await Coupon.find({
+      users: { $in: [findUser._id] },
+    });
+
+    // console.log(readeemCoupon);
+
+    res.render("coupon", { CouponDataArray, readeemCoupon });
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
 module.exports = {
   loadLanding,
@@ -853,5 +944,5 @@ module.exports = {
   loadEditAccount,
   editAccount,
   loadShop,
-  loadCoupon
+  loadCoupon,
 };
