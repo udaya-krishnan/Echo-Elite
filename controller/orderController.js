@@ -5,6 +5,7 @@ const Address = require("../model/addressModel");
 const Order = require("../model/orderModel");
 const Wallet = require("../model/walletModel");
 const generateOrder = require("../controller/otpGenrate");
+const Coupon=require("../model/CouponModel")
 const Razorpay = require("razorpay");
 const generateTransaction=require("../controller/transationId")
 const key_id = process.env.RAZORPAYID;
@@ -38,6 +39,10 @@ const loadViewOrder = async (req, res) => {
       proData.push(await Product.findById({ _id: proId[i] }));
     }
 
+    
+
+
+
     res.render("orderView", { proData, findOrder });
   } catch (error) {
     console.log(error.message);
@@ -50,10 +55,13 @@ const cancelOrder = async (req, res) => {
     console.log(id)
 
     const findOrder = await Order.findById({ _id: id });
+    const userData=await User.findOne({email:req.session.email})
     console.log(findOrder)
     console.log("inside cancelOrder")
 
     if (findOrder.orderType == "Cash on Delivery") {
+      const couponId=findOrder.coupon
+      console.log(couponId+"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
       console.log("inside Cash on delivary");
       const updateOrder = await Order.findByIdAndUpdate(
         { _id: id },
@@ -61,6 +69,9 @@ const cancelOrder = async (req, res) => {
           $set: {
             status: "Canceled",
           },
+          $unset:{
+            coupon:couponId
+          }
         }
       );
 
@@ -80,6 +91,15 @@ const cancelOrder = async (req, res) => {
           }
         );
       }
+
+      const findCoupon=await Coupon.findByIdAndUpdate({_id:couponId},
+        {
+          $pull:{users:{$eq:userData._id}}
+        })
+
+        console.log(findCoupon+"wwwwwwwwwwwwwwwwwwwwwwwwwwww")
+
+      
     } else if(findOrder.orderType == "Razorpay") {
        console.log("inside Razorpay")
       const findUser = await User.findOne({ email: req.session.email });
@@ -116,7 +136,7 @@ const cancelOrder = async (req, res) => {
         const userInWallet= await Wallet.findOne({userId:findUser._id})
 
         console.log(userInWallet)
-
+ 
         if(userInWallet){
           console.log("inside userWallet")
           const updateWallet=await Wallet.findOneAndUpdate({userId:findUser._id},
@@ -225,32 +245,130 @@ const saveOrder = async (req, res) => {
           }
         );
       }
-    } else if (status == "Canceled") {
-      const updateOrder = await Order.findByIdAndUpdate(
-        { _id: id },
-        {
-          $set: {
-            status: "Canceled",
-          },
-        }
-      );
+    } else if (status == "Canceled") { 
+      // const findUser = await User.findOne({ email: req.session.email });
+      const findOrder=await Order.findById({_id:id})
+      if(findOrder.orderType=="Cash on Delivery"){
 
-      const proId = [];
-
-      for (let i = 0; i < checking.items.length; i++) {
-        proId.push(checking.items[i].productsId);
-      }
-
-      for (let i = 0; i < proId.length; i++) {
-        await Product.findByIdAndUpdate(
-          { _id: proId[i] },
+        const updateOrder = await Order.findByIdAndUpdate(
+          { _id: id },
           {
-            $inc: {
-              stock: checking.items[i].quantity,
+            $set: {
+              status: "Canceled",
             },
           }
         );
+  
+        const proId = [];
+  
+        for (let i = 0; i < findOrder.items.length; i++) {
+          proId.push(findOrder.items[i].productsId);
+        }
+  
+        for (let i = 0; i < proId.length; i++) {
+          await Product.findByIdAndUpdate(
+            { _id: proId[i] },
+            {
+              $inc: {
+                stock: findOrder.items[i].quantity,
+              },
+            }
+          );
+        }
+
+      }else if(findOrder.orderType == "Razorpay"){
+
+        // const findUser = await User.findOne({ email: req.session.email });
+        const findOrder=await Order.findById({_id:id})
+        const date = generateDate();
+        const Tid= generateTransaction()
+  
+        const updateOrder = await Order.findByIdAndUpdate(
+          { _id: id },
+          {
+            $set: {
+              status: "Canceled",
+            },
+          }
+        );
+  
+        const proId = [];
+  
+        for (let i = 0; i < findOrder.items.length; i++) {
+          proId.push(findOrder.items[i].productsId);
+        }
+  
+        for (let i = 0; i < proId.length; i++) {
+          await Product.findByIdAndUpdate(
+            { _id: proId[i] },
+            {
+              $inc: {
+                stock: findOrder.items[i].quantity,
+              },
+            }
+          );
+        }
+  
+          const userInWallet= await Wallet.findOne({userId:findOrder.userId})
+  
+          // console.log(userInWallet)
+   
+          if(userInWallet){
+            console.log("inside userWallet")
+            const updateWallet=await Wallet.findOneAndUpdate({userId:findOrder.userId},
+              {
+                $inc:{
+                  balance:findOrder.totalAmount
+                },
+                $push:{
+                  transactions:{
+                    id:Tid,
+                    date:date,
+                    amount:findOrder.totalAmount
+                  }
+                }
+              })
+          }else{
+            console.log("else worked");
+            const createWallet=new Wallet({
+              userId:findOrder.userId,
+              balance:findOrder.totalAmount,
+              transactions:[{
+                id:Tid,
+                date:date,
+                amount:findOrder.totalAmount,
+              }]
+            })
+  
+            await createWallet.save()
+          }
+
       }
+    //   const updateOrder = await Order.findByIdAndUpdate(
+    //     { _id: id },
+    //     {
+    //       $set: {
+    //         status: "Canceled",
+    //       },
+    //     }
+    //   );
+
+    //   const proId = [];
+
+    //   for (let i = 0; i < checking.items.length; i++) {
+    //     proId.push(checking.items[i].productsId);
+    //   }
+
+    //   for (let i = 0; i < proId.length; i++) {
+    //     await Product.findByIdAndUpdate(
+    //       { _id: proId[i] },
+    //       {
+    //         $inc: {
+    //           stock: checking.items[i].quantity,
+    //         },
+    //       }
+    //     );
+    //   }
     }
 
     res.json({ status: true });
@@ -317,7 +435,14 @@ const rezopayment = async (req, res) => {
     //   req.body.payment
     // );
 
-    const { payment, order, addressId, order_id } = req.body;
+    const { payment, order, addressId, order_id ,amount,couponCode} = req.body;
+    const findCoupon=await Coupon.findOne({couponCode:couponCode})
+
+    console.log("start")
+    console.log( amount)
+    console.log("end")
+
+
 
     let hmac = crypto.createHmac("sha256", key_secret);
 
@@ -357,21 +482,50 @@ const rezopayment = async (req, res) => {
         );
       }
       // const orderNum = generateOrder.generateOrder();
-      const addressData = await Address.findOne({ _id: addressId });
-      const date = generateDate();
-      const orderData = new Order({
-        userId: userData._id,
-        userEmail: userData.email,
-        orderNumber: order_id,
-        items: proData,
-        totalAmount: cartData.total,
-        orderType: "Razorpay",
-        orderDate: date,
-        status: "Processing",
-        shippingAddress: addressData,
-      });
+     
 
-      orderData.save();
+      if(findCoupon){
+
+        const addressData = await Address.findOne({ _id: addressId });
+        const date = generateDate();
+        const orderData = new Order({
+          userId: userData._id,
+          userEmail: userData.email,
+          orderNumber: order_id,
+          items: proData,
+          totalAmount: amount,
+          orderType: "Razorpay",
+          orderDate: date,
+          status: "Processing",
+          shippingAddress: addressData,
+          coupon:findCoupon._id
+        });
+  
+        orderData.save();
+        
+        const updateCoupon=await Coupon.findByIdAndUpdate({_id:findCoupon._id},
+          {
+            $push:{
+              users:userData._id
+            }
+          })
+      }else{
+        const addressData = await Address.findOne({ _id: addressId });
+        const date = generateDate();
+        const orderData = new Order({
+          userId: userData._id,
+          userEmail: userData.email,
+          orderNumber: order_id,
+          items: proData,
+          totalAmount: amount,
+          orderType: "Razorpay",
+          orderDate: date,
+          status: "Processing",
+          shippingAddress: addressData,
+        });
+  
+        orderData.save();
+      }
 
       // const userInWallet = await Wallet.findOne({ userId: userData._id });
 

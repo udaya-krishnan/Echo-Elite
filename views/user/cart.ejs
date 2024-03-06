@@ -600,25 +600,60 @@
                                                                 <%= proData[i].discripiton %><br>
                                                             </p> 
                                                         </td>
+
+                                                        <% if (proData[i].offerPrice) { %>
+
+                                                            
                                                         <td hidden class="price" data-title="Price">₹<span id="price<%=i%>">
-                                                                <%= proData[i].offerPrice %>
-                                                            </span></td>
-                                                        <td hidden class="text-center" data-title="Stock">
-                                                            <button
-                                                                onclick="increment('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
-                                                                style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">+</button>
-                                                            <div class="detail-qty border radius  m-auto">
+                                                            <%= proData[i].offerPrice %>
+                                                        </span></td>
+                                                    <td hidden class="text-center" data-title="Stock">
+                                                        <button
+                                                            onclick="increment('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
+                                                            style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">+</button>
+                                                        <div class="detail-qty border radius  m-auto">
 
-                                                                <span id="quantity<%=i%>">
-                                                                    <%= cartData.items[i].quantity %>
-                                                                </span>
+                                                            <span id="quantity<%=i%>">
+                                                                <%= cartData.items[i].quantity %>
+                                                            </span>
 
 
-                                                            </div>
-                                                            <button
-                                                                onclick="decrement('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
-                                                                style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">-</button>
-                                                        </td>
+                                                        </div>
+                                                        <button
+                                                            onclick="decrement('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
+                                                            style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">-</button>
+                                                    </td>
+                                                         
+                                                        <% }else{ %>
+
+
+                                                            
+                                                        <td hidden class="price" data-title="Price">₹<span id="price<%=i%>">
+                                                            <%= proData[i].regularPrice %>
+                                                        </span></td>
+                                                    <td hidden class="text-center" data-title="Stock">
+                                                        <button
+                                                            onclick="increment('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].regularPrice %>','<%=cartData.items[i].subTotal %>')"
+                                                            style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">+</button>
+                                                        <div class="detail-qty border radius  m-auto">
+
+                                                            <span id="quantity<%=i%>">
+                                                                <%= cartData.items[i].quantity %>
+                                                            </span>
+
+
+                                                        </div>
+                                                        <button
+                                                            onclick="decrement('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].regularPrice %>','<%=cartData.items[i].subTotal %>')"
+                                                            style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">-</button>
+                                                    </td>
+
+                                                            <% } %>
+
+
+
+
+
                                                         <td hidden class="text-right" data-title="Cart">₹
                                                             <span id="subtotal<%=i%>">
                                                                 <%= cartData.items[i].subTotal %>
@@ -639,7 +674,15 @@
                                                                     <%= proData[i].discripiton %><br>
                                                                 </p> 
                                                             </td>
-                                                            <td class="price" data-title="Price">₹<span id="price<%=i%>">
+
+
+
+
+
+
+                                                            <% if (proData[i].offerPrice) { %>
+
+                                                                <td class="price" data-title="Price">₹<span id="price<%=i%>">
                                                                     <%= proData[i].offerPrice %>
                                                                 </span></td>
                                                             <td class="text-center" data-title="Stock">
@@ -658,16 +701,42 @@
                                                                     onclick="decrement('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].offerPrice %>','<%=cartData.items[i].subTotal %>')"
                                                                     style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">-</button>
                                                             </td>
-                                                            <td class="text-right" data-title="Cart">₹
-                                                                <span id="subtotal<%=i%>">
-                                                                    <%= cartData.items[i].subTotal %>
-                                                                </span>
+                                                            
+                                                             
+                                                            <% }else{ %>
+
+
+                                                                <td class="price" data-title="Price">₹<span id="price<%=i%>">
+                                                                    <%= proData[i].regularPrice %>
+                                                                </span></td>
+                                                            <td class="text-center" data-title="Stock">
+                                                                <button
+                                                                    onclick="increment('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].regularPrice %>','<%=cartData.items[i].subTotal %>')"
+                                                                    style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">+</button>
+                                                                <div class="detail-qty border radius  m-auto">
+    
+                                                                    <span id="quantity<%=i%>">
+                                                                        <%= cartData.items[i].quantity %>
+                                                                    </span>
+    
+    
+                                                                </div>
+                                                                <button
+                                                                    onclick="decrement('<%= proData[i]._id%>','1','<%=i%>','<%= proData[i].regularPrice %>','<%=cartData.items[i].subTotal %>')"
+                                                                    style="background-color: rgb(50, 134, 224);width: 50px; height: 25px; border: none; color: white; ">-</button>
                                                             </td>
-    
-    
-    
-    
-    
+                                                           
+
+
+
+
+                                                                <% } %>
+                                                                <td class="text-right" data-title="Cart">₹
+                                                                    <span id="subtotal<%=i%>">
+                                                                        <%= cartData.items[i].subTotal %>
+                                                                    </span>
+                                                                </td>
+                                                           
     
                                                             <% } %>
     

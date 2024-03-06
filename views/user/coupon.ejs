@@ -15,6 +15,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favico.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
+    <script src="https://kit.fontawesome.com/7357e273fa.js" crossorigin="anonymous"></script>
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.<path d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"/></svg> -->
 </head>
 
 <body>
@@ -157,7 +159,7 @@
                         <!-- <a class="categori-button-active" href="#">
                             <span class="fa fa-list"></span> Browse Categories <i class="down far fa-chevron-down"></i> <i class="up far fa-chevron-up"></i>
                         </a> -->
-                        
+
                     </div>
                     <div
                         class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block main-menu-light-white hover-boder hover-boder-white">
@@ -555,41 +557,38 @@
                                 <div class="dashboard-menu">
                                     <ul class="nav flex-column" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link " 
-                                                href="/dashboard" role="tab" aria-controls="dashboard"
+                                            <a class="nav-link " href="/dashboard" role="tab" aria-controls="dashboard"
                                                 aria-selected="false"><i class="fa fa-atom mr-15"></i>Dashboard</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link active"  href="/orders"
-                                                role="tab" aria-controls="orders" aria-selected="false"><i
+                                            <a class="nav-link" href="/orders" role="tab" aria-controls="orders"
+                                                aria-selected="false"><i
                                                     class="fa fa-shopping-basket mr-15"></i>Orders</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" 
-                                                href="/wallet" role="tab" aria-controls="track-orders"
+                                            <a class="nav-link" href="/wallet" role="tab" aria-controls="track-orders"
                                                 aria-selected="false"><i class="fa fa-paper-plane mr-15"></i>Wallet</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link"  href="/address"
-                                                role="tab" aria-controls="address" aria-selected="true"><i
-                                                    class="fa fa-map-marked mr-15"></i>My Address</a>
+                                            <a class="nav-link" href="/address" role="tab" aria-controls="address"
+                                                aria-selected="true"><i class="fa fa-map-marked mr-15"></i>My
+                                                Address</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/change-pass"
-                                                role="tab" aria-controls="change" aria-selected="true"><i
-                                                    class="fa fa-key mr-15"></i>Change Password</a>
+                                            <a class="nav-link" href="/change-pass" role="tab" aria-controls="change"
+                                                aria-selected="true"><i class="fa fa-key mr-15"></i>Change Password</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" 
-                                                href="/account-detail" role="tab" aria-controls="account-detail"
-                                                aria-selected="true"><i class="fa fa-user-edit mr-15"></i>Account
+                                            <a class="nav-link" href="/account-detail" role="tab"
+                                                aria-controls="account-detail" aria-selected="true"><i
+                                                    class="fa fa-user-edit mr-15"></i>Account
                                                 details</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" 
-                                                href="/coupon" role="tab" aria-controls="account-detail"
-                                                aria-selected="true"><i class="fa fa-user-edit mr-15"></i>My Coupon
-                                                </a>
+                                        <li class="nav-item ">
+                                            <a class="nav-link active" href="/coupon" role="tab"
+                                                aria-controls="account-detail" aria-selected="true"><i
+                                                    class="fa fa-user-edit mr-15"></i> My Coupon
+                                            </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="/logout"><i
@@ -598,235 +597,45 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-md-8">
-                                
-                                     <!-- <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab"> -->
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="mb-0">Your Orders</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Order</th>
-                                                                <th>Date</th>
-                                                                <th>Status</th>
-                                                                <th>Total</th>
-                                                                <th>Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <% if (orderData) { %>
 
-                                       
-
-                                                                <% for( let i = 0; i < orderData.length; i++ ) { %>
-                                                                    <tr>
-
-                                                                        <td>#<%= orderData[i].orderNumber %></td>
-                                                                        <td><%= orderData[i].orderDate %></td>
-                                                                        <td><%= orderData[i].status %></td>
-                                                                        <td>₹<%= orderData[i].totalAmount %> for <%= orderData[i].items.length %> item</td>
-                                                                        <td><a href="/orderView?id=<%= orderData[i]._id %>" class="btn-small d-block">View</a></td>
-                                                                    </tr>
-
-
-                                                                
-                                                                <% } %>
-                               
-                                                            <% }else{ %>
-
-                                                                <tr>
-                                                                    <td>No order Found</td>
-
-                                                                </tr>
-
-
-
-
-                                                                <% } %>
-                                                            
-                                                           
-                                                            <!-- <tr>
-                                                                <td>#2468</td>
-                                                                <td>June 29, 2020</td>
-                                                                <td>Completed</td>
-                                                                <td>$364.00 for 5 item</td>
-                                                                <td><a href="#" class="btn-small d-block">View</a></td>
-                                                            </tr> -->
-                                                            <!-- <tr>
-                                                                <td>#2366</td>
-                                                                <td>August 02, 2020</td>
-                                                                <td>Completed</td>
-                                                                <td>$280.00 for 3 item</td>
-                                                                <td><a href="#" class="btn-small d-block">View</a></td>
-                                                            </tr> -->
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <!-- </div>  -->
-                                
-                                           
-                                            <!-- <div class="col-lg-6">
-                                                <div class="card"
-                                                    style="border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
-                                                    <div class="card-header"
-                                                        style="background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0;">
-                                                        <h5 class="card-title mb-0"
-                                                            style="color: #333; font-weight: bold;">Shipping Address
-                                                        </h5>
-                                                    </div>
-                                                    <div class="card-body" style="padding: 20px;">
-                                                        <address class="mb-4"
-                                                            style="font-size: 16px; line-height: 1.5;">4299 Express
-                                                            Lane<br> Sarasota, FL 34249 USA <br>Phone: 1.941.227.4444
-                                                        </address>
-                                                        <p class="mb-4">Sarasota</p>
-                                                        <a href="#" class="btn btn-primary btn-sm"
-                                                            style="font-size: 14px; text-transform: uppercase; background-color: #007bff; border-color: #007bff;">Edit</a>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-                                        <!-- </div>
-                                        <div class="row mt-4">
-                                            <div class="col-lg-12 text-center">
-                                                <a href="/addAddress" class="btn btn-primary" 
-                                                    style="font-size: 16px; text-transform: uppercase;">Add New
-                                                    Address</a>
-                                            </div>
-                                        </div>
-                                    </div>  -->
-
-
-
-
-                                    <!-- <div class="tab-pane fade" id="account-detail" role="tabpanel"
-                                        aria-labelledby="change-tab">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5>Account Details</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>Already have an account? <a href="page-login-register.html">Log in
-                                                        instead!</a></p>
-                                                <form method="post" name="enq">
-                                                    <div class="row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>First Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="name"
-                                                                type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Last Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="phone">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Display Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="dname"
-                                                                type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Email Address <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="email"
-                                                                type="email">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Current Password <span
-                                                                    class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="password" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>New Password <span class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="npassword" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Confirm Password <span
-                                                                    class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="cpassword" type="password">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-fill-out submit"
-                                                                name="submit" value="Submit">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-
-
-
-
-
-                                    <!-- <div class="tab-pane fade" id="account-detail" role="tabpanel"
-                                        aria-labelledby="account-detail-tab">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5>Account Details</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>Already have an account? <a href="page-login-register.html">Log in
-                                                        instead!</a></p>
-                                                <form method="post" name="enq">
-                                                    <div class="row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>First Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="name"
-                                                                type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Last Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="phone">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Display Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="dname"
-                                                                type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Email Address <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="email"
-                                                                type="email">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Current Password <span
-                                                                    class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="password" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>New Password <span class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="npassword" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Confirm Password <span
-                                                                    class="required">*</span></label>
-                                                            <input required="" class="form-control square"
-                                                                name="cpassword" type="password">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-fill-out submit"
-                                                                name="submit" value="Submit">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-
-
-                                </div>
+                            
+<div class="col-md-8">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; height: 100vh;">
+        <div>
+            <% if (CouponDataArray.length > 0) { %>
+                <% for(let i = 0; i < CouponDataArray.length; i++) { %>
+                    <div style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; background-color: #f9f9f9; color: #333; margin-bottom: 20px;">
+                        <h2 style="margin-bottom: 10px;"><%= CouponDataArray[i].name %>!</h2>
+                        <p>Get <span style="color: #16e643; font-weight: bold;" id="code"><%= CouponDataArray[i].discount %>% OFF</span> on your next purchase</p>
+                        <p>Use coupon code: <span id="couponCode" style="font-size: 1.2em; background-color: #6175e9; color: #fff; padding: 5px 9px; border-radius: 5px; margin: 5px;"><%= CouponDataArray[i].couponCode %></span><i class="fa-regular fa-copy" onclick="copyText()" style="cursor: pointer; margin-left: 5px;"></i></p>
+                        <p style="margin-top: 10px;">Valid until: <span style="color: #666;"><%= CouponDataArray[i].EndDate %></span></p>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <!-- <h2>No Coupon Found</h2> -->
+                <div>
+                    <% if (readeemCoupon.length > 0) { %>
+                        <% for(let i = 0; i < readeemCoupon.length; i++) { %>
+                            <div style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; text-align: center; background-color: #f9f9f9; color: #333; margin-bottom: 20px;">
+                                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Redeemed Coupon</h2>
+                                <p>Offer: <span style="color: #16e643; font-weight: bold;"><%= readeemCoupon[i].discount %>% OFF</span></p>
+                                <p>Coupon Code: <span style="font-size: 1.2em; background-color: #0026ff; color: #fff; padding: 5px 10px; border-radius: 5px; margin: 5px;"><%= readeemCoupon[i].couponCode %></span></p>
+                                <p style="margin-top: 10px;">Valid until: <span style="color: #666;"><%= readeemCoupon[i].EndDate %></span></p>
                             </div>
+                        <% } %>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+      
+    </div>
+</div>
+
+                            
+                                
+                           
+
+                            
                         </div>
                     </div>
                 </div>
@@ -987,6 +796,16 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
-
+<script>
+     function copyText() {
+        // alert("helllo")
+     const code =document.getElementById("couponCode").innerHTML
+     /* Copy text into clipboard */
+     navigator.clipboard.writeText
+         (code);
+        
+        
+ }
+</script>
 
 </html>

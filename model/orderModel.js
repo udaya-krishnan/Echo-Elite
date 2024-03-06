@@ -92,6 +92,10 @@ const order_schema=new mongoose.Schema({
           
         },
 
+    },
+    coupon:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"coupons"
     }
 
 },{versionKey:false});

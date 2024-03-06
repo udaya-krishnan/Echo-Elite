@@ -608,15 +608,30 @@
                                             </div>
                                         </div>
                                         <div class="clearfix product-price-cover">
-                                            <div class="product-price primary-color float-left">
-                                                <ins><span id="offerPrice" class="text-brand">₹<%= proData.offerPrice %>
-                                                    </span></ins>
-                                                <ins><span class="old-price font-md ml-15">₹<%= proData.regularPrice %>
-                                                    </span></ins>
-                                                <span class="save-price  font-md color3 ml-15">
-                                                    <%= proData.offPercentage %>%
-                                                </span>
-                                            </div>
+                                            <% if (proData.offerPrice) { %>
+                                                <% var percentage=(proData.regularPrice-proData.offerPrice)/proData.regularPrice*100 %>
+                                                <div class="product-price primary-color float-left">
+                                                    <ins><span id="offerPrice" class="text-brand">₹<%= proData.offerPrice %>
+                                                        </span></ins>
+                                                    <ins><span class="old-price font-md ml-15">₹<%= proData.regularPrice %>
+                                                        </span></ins>
+                                                    <span class="save-price  font-md color3 ml-15">
+                                                        <%= percentage.toFixed() %>%
+                                                    </span>
+                                                </div>
+                                             
+                                            <% }else{ %>
+
+                                                <div class="product-price primary-color float-left">
+                                                   
+                                                    <ins><span id="offerPrice" class="text-brand">₹<%= proData.regularPrice %>
+                                                        </span></ins>
+                                                    <!-- <span class="save-price  font-md color3 ml-15">
+                                                    
+                                                    </span> -->
+                                                </div>
+                                                <% } %>
+                                           
                                         </div>
                                         <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                         <div class="short-desc mb-30">
@@ -1075,10 +1090,19 @@
                                                         <span>
                                                         </span>
                                                     </div>
-                                                    <div class="product-price">
-                                                        <span>₹<%= fullData[i].offerPrice %> </span>
-                                                        <span class="old-price">₹<%= fullData[i].regularPrice %></span>
-                                                    </div>
+                                                    <% if (fullData[i].offerPrice) { %>
+
+                                                        <div class="product-price">
+                                                            <span>₹<%= fullData[i].offerPrice %> </span>
+                                                            <span class="old-price">₹<%= fullData[i].regularPrice %></span>
+                                                        </div>
+                                                    <% }else{ %>
+                                                        <div class="product-price">
+                                                           
+                                                            <span >₹<%= fullData[i].regularPrice %></span>
+                                                        </div>
+                                                        <% } %>
+                                                    
                                                 </div>
                                             </div>
                                         </div>

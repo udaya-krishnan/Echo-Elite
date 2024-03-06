@@ -908,17 +908,42 @@
                                                 <h2><a href="/showproduct">
                                                         <%= proData[i].name %>
                                                     </a></h2>
+                                                    <% if (proData[i].offerPrice) { %>
+
+                                                        <% var percentage=(proData[i].regularPrice-proData[i].offerPrice)/proData[i].regularPrice*100 %>
+
+                                                        <div class="rating-result" title="90%">
+                                                            <span>
+                                                                <span>
+                                                                    <%= percentage %>%
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        <div class="product-price">
+                                                            <span id="offerPrice">₹<%= proData[i].offerPrice %> </span>
+                                                            <span class="old-price">₹<%= proData[i].regularPrice %></span>
+                                                        </div>
+
+                                                     
+                                                    <% }else{ %>
+
+<!--                                                         
                                                 <div class="rating-result" title="90%">
                                                     <span>
                                                         <span>
-                                                            <%= proData[i].offPercentage %>%
+                                                           
                                                         </span>
                                                     </span>
-                                                </div>
+                                                </div> -->
                                                 <div class="product-price">
-                                                    <span id="offerPrice">₹<%= proData[i].offerPrice %> </span>
-                                                    <span class="old-price">₹<%= proData[i].regularPrice %></span>
+                                                    <!-- <span id="offerPrice">₹</span> -->
+                                                    <span class="offerPrice">₹<%= proData[i].regularPrice %></span>
                                                 </div>
+
+
+                                                        <% } %>
+
+
                                                 <div class="product-action-1 show">
                                                     <input type="hidden" id="proId<%=i%>" value="<%= proData[i]._id %>">
                                                     
@@ -989,10 +1014,22 @@
                                         <span>
                                         </span>
                                     </div>
-                                    <div class="product-price">
-                                        <span>₹<%= newArrivals[i].offerPrice %></span>
-                                        <span class="old-price">₹<%= newArrivals[i].regularPrice %></span>
-                                    </div>
+                                    <% if (newArrivals.offerPrice) { %>
+
+                                        <div class="product-price">
+                                            <span>₹<%= newArrivals[i].offerPrice %></span>
+                                            <span class="old-price">₹<%= newArrivals[i].regularPrice %></span>
+                                        </div>
+                                     
+                                    <% }else{ %>
+
+                                        <div class="product-price">
+                                            
+                                            <span class="old-price">₹<%= newArrivals[i].regularPrice %></span>
+                                        </div>
+
+                                        <% } %>
+                                    
                                 </div>
                             </div>
 

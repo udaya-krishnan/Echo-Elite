@@ -11,6 +11,8 @@ const Adderss = require("../model/addressModel");
 const Cart = require("../model/cartModel");
 const Wallet=require("../model/walletModel")
 const Order = require("../model/orderModel");
+const Coupon =require("../model/CouponModel");
+const CouponModel = require("../model/CouponModel");
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -618,7 +620,7 @@ const loadOrder = async (req, res) => {
 const loadTrack = async (req, res) => {
   try {
     const userData=await User.findOne({email:req.session.email})
-    const userWallet=await Wallet.findOne({userId:userData._id})
+    const userWallet=await Wallet.findOne({userId:userData._id}).sort({"date":1}).limit(5)
     console.log(userWallet)
     
     res.render("wallet",{userWallet});
@@ -781,6 +783,45 @@ const loadShop = async (req, res) => {
   }
 };
 
+const loadCoupon=async(req,res)=>{
+  try {
+    const findUser= await User.findOne({email:req.session.email})
+
+  // const couponId=[]
+  //   console.log("hello");
+  // for(let i=0;i<findUser.coupons.length;i++){
+  //   couponId.push(findUser.coupons[i])
+  // }
+  // let CouponData=[]
+  // if(couponId.length>0){
+  //   console.log("fuck")
+   
+  //   for(let i=0;i<couponId.length;i++){
+  //     CouponData.push(await Coupon.findById({_id:couponId[i]}))
+  //   }
+  // }
+
+    // console.log(userCoupon)
+
+    const CouponDataArray = await Coupon.find({
+     
+      users: { $nin: [findUser._id] },
+      // isActive: true
+  });
+
+  const readeemCoupon=await Coupon.find({
+    users:{$in:[findUser._id]}
+  })
+    
+
+    console.log(readeemCoupon)
+  
+    res.render("coupon",{CouponDataArray,readeemCoupon})
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 module.exports = {
   loadLanding,
   loadRegister,
@@ -812,4 +853,5 @@ module.exports = {
   loadEditAccount,
   editAccount,
   loadShop,
+  loadCoupon
 };

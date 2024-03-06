@@ -197,12 +197,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-4">
+                                <!-- <div class="mb-4">
                                     <label class="form-label">offer Percentage</label>
                                     <input type="text" placeholder="%" class="form-control" id="off" onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'" name="off"
                                         onblur="ofFun()">
                                     <p id="offErr" class="text-danger"></p>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -309,7 +309,7 @@
             } else {
                 document.getElementById("nameErr").innerHTML = ""
             }
-            if (nameRegex.test(name)) {
+            if (!nameRegex.test(name)) {
                 document.getElementById("nameErr").innerHTML = "Invalid Name"
             } else {
                 document.getElementById("nameErr").innerHTML = ""
@@ -344,18 +344,24 @@
 
         function opFun() {
             const op = document.getElementById("offprice").value
+            const rp= document.getElementById("regprice").value
 
             const regex = /^[0-9]+$/
 
-            if (op.trim() == '') {
-                document.getElementById("opErr").innerHTML = "Regular price is require"
-            } else {
-                document.getElementById("opErr").innerHTML = ""
-            }
+            // if (op.trim() == '') {
+            //     document.getElementById("opErr").innerHTML = "Regular price is require"
+            // } else {
+            //     document.getElementById("opErr").innerHTML = ""
+            // }
             if (!regex.test(op)) {
                 document.getElementById("opErr").innerHTML = "Invalid price"
             } else {
                 document.getElementById("opErr").innerHTML = ""
+            }
+            if(op>rp){
+                document.getElementById("opErr").innerHTML = "Offer price Can't be grater than regular price"
+            }else{
+                document.getElementById("opErr").innerHTML=""
             }
         }
 
@@ -378,32 +384,32 @@
         }
 
 
-        function ofFun() {
-            const st = document.getElementById("off").value
+        // function ofFun() {
+        //     const st = document.getElementById("off").value
 
-            const regex = /^[0-9]+$/
+        //     const regex = /^[0-9]+$/
 
-            if (st.trim() == '') {
-                document.getElementById("offErr").innerHTML = "Offer Pecentage is require"
-            } else {
-                document.getElementById("offErr").innerHTML = ""
-            }
-            if (!regex.test(st)) {
-                document.getElementById("offErr").innerHTML = "Invalid price"
-            } else {
-                document.getElementById("offErr").innerHTML = ""
-            }
-            if(st>100){ 
-                document.getElementById("offErr").innerHTML = "Miximum 100%"
-            }else {
-                document.getElementById("offErr").innerHTML = ""
-            }
-            if(st<=0){
-                document.getElementById("offErr").innerHTML = "Minimum 100%"
-            }else {
-                document.getElementById("offErr").innerHTML = ""
-            }
-        }
+        //     if (st.trim() == '') {
+        //         document.getElementById("offErr").innerHTML = "Offer Pecentage is require"
+        //     } else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if (!regex.test(st)) {
+        //         document.getElementById("offErr").innerHTML = "Invalid price"
+        //     } else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if(st>100){ 
+        //         document.getElementById("offErr").innerHTML = "Miximum 100%"
+        //     }else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        //     if(st<=0){
+        //         document.getElementById("offErr").innerHTML = "Minimum 100%"
+        //     }else {
+        //         document.getElementById("offErr").innerHTML = ""
+        //     }
+        // }
 
         function coFun() {
             const col = document.getElementById("color").value
@@ -440,7 +446,7 @@
             disFun()
             rpFun()
             coFun()
-            ofFun()
+            // ofFun()
             stFun()
             opFun()
             imageValidation()
@@ -450,11 +456,11 @@
             const gp=document.getElementById("rpErr")
             const op=document.getElementById("opErr")
             const st=document.getElementById("stErr")
-            const of=document.getElementById("offErr")
+            // const of=document.getElementById("offErr")
             const co=document.getElementById("coErr")
             const imageError = document.getElementById("imageError")
 
-            if(name.innerHTML||dis.innerHTML||gp.innerHTML||op.innerHTML||st.innerHTML||of.innerHTML||co.innerHTML||imageError.innerHTML){
+            if(name.innerHTML||dis.innerHTML||gp.innerHTML||op.innerHTML||st.innerHTML||co.innerHTML||imageError.innerHTML){
                 e.preventDefault()
             }
             
@@ -467,10 +473,10 @@
             const rp = document.getElementById("regprice").value.trim()
             const op = document.getElementById("offprice").value.trim()
             const st = document.getElementById("stock").value.trim()
-            const sf = document.getElementById("off").value.trim()
+            // const sf = document.getElementById("off").value.trim()
             const col = document.getElementById("color").value.trim()
 
-            if(name==''&&dis==''&&rp==''&&op==''&&st==''&&sf==''&&col==''){
+            if(name==''&&dis==''&&rp==''&&op==''&&st==''&&col==''){
                 window.location.href = "http://localhost:2003/admin/product"
             }else{
                 //  alert("h")

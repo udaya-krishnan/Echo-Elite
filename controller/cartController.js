@@ -7,6 +7,7 @@ const generateOrder = require("../controller/otpGenrate");
 const generateDate=require("../controller/dateGenrator")
 const Razorpay=require("razorpay")
 const Wallet=require("../model/walletModel")
+const Coupon=require("../model/CouponModel")
 
 const key_id=process.env.RAZORPAYID
 const key_secret=process.env.RAZORPAYSECRET
@@ -57,7 +58,7 @@ const loadCart = async (req, res) => {
             { userId: userData._id },
             {
               $push: {
-                items: {
+                items: { 
                   productsId: id,
                   subTotal: priceOFF,
                   quantity: 1,
@@ -290,7 +291,10 @@ const loadCheckOutPage = async (req, res) => {
 
     const address = await Address.find({ userId: userData._id });
 
-    res.render("checkOut", { proData, cartItems, cartData, address });
+
+    const CouponDataArray=await Coupon.find({isActive:true})
+
+    res.render("checkOut", { proData, cartItems, cartData, address ,CouponDataArray});
   } catch (error) {}
 };
 
@@ -298,9 +302,10 @@ const addOrder = async (req, res) => {
   try {
 
     // console.log("inside aaaaaaaaaddddddddddOrder");
-    const { addressId, cartid, paymentOption } = req.body;
+    const { addressId, cartid, paymentOption,total,code } = req.body;
     // console.log(addressId)
     // console.log("inside aaaaaaaaaddddddddddOrder",paymentOption);
+    const findCoupon=await Coupon.findOne({couponCode:code})
 
     if(!addressId||!paymentOption){
 
@@ -351,22 +356,52 @@ const addOrder = async (req, res) => {
   
       console.log(addressData);
       const date=generateDate()
-  
-      const orderData = new Order({
-        userId: userData._id,
-        userEmail:userData.email,
-        orderNumber: orderNum,
-        items: proData,
-        totalAmount: cartData.total,
-        orderType: paymentOption,
-        orderDate:date,
-        status: "Processing",
-        shippingAddress: addressData,
-      });
-  
-      console.log(proData);
-  
-      orderData.save();
+      
+      console.log(findCoupon)
+      
+      if(findCoupon){
+        console.log("inside find coupon")
+        const orderData = new Order({
+          userId: userData._id,
+          userEmail:userData.email,
+          orderNumber: orderNum,
+          items: proData,
+          totalAmount: total,
+          orderType: paymentOption,
+          orderDate:date,
+          status: "Processing",
+          shippingAddress: addressData,
+          coupon:findCoupon._id
+        });
+    
+        console.log(proData);
+    
+        orderData.save();
+
+        const updateCoupon=await Coupon.findByIdAndUpdate({_id:findCoupon._id},
+          {
+            $push:{
+              users:userData._id
+            }
+          })
+      }else{
+        const orderData = new Order({
+          userId: userData._id,
+          userEmail:userData.email,
+          orderNumber: orderNum,
+          items: proData,
+          totalAmount: total,
+          orderType: paymentOption,
+          orderDate:date,
+          status: "Processing",
+          shippingAddress: addressData,
+        });
+    
+        console.log(proData);
+    
+        orderData.save();
+      }
+      
 
     
   
@@ -412,15 +447,19 @@ const addOrder = async (req, res) => {
       const date=generateDate()
 
       var options={
-        amount:cartData.total*100,
+        amount:total*100,
         currency:"INR",
         receipt:stringOrder_id
       }
+      console.log(total)
 
+      let amount=Number(total)
+      // let result=amount*10
+      console.log(amount+"aaaaaaaaaaaaaaaaaaaamountma")
       instance.orders.create(options,async(error,razorpayOrder)=>{
         if(!error){
           console.log("hello"+razorpayOrder)
-          res.json({status:"rezorpay",order:razorpayOrder,address:addressId,orderNumber:orderNum})
+          res.json({status:"rezorpay",order:razorpayOrder,address:addressId,orderNumber:orderNum,total:amount,code:code})
         }else{
           console.log(error.message)
         }
