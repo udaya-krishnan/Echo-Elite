@@ -147,10 +147,11 @@
                         <div class="card-body">
                             <p id="filedErr" class="text-danger"></p>
                             <div class="mb-4">
+                                <input type="hidden" id="id" name="user_id" value="<%= findCoupon._id%>">
                                 <label for="product_title" class="form-label">Coupon Name</label>
                                 <input type="text" placeholder="Type here" id="name" class="form-control"
                                     onkeydown="return /[a-zA-Z\s]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'"
-                                    onblur="name()">
+                                    onblur="name()" value="<%= findCoupon.name %>">
                                 <p id="nameErr" class="text-danger"></p>
                             </div>
                             <div class="row gx-3">
@@ -158,13 +159,13 @@
                                 <div class="col-md-4  mb-3">
                                     <label for="product_color" class="form-label">Start Date</label>
                                     <input type="date" placeholder="Type here" id="startDate" onblur="startDate()"
-                                        class="form-control">
+                                        class="form-control" value="<%= findCoupon.startDate %>" >
                                     <p id="startDateErr" class="text-danger"></p>
                                 </div>
                                 <div class="col-md-4  mb-3">
                                     <label for="product_size" class="form-label">End Date</label>
                                     <input type="date" placeholder="Type here" id="endDate" class="form-control"
-                                        onblur="endDate()">
+                                        onblur="endDate()" value="<%= findCoupon.EndDate %>">
                                     <p id="endDateErr" class="text-danger"></p>
                                 </div>
                             </div>
@@ -173,21 +174,21 @@
                                     <label for="product_sku" class="form-label">Mini Amount</label>
                                     <input type="text" placeholder="Type here" class="form-control" onblur="minCash()"
                                         onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'"
-                                        id="Minimum">
+                                        id="Minimum"  value="<%= findCoupon.minimumAmount %>">
                                     <p id="minAmountErr" class="text-danger"></p>
                                 </div>
                                 <div class="col-md-4  mb-3">
                                     <label for="product_color" class="form-label">Max Amount</label>
                                     <input type="text" placeholder="Type here" class="form-control"
                                         onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'"
-                                        onblur="maxCash()" id="maximum">
+                                        onblur="maxCash()" id="maximum"  value="<%= findCoupon.maximumAmount %>">
                                     <p id="maxAmountErr" class="text-danger"></p>
                                 </div>
                                 <div class="col-md-4  mb-3">
                                     <label for="product_size" class="form-label">Discount</label>
                                     <input type="text" placeholder="Type here"
                                         onKeyDown="return /[0-9]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'"
-                                        class="form-control" onblur="dis()" id="discount">
+                                        class="form-control" onblur="dis()" id="discount"   value="<%= findCoupon.discount %>">
                                     <p id="disErr" class="text-danger"></p>
                                 </div>
                             </div>
@@ -343,7 +344,7 @@
             document.getElementById("filedErr").innerHTML = "Fill the Filed"
         } else {
             document.getElementById("filedErr").innerHTML = ""
-
+            const id=document.getElementById("id").value
             const nameValue = document.getElementById("name").value
             const startDate = document.getElementById("startDate").value
             const Minimum = document.getElementById("Minimum").value
@@ -352,7 +353,7 @@
             const discount = document.getElementById("discount").value
 
             $.ajax({
-                url: "/admin/addCoupon",
+                url: "/admin/editCoupon",
                 method: "post",
                 data: {
                     nameValue,
@@ -360,7 +361,8 @@
                     maximum,
                     discount,
                     startDate,
-                    Minimum
+                    Minimum,
+                    id
                 },
                 success: (response) => {
                     if (response.status == true) {

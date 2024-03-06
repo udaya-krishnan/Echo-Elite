@@ -609,14 +609,14 @@
                                         </div>
                                         <div class="clearfix product-price-cover">
                                             <% if (proData.offerPrice) { %>
-                                                <% var percentage=(proData[i].regularPrice-proData[i].offerPrice)/proData[i].regularPrice*100 %>
+                                                <% var percentage=(proData.regularPrice-proData.offerPrice)/proData.regularPrice*100 %>
                                                 <div class="product-price primary-color float-left">
                                                     <ins><span id="offerPrice" class="text-brand">₹<%= proData.offerPrice %>
                                                         </span></ins>
                                                     <ins><span class="old-price font-md ml-15">₹<%= proData.regularPrice %>
                                                         </span></ins>
                                                     <span class="save-price  font-md color3 ml-15">
-                                                        <%= percentage %>%
+                                                        <%= percentage.toFixed() %>%
                                                     </span>
                                                 </div>
                                              

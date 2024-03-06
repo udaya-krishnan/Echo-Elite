@@ -113,5 +113,7 @@ admin_route.get("/coupon",isAdmin,couponController.loadCouponPage)
 admin_route.get("/addCoupon",isAdmin,couponController.addCouponLoad)
 admin_route.post("/addCoupon",isAdmin,couponController.addCoupon)
 admin_route.post("/coupon-block",isAdmin,couponController.blockCoupon)
+admin_route.get("/coupon-edit",isAdmin,couponController.editpageLoad)
+admin_route.post("/editCoupon",isAdmin,couponController.editCoupon)
 
 module.exports = admin_route;

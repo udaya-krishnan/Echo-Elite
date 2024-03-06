@@ -15,6 +15,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favico.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
+    <script src="https://kit.fontawesome.com/7357e273fa.js" crossorigin="anonymous"></script>
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.<path d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"/></svg> -->
 </head>
 
 <body>
@@ -596,23 +598,42 @@
                                 </div>
                             </div>
 
-
-                            <div class="col-md-8">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; height: 100vh;">
-                                    <div style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; background-color: #f9f9f9; color: #333;">
-                                        <h2>Special Offer!</h2>
-                                        <p>Get <span style="color: #16e643; font-weight: bold;">25% OFF</span> on your next purchase</p>
-                                        <p>Use coupon code: <span style="font-size: 1.2em; background-color: #0026ff; color: #fff; padding: 5px 10px; border-radius: 5px; margin: 5px;">SALE25</span></p>
-                                        <p>Valid until: <span style="color: #666;">31st March, 2024</span></p>
-                                    </div>
-                                    <div style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; background-color: #f9f9f9; color: #333;">
-                                        <h2>Special Offer!</h2>
-                                        <p>Get <span style="color: #16e643; font-weight: bold;">25% OFF</span> on your next purchase</p>
-                                        <p>Use coupon code: <span style="font-size: 1.2em; background-color: #0026ff; color: #fff; padding: 5px 10px; border-radius: 5px; margin: 5px;">SALE25</span></p>
-                                        <p>Valid until: <span style="color: #666;">31st March, 2024</span></p>
-                                    </div>
-                                </div>
+                            
+<div class="col-md-8">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; height: 100vh;">
+        <div>
+            <% if (CouponDataArray.length > 0) { %>
+                <% for(let i = 0; i < CouponDataArray.length; i++) { %>
+                    <div style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; background-color: #f9f9f9; color: #333; margin-bottom: 20px;">
+                        <h2 style="margin-bottom: 10px;"><%= CouponDataArray[i].name %>!</h2>
+                        <p>Get <span style="color: #16e643; font-weight: bold;" id="code"><%= CouponDataArray[i].discount %>% OFF</span> on your next purchase</p>
+                        <p>Use coupon code: <span id="couponCode" style="font-size: 1.2em; background-color: #6175e9; color: #fff; padding: 5px 9px; border-radius: 5px; margin: 5px;"><%= CouponDataArray[i].couponCode %></span><i class="fa-regular fa-copy" onclick="copyText()" style="cursor: pointer; margin-left: 5px;"></i></p>
+                        <p style="margin-top: 10px;">Valid until: <span style="color: #666;"><%= CouponDataArray[i].EndDate %></span></p>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <!-- <h2>No Coupon Found</h2> -->
+                <div>
+                    <% if (readeemCoupon.length > 0) { %>
+                        <% for(let i = 0; i < readeemCoupon.length; i++) { %>
+                            <div style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; text-align: center; background-color: #f9f9f9; color: #333; margin-bottom: 20px;">
+                                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Redeemed Coupon</h2>
+                                <p>Offer: <span style="color: #16e643; font-weight: bold;"><%= readeemCoupon[i].discount %>% OFF</span></p>
+                                <p>Coupon Code: <span style="font-size: 1.2em; background-color: #0026ff; color: #fff; padding: 5px 10px; border-radius: 5px; margin: 5px;"><%= readeemCoupon[i].couponCode %></span></p>
+                                <p style="margin-top: 10px;">Valid until: <span style="color: #666;"><%= readeemCoupon[i].EndDate %></span></p>
                             </div>
+                        <% } %>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+      
+    </div>
+</div>
+
+                            
+                                
+                           
 
                             
                         </div>
@@ -775,6 +796,16 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
-
+<script>
+     function copyText() {
+        // alert("helllo")
+     const code =document.getElementById("couponCode").innerHTML
+     /* Copy text into clipboard */
+     navigator.clipboard.writeText
+         (code);
+        
+        
+ }
+</script>
 
 </html>

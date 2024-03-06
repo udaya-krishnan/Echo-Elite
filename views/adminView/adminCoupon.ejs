@@ -175,18 +175,18 @@
                                                 <td><%=  couponData[i].minimumAmount %></td>
                                                 <td><%=  couponData[i].maximumAmount%></td>
                                                 <% if (couponData[i].isActive==true) { %>
-                                                    <td id="status<%=i%>">Active</td>
-                                                    <td class="text-end">
 
-                                                        <button style="padding: 10px 10px; background-color: #007bff; color: #fff; border: none; width: 110px; cursor: pointer; display: block;" id="block<%=i%>" onclick="Block('<%= couponData[i]._id%>','<%=i%>')">Not Active</button>
-                                                        
-                                                      
-                                                    </td>
+                                                    <td id="status<%=i%>">Active</td>
+                                                    <td class="text-end" style="text-align: right;">
+                                                        <a href="/admin/coupon-edit?id=<%=couponData[i]._id  %>" id="edit<%=i%>" class="btn btn-info rounded font-sm mt-6 p-10" style="display: inline-block; margin-right: 10px;">EDIT</a>
+                                                        <button type="button" class="btn btn-primary" style="padding: 10px; display: inline-block;" id="listButton<%=i%>" onclick="Block('<%= couponData[i]._id %>','<%=i%>')">Not Active</button>
+                                                      </td>
                                                  
                                                 <% }else{ %>
                                                     <td id="status<%=i%>">Not Active</td>
                                                     <td class="text-end">
-                                                              <button style="padding: 10px 10px; background-color: #007bff; color: #fff; border: none; width: 110px; cursor: pointer; display:block;" id="block<%= i %>" onclick="Block('<%= couponData[i]._id%>','<%=i%>')">Active</button>
+                                                        <a href="/admin/coupon-edit?id=<%= couponData[i]._id %>" id="edit<%=i%>" class="btn btn-info rounded font-sm mt-6 p-10" style="display: none; margin-right: 10px;">EDIT</a>
+                                                        <button type="button" class="btn btn-primary" style="padding: 10px; display: inline-block;" id="listButton<%=i%>" onclick="Block('<%=couponData[i]._id %>','<%=i%>')">Active</button>
                                                     </td>
                                                     <% } %>
                                                
@@ -256,12 +256,14 @@
         success:(response)=>{
             if(response.status==true){
                 // alert("hello")
-                document.getElementById("status"+index).innerHTML="Active"
-                document.getElementById("block"+index).innerHTML="Not Active"
+                document.getElementById("edit"+index).style.display="none"
+                    document.getElementById("listButton"+index).innerHTML='Active'
+                    document.getElementById('status'+index).innerHTML='Not Active'
             }else if(response.status==false){
-                // alert("hai")
-                document.getElementById("status"+index).innerHTML="Not Active"
-                document.getElementById("block"+index).innerHTML="Active"
+               
+                    document.getElementById("edit"+index).style.display="inline-block"
+                    document.getElementById("listButton"+index).innerHTML='Not Active'
+                    document.getElementById('status'+index).innerHTML='Active'
             }
         }
       })
