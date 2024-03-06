@@ -445,14 +445,16 @@ const addOrder = async (req, res) => {
       console.log(orderNum);
       const addressData = await Address.findOne({ _id: addressId });
       const date=generateDate()
-
+      console.log(typeof(total))
+     
       var options={
         amount:total*100,
         currency:"INR",
         receipt:stringOrder_id
       }
-      console.log(total)
-
+      // console.log(typeof(total))
+      console.log(options)
+ 
       let amount=Number(total)
       // let result=amount*10
       console.log(amount+"aaaaaaaaaaaaaaaaaaaamountma")

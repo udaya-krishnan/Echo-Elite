@@ -1069,6 +1069,11 @@
                                                 placeholder="Confirm password" >
                                             <div id="Conf_error" class="text-danger"></div>
                                         </div>
+                                        <div class="form-group">
+                                            <input type="text" id="referral" name="referral"
+                                                placeholder="Enter Referral Code" >
+                                            <div id="Referral" class="text-danger" style="display: none;">Invalid Refferral Code</div>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <input type="submit" id="submitId" class="btn btn-fill-out btn-block hover-up"
@@ -1382,6 +1387,8 @@
             const email = document.getElementById("email").value.trim()
             const mob = document.getElementById("mobile").value.trim()
             const pass = document.getElementById("password").value.trim()
+            const reffer=document.getElementById("referral").value.trim()
+            
             nameFun()
             emailFun()
             mobFun()
@@ -1426,7 +1433,9 @@
                         mob,
                         name,
                         pass,
-                        confirm
+                        confirm,
+                        reffer
+
                     },
                     success: (response) => {
 
@@ -1443,6 +1452,11 @@
                             }, 2000)
                         } else if (response.status === true) {
                             window.location.href = "http://localhost:2003/otp"
+                        } else if(response.status=="reffer"){
+                            document.getElementById("Referral").style.display="block"
+                            setTimeout(()=>{
+                                document.getElementById("Referral").style.display="none"
+                            },2000)
                         }
 
                     }
