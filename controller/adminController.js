@@ -56,13 +56,14 @@ const loadDash=async(req,res)=>{
      }
      const product=await Product.find({})
      const category=await Category.find({})
-     const order=await Order.find({$or:[]})
+     const order=await Order.find({status:{$nin:["Ordered","Canceled","Shipped"]}})
      const proLength=product.length
      const catLength=category.length
+     const orderLength=order.length
    
     
 
-      res.render('adminDash',{sum,proLength,catLength})
+      res.render('adminDash',{sum,proLength,catLength,orderLength})
    } catch (error) {
       console.log(error.message)
    }
