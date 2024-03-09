@@ -371,7 +371,8 @@ const addOrder = async (req, res) => {
           orderDate:date,
           status: "Processing",
           shippingAddress: addressData,
-          coupon:findCoupon._id
+          coupon:findCoupon.couponCode,
+          discount:findCoupon.discount
         });
     
         console.log(proData);

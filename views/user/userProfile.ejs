@@ -613,8 +613,8 @@
                                                     <div style="margin-top: 20px;">
                                                         <p>Your referral code:</p>
                                                         <div style="display: flex; align-items: center; border: 1px solid #e0e0e0; padding: 10px; border-radius: 5px;">
-                                                            <span style="flex: 1;"><%= userData.referralCode %></span>
-                                                            <button style="background-color: #2874f0; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Copy</button>
+                                                            <span id="referralCode" style="flex: 1;"><%= userData.referralCode %></span>
+                                                            <button id="copyButton" style="background-color: #2874f0; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Copy</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1002,5 +1002,30 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
+
+<script>
+    document.getElementById("copyButton").addEventListener("click", function() {
+        // Get the referral code
+        var referralCode = document.getElementById("referralCode").innerText;
+
+        // Create a temporary input element
+        var tempInput = document.createElement("input");
+        tempInput.setAttribute("value", referralCode);
+        document.body.appendChild(tempInput);
+
+        // Select the text in the input element
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text to the clipboard
+        document.execCommand("copy");
+
+        // Remove the temporary input element
+        document.body.removeChild(tempInput);
+
+        // Alert the user
+        
+    });
+</script>
 
 </html>

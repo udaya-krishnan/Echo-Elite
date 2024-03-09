@@ -116,4 +116,12 @@ admin_route.post("/coupon-block",isAdmin,couponController.blockCoupon)
 admin_route.get("/coupon-edit",isAdmin,couponController.editpageLoad)
 admin_route.post("/editCoupon",isAdmin,couponController.editCoupon)
 
+
+//*****************************************************Sales***************** */
+
+
+admin_route.get("/sales",isAdmin,adminController.loadSales)
+admin_route.get("/salesDate",isAdmin,adminController.dateFilter)
+admin_route.get("/Date",isAdmin,adminController.sortDate)
+
 module.exports = admin_route;
