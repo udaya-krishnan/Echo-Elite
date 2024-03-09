@@ -1,11 +1,10 @@
-const generateDate=()=>{
-    const currentDate=new Date();
-    const day=currentDate.getDate();
-    const month=currentDate.getMonth();
-    const year=currentDate.getFullYear();
-    const formateDate=`${day}-${month}-${year}`
+const generateDate = () => {
+    const currentDate = new Date();
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1; 
+    const year = currentDate.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
 
-    return formateDate;
+    return formattedDate;
 }
-
 module.exports=generateDate

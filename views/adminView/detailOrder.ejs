@@ -69,6 +69,16 @@
                         <span class="text">Orders</span>
                     </a>
                 </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupon"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/sales"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                </li>
 
             </ul>
             <hr>
@@ -287,8 +297,14 @@
                                                         </div>
                                                     </a>
                                                 </td>
-                                                <td> ₹<%= proData[i].offerPrice %>
-                                                </td>
+
+                                                <% if (proData[i].offerPrice) { %>
+                                                    <td> ₹<%= proData[i].offerPrice %></td>
+                                                <% }else{ %>
+                                                    <td>₹<%= proData[i].regularPrice %></td>
+                                                    <% } %>
+                                                
+
                                                 <td>
                                                     <%= findOrder.items[i].quantity %>
                                                 </td>
