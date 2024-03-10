@@ -80,18 +80,26 @@ const Wishlist = require("../model/wishlistModel");
 
 const nextPage = async (req, res) => {
   try {
-    const num = req.body.number;
-    const skip = num * 6;
+    const num = req.query.num;
+    console.log(typeof num);
+    const number = parseInt(num);
+    const skip = number * 6;
+    console.log(skip);
 
-    const proData = await Product.find({}).skip(skip).limit(6);
+    const proData = await Product.find({ is_blocked: false })
+      .skip(skip)
+      .limit(6);
 
-    //    const proData=await Product.find({})
-
-    const catData = await Category.find({});
-    const newPro = await Product.find({}).skip(skip).limit(6);
+    const catData = await Category.find({ is_blocked: false });
+    const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
+    if (proData.length < 0) {
+    }
+    let newNum = number + 1;
 
-    res.render("shop", { proData, catData, newPro, brandData });
+      let previous=true
+    
+    res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
   } catch (error) {
     console.log(error.message);
   }
@@ -100,17 +108,77 @@ const nextPage = async (req, res) => {
 const categoryfilter = async (req, res) => {
   try {
     const id = req.query.id;
-    console.log(id);
+    const sort = req.query.sort;
 
-    const findCat = await Category.findById({ _id: id });
+    let num = req.query.num;
 
-    const proData = await Product.find({ category: findCat._id }).limit(6);
+    // console.log(id);
+    // console.log(sort);
 
-    // const proData=await Product.find({}).sort({name:-1}).limit(6)
-    const catData = await Category.find({});
-    const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
-    const brandData = await Brand.find({});
-    res.render("shop", { proData, catData, newPro, brandData });
+    if (sort == "lowToHigh") {
+      const findCat = await Category.findById({ _id: id });
+      const proData = await Product.find({
+        category: findCat._id,
+        is_blocked: false,
+      })
+        .sort({ regularPrice: 1 })
+        .limit(6);
+      const catData = await Category.find({ is_blocked: false });
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+    } else if (sort == "highToLow") {
+      const findCat = await Category.findById({ _id: id });
+      const proData = await Product.find({
+        category: findCat._id,
+        is_blocked: false,
+      })
+        .sort({ regularPrice: -1 })
+        .limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+
+      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+    } else if (sort == "aA-zZ") {
+      const findCat = await Category.findById({ _id: id });
+      const proData = await Product.find({
+        category: findCat._id,
+        is_blocked: false,
+      })
+        .sort({ name: 1 })
+        .limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+
+      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+    } else if (sort == "zZ-aA") {
+      const findCat = await Category.findById({ _id: id });
+      const proData = await Product.find({
+        category: findCat._id,
+        is_blocked: false,
+      })
+        .sort({ name: -1 })
+        .limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+
+      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+    } else {
+      const findCat = await Category.findById({ _id: id });
+
+      const proData = await Product.find({
+        category: findCat._id,
+        is_blocked: false,
+      }).limit(6);
+      const catData = await Category.find({ is_blocked: false });
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+
+      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+    }
   } catch (error) {
     console.log(error.message);
   }
@@ -135,35 +203,38 @@ const brandFilter = async (req, res) => {
 
 const loadWishlist = async (req, res) => {
   try {
-    const findUser=await User.findOne({email:req.session.email})
- 
-    const wishData=await Wishlist.findOne({user_id:findUser._id})
-     
-    let proId=[]
+    const findUser = await User.findOne({ email: req.session.email });
 
-    for(let i=0;i<wishData.products.length;i++){
-        proId.push(wishData.products[i].productId)
+    const wishData = await Wishlist.findOne({ user_id: findUser._id });
+
+    let proId = [];
+
+    for (let i = 0; i < wishData.products.length; i++) {
+      proId.push(wishData.products[i].productId);
     }
 
-    let proData=[]
+    let proData = [];
 
-    for(let i=0;i<proId.length;i++){
-        proData.push(await Product.findById({_id:proId[i]}))
+    for (let i = 0; i < proId.length; i++) {
+      proData.push(await Product.findById({ _id: proId[i] }));
     }
 
-    console.log(proData)
+    console.log(proData);
 
-    const cartData=[]
+    const cartData = [];
 
-    for(let i=0;i< proId.length;i++){
-        cartData.push(await Cart.findOne({userId:findUser._id,"items.productsId":proId[i]}))
+    for (let i = 0; i < proId.length; i++) {
+      cartData.push(
+        await Cart.findOne({
+          userId: findUser._id,
+          "items.productsId": proId[i],
+        })
+      );
     }
 
-    console.log(cartData,"caaaaaaaaaaartttttttttt")
+    console.log(cartData, "caaaaaaaaaaartttttttttt");
 
-
-    res.render("wishList",{wishData,proData});
-
+    res.render("wishList", { wishData, proData });
   } catch (error) {
     console.log(error.message);
   }
@@ -172,14 +243,14 @@ const loadWishlist = async (req, res) => {
 const addWishlist = async (req, res) => {
   try {
     const id = req.body.id;
-//    console.log("hello")
+    //    console.log("hello")
     const findUer = await User.findOne({ email: req.session.email });
     // console.log(("find Usernnnnnnnnnnnnnnnnnnnn",findUer));
     const findProData = await Product.findById({ _id: id });
-        // console.log("proDataaaaaaaaaaaaaaaaaaaaaa",findProData)
+    // console.log("proDataaaaaaaaaaaaaaaaaaaaaa",findProData)
     if (findUer) {
       const userFind = await Wishlist.findOne({ user_id: findUer._id });
-    //   console.log("usrFinddddddddddddddddddddddddddddd",userFind )
+      //   console.log("usrFinddddddddddddddddddddddddddddd",userFind )
 
       if (userFind) {
         let proWish = false;
@@ -193,7 +264,7 @@ const addWishlist = async (req, res) => {
         if (proWish) {
           res.json({ status: "already" });
         } else {
-            // console.log("eeeeeeeeeeeelseeeeeeeeeeeeeeeeeeeeeeeessssssss")
+          // console.log("eeeeeeeeeeeelseeeeeeeeeeeeeeeeeeeeeeeessssssss")
           const updateWish = await Wishlist.findOneAndUpdate(
             { user_id: findUer._id },
             {
@@ -206,7 +277,6 @@ const addWishlist = async (req, res) => {
           );
         }
       } else {
-
         // console.log("userfind else worked")
         const wishList = new Wishlist({
           user_id: findUer._id,
@@ -219,7 +289,6 @@ const addWishlist = async (req, res) => {
         const wishlist = wishList.save();
       }
       res.json({ status: true });
-      
     } else {
       res.json({ status: "login" });
     }
@@ -228,47 +297,95 @@ const addWishlist = async (req, res) => {
   }
 };
 
+const removeWish = async (req, res) => {
+  try {
+    const id = req.body.id;
+    const findUser = await User.findOne({ email: req.session.email });
 
-const removeWish=async(req,res)=>{
-    try {
-        const id=req.body.id
-        const findUser=await User.findOne({email:req.session.email})
+    const dalePro = await Wishlist.findOneAndUpdate(
+      { user_id: findUser._id },
+      {
+        $pull: { products: { productId: id } },
+      }
+    );
 
-        const dalePro=await Wishlist.findOneAndUpdate(
-            {user_id:findUser._id},
-            {
-                $pull:{products:{productId:id}}
-            }
+    res.json({ status: true });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
-        )
+const removeFromwishlist = async (req, res) => {
+  try {
+    const id = req.body.id;
+    const findUser = await User.findOne({ email: req.session.email });
 
-        res.json({status:true})
+    const dalePro = await Wishlist.findOneAndUpdate(
+      { user_id: findUser._id },
+      {
+        $pull: { products: { productId: id } },
+      }
+    );
 
-    } catch (error) {
-        console.log(error.message)
+    res.json({ status: true });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const search = async (req, res) => {
+  try {
+    const value = req.body.search;
+
+    const searchValue = await Product.find({
+      name: { $regex: value, $options: "i" },
+    });
+
+    res.json({ status: true, result: searchValue });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const previousPage=async(req,res)=>{
+  try {
+    const num=req.query.num
+    // console.log(num)
+    const number = parseInt(num)-2;
+    // console.log("nummmmmmmmmmmmmmmmmmbbbbbb"+number)
+    const skip = number * 6;
+    console.log(skip);
+
+    if(number==1){
+      const proData = await Product.find({ is_blocked: false })
+      .limit(6);
+      const catData = await Category.find({ is_blocked: false });
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      let previous=false
+      let newNum=number
+      res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
     }
+
+    const proData = await Product.find({ is_blocked: false })
+      .skip(skip)
+      .limit(6);
+    const catData = await Category.find({ is_blocked: false });
+    const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+    const brandData = await Brand.find({});
+
+    let newNum = number 
+
+    console.log("nnnnnnnnnnew numbbbbbbber"+newNum)
+      let previous=true
+    
+    res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
+  } catch (error) {
+    console.log(error.message)
+  }
 }
 
-const removeFromwishlist=async(req,res)=>{
-    try {
 
-        const id=req.body.id
-        const findUser=await User.findOne({email:req.session.email})
-
-        const dalePro=await Wishlist.findOneAndUpdate(
-            {user_id:findUser._id},
-            {
-                $pull:{products:{productId:id}}
-            }
-
-        )
-
-        res.json({status:true})
-        
-    } catch (error) {
-        console.log(error.message)
-    }
-}
 
 module.exports = {
   nextPage,
@@ -277,5 +394,7 @@ module.exports = {
   loadWishlist,
   addWishlist,
   removeWish,
-  removeFromwishlist
+  removeFromwishlist,
+  search,
+  previousPage
 };

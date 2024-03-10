@@ -42,6 +42,10 @@ const productSchema=new mongoose.Schema({
     is_blocked:{
         type:Boolean,
         require:true
+    },
+    rating:{
+        type:Number,
+        default:0
     }
 
 },{versionKey:false})

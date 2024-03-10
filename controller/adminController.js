@@ -291,10 +291,6 @@ const order = await Order.find({
 });
 
    
-
-   //  console.log(order)
-
-
     res.render("adminSales", { order });
   } catch (error) {
     console.log(error.message);

@@ -219,11 +219,16 @@
                             <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Monthly Earning</h6>
-                                <% if (month.length>0) { %>
-                                    <span>₹<%= month[0].totalEarnings %></span>
-                                <% }else{ %>
+                                <% if (month) { %>
+                                    <% if (month.length>0) { %>
+                                        <span>₹<%= month[0].totalEarnings %></span>
+                                    <% }else{ %>
+                                        <span>0</span>
+                                        <% } %> 
+                                <% } else{%>
                                     <span>0</span>
-                                    <% } %> 
+                                    <% } %>
+                               
                                
                                 <span class="text-sm">
                                     Based in your local time.

@@ -102,5 +102,5 @@ const order_schema=new mongoose.Schema({
 
 },{versionKey:false});
 
-const order=mongoose.model("order",order_schema)
-module.exports=order
+
+module.exports=mongoose.model("order",order_schema)

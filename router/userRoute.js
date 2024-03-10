@@ -10,6 +10,7 @@ const cartController=require("../controller/cartController")
 const orderController=require("../controller/orderController")
 const shopController=require("../controller/shopController")
 const couponController=require("../controller/couponController")
+const productController=require("../controller/productController")
 const userAuth=require("../middleware/auth")
 
 
@@ -90,12 +91,13 @@ user_router.get('/',userController.loadLanding)
   // .get("/highTolow",shopController.highTolow)
   // .get("/aAzZ",shopController.AtoZ)
   // .get("/zZaA",shopController.ZtoA)
-  .post("/next-page",shopController.nextPage)
+  .get("/next-page",shopController.nextPage)
 
-  .get("/filter",shopController.categoryfilter)
+  .get("/catagory",shopController.categoryfilter)
 .get("/brandFiter",shopController.brandFilter)
 
-
+.post("/shop-search",shopController.search)
+.get("/previous-page",shopController.previousPage)
 
   //***************************************************Ckeck Out************************ */
 
@@ -146,6 +148,13 @@ user_router.get('/',userController.loadLanding)
 .get("/coupon",userAuth.isBlocked,userAuth.islogin,userController.loadCoupon)
 
 .post("/applyCoupon",userAuth.islogin,userAuth.isBlocked,couponController.applyCoupon)
+
+
+//*********************************************Rating************************ */
+
+.post("/rating",userAuth.islogin,userAuth.isBlocked,productController.ratingProduct)
+
+
 
 
 

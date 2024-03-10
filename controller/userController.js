@@ -16,6 +16,7 @@ const CouponModel = require("../model/CouponModel");
 const referralCode = require("../controller/refferalCode");
 const generateDate = require("../controller/dateGenrator");
 const generateTransaction=require("../controller/transationId")
+const Rating=require("../model/ratingModel")
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -465,10 +466,47 @@ const loadProduct = async (req, res) => {
     // console.log(proData)
 
     const user = req.session.email;
+    const totalRating=await Rating.find({productId:proData._id},{star:true})
+    const reviews=totalRating.length
+
+    const allRatingData=await Rating.find({productId:proData._id})
 
     if (proData) {
       const fullData = await Product.find({});
       if (req.session.email) {
+
+
+        const order=await Order.find({userEmail:req.session.email,status:"Delivered"})
+        console.log(order)
+        let ratingShow=false
+        let product=false
+
+        if(order.length>0){
+          // console.log("inside order");
+          for(let i=0;i<order.length;i++){
+            // console.log("order array");
+           for(let j=0;j<order[i].items.length;j++){
+            // console.log(("j loop"));
+            // console.log("productId  "+proData._id);
+            // console.log("orderid  "+order[i].items[j].productsId)
+            if(proData._id.toString()===order[i].items[j].productsId.toString()){
+              // console.log("product in the order");
+              product=true
+              break;
+            }
+           }
+          }
+          if(product){
+            // console.log(("rating Show"));
+            ratingShow=true
+          }else{
+            // console.log("no product");
+          }
+        }
+
+
+
+
         const userData = await User.findOne({ email: req.session.email });
         const cartData = await Cart.findOne({
           userId: userData._id,
@@ -488,8 +526,12 @@ const loadProduct = async (req, res) => {
             cartData,
             user,
             findWish,
+            ratingShow,
+            reviews,
+            allRatingData
           });
         } else {
+
           const findWish = await Wishlist.findOne({
             user_id: userData._id,
             "products.productId": proData._id,
@@ -501,12 +543,18 @@ const loadProduct = async (req, res) => {
             cartData,
             user,
             findWish,
+            ratingShow,
+            reviews,
+            allRatingData
           });
         }
       } else {
         const cartData = null;
         const findWish = null;
-        res.render("product", { proData, fullData, cartData, user, findWish });
+        let ratingShow=false
+        
+    
+        res.render("product", { proData, fullData, cartData, user, findWish ,ratingShow,reviews,allRatingData});
       }
     } else {
       res.redirect("/404");
@@ -853,38 +901,41 @@ const loadShop = async (req, res) => {
   try {
     const sort = req.query.sort;
     // console.log(sort);
-
+    let newNum=1
+    let previous=false;
     if (sort == "lowToHigh") {
+     
       const proData = await Product.find({}).sort({ offerPrice: 1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData });
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     } else if (sort == "highToLow") {
       const proData = await Product.find({}).sort({ offerPrice: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData });
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     } else if (sort == "aA-zZ") {
       const proData = await Product.find({}).sort({ name: 1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData });
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     } else if (sort == "zZ-aA") {
       const proData = await Product.find({}).sort({ name: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData });
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     }
 
     const proData = await Product.find({}).limit(6);
     const catData = await Category.find({});
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
-    res.render("shop", { proData, catData, newPro, brandData });
+   
+    res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
   } catch (error) {
     console.log(error.message);
   }
