@@ -15,7 +15,90 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favico.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
+
+
 </head>
+
+<style>
+    
+    .search-result {
+        display: none;
+        position: absolute;
+        height: auto;
+        
+    }
+
+    .no-product-found {
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    #searchResultsContainer {
+        background-color: rgb(255, 255, 255); 
+        position: absolute;
+        z-index: 1;
+        width: 592px;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+       
+    }
+
+    .product-container {
+        width: 200px;
+        margin: 10px;
+        text-align: left;
+     
+    }
+
+    .product-container img {
+        margin-left: -2px;
+        max-width: 20%;
+        height: auto;
+        transform: rotate(0deg);
+        transition: transform 0.5s ease; 
+       
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: -50px;
+    }
+
+    .product-info p {
+        margin: 2px 0;
+        margin-left: 40px;
+        font-size: 10px;
+        margin-top: 5px;
+        color: black;
+        font-weight: bold;
+    }
+
+  
+    .rotate-90 {
+        transform: rotate(90deg);
+    }
+
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
+    .rotate-270 {
+        transform: rotate(270deg);
+    }
+</style>
+
+
+
+
 
 <body>
     <header class="header-area header-height-2">
@@ -65,29 +148,35 @@
                     <div class="logo logo-width-1">
                         <a href="index.html"><img src="/assets/imgs/theme/echo.png" alt="logo"></a>
                     </div>
-                    <div class="search-style-2">
-                        <form action="#">
-                            <!-- <select class="select-active">
-                                <option>All Categories</option>
-                                <option>Women's Clothing</option>
-                                <option>Men's Clothing</option>
-                                <option>Cellphones</option>
-                                <option>Computer & Office</option>
-                                <option>Consumer Electronics</option>
-                                <option>Jewelry & Accessories</option>
-                                <option>Home & Garden</option>
-                                <option>Luggage & Bags</option>
-                                <option>Shoes</option>
-                                <option>Mother & Kids</option>
-                            </select> -->
-                            <input type="text" placeholder="Search for items…" id="search" onkeydown="key()">
-                            <button type="submit"> <i class="far fa-search"></i> </button>
+                    <div class="search-style-2" style="width: 600px;">
+                       
+                            <div class="search-style-2">
+                           
+                                <input type="text" id="input" style="width: 100%;margin-top: 5px;" placeholder="Search" onkeyup="SearchProduct()">
+                                
+                              
+                              
+                                   
+                            </div>
+                      
 
-                        </form>
-                        <div style="display: none; width: 520px ;height: 40px ; background-color: blue; " id="result">
-                        </div>
+                            <div class="search-result">
+
+                                <div id="searchResultsContainer">
+        
+                                </div>
+        
+                            </div> 
+        
+                            <h5 class="no-product-found">No products found</h5>
+    
+    
+
+
+
+
                     </div>
-
+                    
                     <div class="header-action-right">
 
                         <div class="header-action-2">
@@ -379,10 +468,10 @@
             </div>
             <div class="mobile-header-content-area">
                 <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="#">
+                    <!-- <form action="#"> -->
                         <input type="text" placeholder="Search…">
                         <button type="submit"> <i class="far fa-search"></i> </button>
-                    </form>
+                    <!-- </form> -->
                 </div>
                 <div class="mobile-menu-wrap mobile-header-border">
                     <div class="main-categori-wrap mobile-header-border">
@@ -562,19 +651,30 @@
                                 <div class="sort-by-cover mr-10">
                                     <div class="sort-by-product-wrap">
                                         <div class="sort-by">
-                                            <span><i class="fa fa-th"></i>Show:</span>
+                                            <span><i class="fa fa-th"></i>Sort Rating:</span>
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
-                                            <span> 50 <i class="far fa-angle-down"></i></span>
+                                            <span> All <i class="far fa-angle-down"></i></span>
                                         </div>
                                     </div>
                                     <div class="sort-by-dropdown">
                                         <ul>
-                                            <li><a class="active" href="#">50</a></li>
-                                            <li><a href="#">100</a></li>
-                                            <li><a href="#">150</a></li>
-                                            <li><a href="#">200</a></li>
-                                            <li><a href="#">All</a></li>
+                                            <!-- <li><a class="active" href="#"></a><div class="product-rating" style="width:50%"></div></li> -->
+                                            <li><a href="/shop?rating=100">  <div class="product-rate">
+                                                <div class="product-rating" style="width:100%"></div>
+                                            </div></a></li>
+                                            <li><a href="/shop?rating=80"> <div class="product-rate">
+                                                <div class="product-rating" style="width:80%"></div>
+                                            </div></a></li>
+                                            <li><a href="/shop?rating=60"> <div class="product-rate">
+                                                <div class="product-rating" style="width:60%"></div>
+                                            </div></a></li>
+                                            <li><a href="/shop?rating=40"> <div class="product-rate">
+                                                <div class="product-rating" style="width:40%"></div>
+                                            </div></a></li>
+                                            <li><a href="/shop?rating=20"> <div class="product-rate">
+                                                <div class="product-rating" style="width:20%"></div>
+                                            </div></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -639,7 +739,10 @@
                                                     <% var
                                                         percentage=(proData[i].regularPrice-proData[i].offerPrice)/proData[i].regularPrice*100
                                                         %>
-                                                        <div class="rating-result" title="90%">
+                                                        <div  title="90%">
+                                                            <div class="product-rate">
+                                                                <div class="product-rating" style="width:<%=proData[i].rating%>%"></div>
+                                                            </div>
                                                             <span>
                                                                 <span>
                                                                     <%= percentage.toFixed(0) %>%
@@ -654,7 +757,10 @@
 
                                                         <% }else{ %>
 
-                                                            <div class="rating-result" title="90%">
+                                                            <div  title="90%">
+                                                                <div class="product-rate">
+                                                                    <div class="product-rating" style="width:<%=proData[i].rating%>%"></div>
+                                                                </div>
                                                                 <!-- <span>
                                                                 <span>
                                                                    
@@ -833,10 +939,10 @@
                                                     <p class="price mb-0 mt-5">₹<%= newPro[i].regularPrice %>
                                                     </p>
                                                     <% } %>
-
-                                                        <div class="product-rate">
-                                                            <div class="product-rating" style="width:90%"></div>
-                                                        </div>
+                                                    <div class="product-rate">
+                                                        <div class="product-rating" style="width:<%=newPro[i].rating%>%"></div>
+                                                    </div>
+                                                        
                                         </div>
                                     </div>
 
@@ -1094,24 +1200,111 @@
     }
 
 
-    function key() {
-        const search = document.getElementById("search").value
-        $.ajax({
-            url: "/shop-search",
-            method: "post",
-            data: {
-                search
-            },
-            success: (response) => {
-                if (response.status == true) {
-                    document.getElementById("result").style.display = "block"
-                }
-            }
-        })
-    }
+    // function key() {
+    //     const search = document.getElementById("search").value
+    //     $.ajax({
+    //         url: "/shop-search",
+    //         method: "post",
+    //         data: {
+    //             search
+    //         },
+    //         success: (response) => {
+    //             if (response.status == true) {
+    //                 document.getElementById("result").style.display = "block"
+    //             }
+    //         }
+    //     })
+    // }
 
     function catagory(id) {
        window.location.href=`/catagory?id=${id}`
+    }
+
+
+
+
+
+
+    const inputElement = document.getElementById('input');
+    let timeoutId;
+
+    function debounce(func, delay) {
+        return function () {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func();
+            }, delay);
+        };
+    }
+
+    function showSearchResult() {
+        const searchResult = document.querySelector('.search-result');
+        searchResult.style.display = 'block';
+    }
+
+    function hideSearchResult() {
+        const searchResult = document.querySelector('.search-result');
+        searchResult.style.display = 'none';
+    }
+
+    function showNoProductFound() {
+        const noProductFound = document.querySelector('.no-product-found');
+        noProductFound.style.display = 'block';
+    }
+
+    function hideNoProductFound() {
+        const noProductFound = document.querySelector('.no-product-found');
+        noProductFound.style.display = 'none';
+    }
+
+    function SearchProduct() {
+        const searchDataValue = inputElement.value.trim();
+
+
+        if (searchDataValue !== "") {
+            showSearchResult();
+            debounce(() => {
+                console.log(searchDataValue)
+                $.ajax({
+                    url: "/search",
+                    method: "post",
+                    data: {
+                        searchDataValue
+                    },
+                    success: (response) => {
+                        const searchResultsContainer = document.getElementById('searchResultsContainer')
+                        searchResultsContainer.innerHTML = ""
+
+                        if (response.searchProducts.length > 0) {
+                            response.searchProducts.forEach(element => {
+                                const productContainer = document.createElement('div');
+                                productContainer.classList.add('product-container');
+
+                                const productElement = document.createElement('div');
+                                productElement.innerHTML = `
+                                <a href="/showproduct?id=${element._id}" class="product-link">
+                                    <img src="/productImages/${element.image[0]}" alt="product">
+                                    <div class="product-info">
+                                        <p>${element.name}</p>
+                                        <p>₹${element.regularPrice}</p>
+                                    </div>
+                                `;
+
+                                productContainer.appendChild(productElement);
+                                searchResultsContainer.appendChild(productContainer);
+                            });
+                            hideNoProductFound();
+                        } else {
+                            hideSearchResult();
+                            showNoProductFound();
+                        }
+                    }
+                })
+            }, 500)();
+        } else {
+            hideSearchResult();
+            hideNoProductFound();
+        }
     }
 
 

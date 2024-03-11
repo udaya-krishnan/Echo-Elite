@@ -900,6 +900,7 @@ const editAccount = async (req, res) => {
 const loadShop = async (req, res) => {
   try {
     const sort = req.query.sort;
+    const rating=req.query.rating
     // console.log(sort);
     let newNum=1
     let previous=false;
@@ -924,6 +925,36 @@ const loadShop = async (req, res) => {
       res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     } else if (sort == "zZ-aA") {
       const proData = await Product.find({}).sort({ name: -1 }).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==100){
+      const proData = await Product.find({rating:100}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==80){
+      const proData = await Product.find({rating:80}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==60){
+      const proData = await Product.find({rating:60}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==40){
+      const proData = await Product.find({rating:40}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==20){
+      const proData = await Product.find({rating:20}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});

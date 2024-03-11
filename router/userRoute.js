@@ -96,9 +96,10 @@ user_router.get('/',userController.loadLanding)
   .get("/catagory",shopController.categoryfilter)
 .get("/brandFiter",shopController.brandFilter)
 
-.post("/shop-search",shopController.search)
+// .post("/shop-search",shopController.search)
 .get("/previous-page",shopController.previousPage)
 
+.post("/search",shopController.searchProducts)
   //***************************************************Ckeck Out************************ */
 
 

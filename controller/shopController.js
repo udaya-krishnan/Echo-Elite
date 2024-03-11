@@ -385,6 +385,22 @@ const previousPage=async(req,res)=>{
   }
 }
 
+const searchProducts = async(req,res)=>{
+  try{
+    console.log("hello");
+      const {searchDataValue} = req.body
+      const searchProducts = await Product.find({name:{
+          $regex: searchDataValue , $options: 'i'
+      }})
+      // console.log(searchProducts);
+      console.log(searchProducts)
+      res.json({status:"searched",searchProducts})
+
+  }catch(err){
+      console.log(err);
+    }
+ }
+
 
 
 module.exports = {
@@ -396,5 +412,6 @@ module.exports = {
   removeWish,
   removeFromwishlist,
   search,
-  previousPage
+  previousPage,
+  searchProducts
 };
