@@ -645,19 +645,30 @@
                                 <div class="sort-by-cover mr-10">
                                     <div class="sort-by-product-wrap">
                                         <div class="sort-by">
-                                            <span><i class="fa fa-th"></i>Show:</span>
+                                            <span><i class="fa fa-th"></i>Sort Rating:</span>
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
-                                            <span> 50 <i class="far fa-angle-down"></i></span>
+                                            <span> All <i class="far fa-angle-down"></i></span>
                                         </div>
                                     </div>
                                     <div class="sort-by-dropdown">
                                         <ul>
-                                            <li><a class="active" href="#">50</a></li>
-                                            <li><a href="#">100</a></li>
-                                            <li><a href="#">150</a></li>
-                                            <li><a href="#">200</a></li>
-                                            <li><a href="#">All</a></li>
+                                            <!-- <li><a class="active" href="#"></a><div class="product-rating" style="width:50%"></div></li> -->
+                                            <li><a href="/catagory?id=<%=findCat._id%>&rating=100">  <div class="product-rate">
+                                                <div class="product-rating" style="width:100%"></div>
+                                            </div></a></li>
+                                            <li><a href="/catagory?id=<%=findCat._id%>rating=80"> <div class="product-rate">
+                                                <div class="product-rating" style="width:80%"></div>
+                                            </div></a></li>
+                                            <li><a href="/catagory?id=<%=findCat._id%>rating=60"> <div class="product-rate">
+                                                <div class="product-rating" style="width:60%"></div>
+                                            </div></a></li>
+                                            <li><a href="/catagory?id=<%=findCat._id%>rating=40"> <div class="product-rate">
+                                                <div class="product-rating" style="width:40%"></div>
+                                            </div></a></li>
+                                            <li><a href="/catagory?id=<%=findCat._id%>rating=20"> <div class="product-rate">
+                                                <div class="product-rating" style="width:20%"></div>
+                                            </div></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -724,7 +735,10 @@
                                                     <% var
                                                         percentage=(proData[i].regularPrice-proData[i].offerPrice)/proData[i].regularPrice*100
                                                         %>
-                                                        <div class="rating-result" title="90%">
+                                                        <div  title="90%">
+                                                            <div class="product-rate">
+                                                                <div class="product-rating" style="width:<%=proData[i].rating%>%"></div>
+                                                            </div>
                                                             <span>
                                                                 <span>
                                                                     <%= percentage.toFixed(0) %>%
@@ -739,7 +753,10 @@
 
                                                         <% }else{ %>
 
-                                                            <div class="rating-result" title="90%">
+                                                            <div  title="90%">
+                                                                <div class="product-rate">
+                                                                    <div class="product-rating" style="width:<%=proData[i].rating%>%"></div>
+                                                                </div>
                                                                 <!-- <span>
                                                                 <span>
                                                                    
@@ -913,7 +930,7 @@
                                                     <% } %>
 
                                                         <div class="product-rate">
-                                                            <div class="product-rating" style="width:90%"></div>
+                                                            <div class="product-rating" style="width:<%=newPro[i].rating%>%"></div>
                                                         </div>
                                         </div>
                                     </div>
