@@ -99,8 +99,9 @@ const order_schema=new mongoose.Schema({
     discount:{
         type:Number,
     }
+    
 
-},{versionKey:false});
+},{versionKey:false,timestamps:true});
 
 
 module.exports=mongoose.model("order",order_schema)

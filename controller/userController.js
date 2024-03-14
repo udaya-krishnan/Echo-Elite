@@ -784,7 +784,7 @@ const loadTrack = async (req, res) => {
     const userData = await User.findOne({ email: req.session.email });
     const userWallet = await Wallet.findOne({ userId: userData._id })
       .sort({ date: 1 })
-      .limit(5);
+      .limit(5);  
     // console.log(userWallet);
 
     res.render("wallet", { userWallet });

@@ -631,11 +631,32 @@
                 </div>
             </div>
         </div>
+        
         <section class="mt-60 mb-60">
+           
             <div class="container">
+             
                 <div class="row">
+                   
                     <div class="col-12">
+                        <% if (findOrder.status=="Delivered") { %>
+                            <button style="background-color: #0d6efd; /* Blue */
+                            border: none;
+                            color: white;
+                            padding: 15px 32px;
+                            text-align: center;
+                            text-decoration: none;
+                            display: inline-block;
+                            font-size: 16px;
+                            margin: 4px 2px;
+                            margin-left: 1000px;
+                            margin-bottom: 30px;
+                            cursor: pointer;
+                            border-radius: 10px;" onclick="invoice('<%=findOrder._id%>')">Invoice</button>
+                        <% } %>
+                        
                         <div class="table-responsive">
+                            
                             <table class="table shopping-summery text-center clean">
                                 <thead>
                                     <tr class="main-heading">
@@ -1178,6 +1199,16 @@
             hideSearchResult();
             hideNoProductFound();
         }
+    }
+
+    function invoice(id){
+        $.ajax({
+            url:"/loadInvoice",
+            method:"post",
+            data:{
+                id
+            }
+        })
     }
 </script>
 

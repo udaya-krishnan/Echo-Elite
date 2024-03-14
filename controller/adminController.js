@@ -3,6 +3,7 @@ const Order = require("../model/orderModel");
 const Product = require("../model/productModel");
 const Category = require("../model/categoryModel");
 const Coupon = require("../model/CouponModel");
+const Chart=require("chart.js")
 // const bcrypt=require('bcrypt')
 
 const adminEmail = process.env.ADMINEMAIL;
@@ -45,6 +46,79 @@ const verifyAdmin = async (req, res) => {
 
 const loadDash = async (req, res) => {
   try {
+
+    const yValues=[0,0,0,0,0,0,0]
+    const order = await Order.find({
+      status: { $nin: ["Ordered", "Canceled", "Shipped"] },
+    });
+
+    for(let i=0;i<order.length;i++){
+      const date=order[i].createdAt
+      const value=date.getDay()
+      yValues[value]+=order[i].totalAmount
+    }
+
+    const allData=await Category.find({})
+
+    const sales=[]
+
+    for(let i=0;i<allData.length;i++){
+      sales.push(0)
+    }
+
+    console.log(sales)
+
+    const allName=allData.map((x)=>x.name)
+    const allId=allData.map((x)=>x._id)
+    
+
+
+    console.log(allName);
+    let productId=[]
+    let quantity=[]
+
+    for(let i=0;i<order.length;i++){
+      for(let j=0;j<order[i].items.length;j++){
+        productId.push(order[i].items[j].productsId)
+        quantity.push(order[i].items[j].quantity)
+      }
+    }
+    console.log(quantity)
+    console.log(productId)
+    const productData=[]
+    for(let i=0;i<productId.length;i++){
+      productData.push(await Product.findById({_id:productId[i]}))
+    }
+  
+    //  console.log(productData);
+
+      for(let i=0;i<productData.length;i++){
+        
+        for(let j=0;j<allId.length;j++){
+          console.log(allId[j]+"     all id");
+          console.log(productData[i].category+"       productid");
+          if(allId[j]==productData[i].category.toString()){
+            console.log(quantity[i]); 
+            
+            sales[j]+=quantity[i]
+          }
+        }
+        
+      }
+
+      console.log(sales)
+ 
+  
+
+
+
+
+
+
+
+
+
+
     const orderData = await Order.find({ status: "Delivered" });
     let sum = 0;
     for (let i = 0; i < orderData.length; i++) {
@@ -52,9 +126,9 @@ const loadDash = async (req, res) => {
     }
     const product = await Product.find({});
     const category = await Category.find({});
-    const order = await Order.find({
-      status: { $nin: ["Ordered", "Canceled", "Shipped"] },
-    });
+    // const order = await Order.find({
+    //   status: { $nin: ["Ordered", "Canceled", "Shipped"] },
+    // });
     // Aggregate pipeline to calculate monthly earnings from delivered orders
     if (order.length > 0) {
       const month = await Order.aggregate([
@@ -94,6 +168,9 @@ const loadDash = async (req, res) => {
         catLength,
         orderLength,
         month,
+        yValues,
+        allName,
+        sales
       });
       //  console.log("hhhhhhhhhheeeeeeelo"+month)
     } else {
@@ -107,6 +184,9 @@ const loadDash = async (req, res) => {
         catLength,
         orderLength,
         month,
+        yValues,
+        allName,
+        sales
       });
     }
 
