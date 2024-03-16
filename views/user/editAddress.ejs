@@ -17,6 +17,82 @@
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
+<style>
+    
+    .search-result {
+        display: none;
+        position: absolute;
+        height: auto;
+    }
+
+    .no-product-found {
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    #searchResultsContainer {
+        background-color: rgb(255, 255, 255); 
+        position: absolute;
+        z-index: 1;
+        width: 592px;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+       
+    }
+
+    .product-container {
+        width: 200px;
+        margin: 10px;
+        text-align: left;
+    }
+
+    .product-container img {
+        margin-left: -2px;
+        max-width: 20%;
+        height: auto;
+        transform: rotate(0deg);
+        transition: transform 0.5s ease; 
+       
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: -50px;
+    }
+
+    .product-info p {
+        margin: 2px 0;
+        margin-left: 40px;
+        font-size: 10px;
+        margin-top: 5px;
+        color: black;
+        font-weight: bold;
+    }
+
+  
+    .rotate-90 {
+        transform: rotate(90deg);
+    }
+
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
+    .rotate-270 {
+        transform: rotate(270deg);
+    }
+</style>
+
+
 <body>
     <header class="header-area header-height-2">
         <!-- <div class="header-top header-top-ptb-1 d-none d-lg-block">
@@ -65,25 +141,34 @@
                     <div class="logo logo-width-1">
                         <a href="index.html"><img src="/assets/imgs/theme/echo.png" alt="logo"></a>
                     </div>
-                    <div class="search-style-2">
-                        <form action="#">
-                            <!-- <select class="select-active">
-                                <option>All Categories</option>
-                                <option>Women's Clothing</option>
-                                <option>Men's Clothing</option>
-                                <option>Cellphones</option>
-                                <option>Computer & Office</option>
-                                <option>Consumer Electronics</option>
-                                <option>Jewelry & Accessories</option>
-                                <option>Home & Garden</option>
-                                <option>Luggage & Bags</option>
-                                <option>Shoes</option>
-                                <option>Mother & Kids</option>
-                            </select> -->
-                            <input type="text" placeholder="Search for items…">
-                            <button type="submit"> <i class="far fa-search"></i> </button>
-                        </form>
-                    </div>
+                    <div class="search-style-2" style="width: 600px;">
+                       
+                        <div class="search-style-2">
+                       
+                            <input type="text" id="input" style="width: 100%;margin-top: 5px;" placeholder="Search" onkeyup="SearchProduct()">
+                            
+                          
+                          
+                               
+                        </div>
+                  
+
+                        <div class="search-result">
+
+                            <div id="searchResultsContainer">
+    
+                            </div>
+    
+                        </div> 
+    
+                        <h5 class="no-product-found">No products found</h5>
+
+
+
+
+
+
+                </div>
                     <div class="header-action-right">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
@@ -1018,7 +1103,87 @@ function nameValidate(){
       })
    }
   
+   const inputElement = document.getElementById('input');
+    let timeoutId;
 
+    function debounce(func, delay) {
+        return function () {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func();
+            }, delay);
+        };
+    }
+
+    function showSearchResult() {
+        const searchResult = document.querySelector('.search-result');
+        searchResult.style.display = 'block';
+    }
+
+    function hideSearchResult() {
+        const searchResult = document.querySelector('.search-result');
+        searchResult.style.display = 'none';
+    }
+
+    function showNoProductFound() {
+        const noProductFound = document.querySelector('.no-product-found');
+        noProductFound.style.display = 'block';
+    }
+
+    function hideNoProductFound() {
+        const noProductFound = document.querySelector('.no-product-found');
+        noProductFound.style.display = 'none';
+    }
+
+    function SearchProduct() {
+        const searchDataValue = inputElement.value.trim();
+
+
+        if (searchDataValue !== "") {
+            showSearchResult();
+            debounce(() => {
+                console.log(searchDataValue)
+                $.ajax({
+                    url: "/search",
+                    method: "post",
+                    data: {
+                        searchDataValue
+                    },
+                    success: (response) => {
+                        const searchResultsContainer = document.getElementById('searchResultsContainer')
+                        searchResultsContainer.innerHTML = ""
+
+                        if (response.searchProducts.length > 0) {
+                            response.searchProducts.forEach(element => {
+                                const productContainer = document.createElement('div');
+                                productContainer.classList.add('product-container');
+
+                                const productElement = document.createElement('div');
+                                productElement.innerHTML = `
+                                <a href="/showproduct?id=${element._id}" class="product-link">
+                                    <img src="/productImages/${element.image[0]}" alt="product">
+                                    <div class="product-info">
+                                        <p>${element.name}</p>
+                                        <p>₹${element.regularPrice}</p>
+                                    </div>
+                                `;
+
+                                productContainer.appendChild(productElement);
+                                searchResultsContainer.appendChild(productContainer);
+                            });
+                            hideNoProductFound();
+                        } else {
+                            hideSearchResult();
+                            showNoProductFound();
+                        }
+                    }
+                })
+            }, 500)();
+        } else {
+            hideSearchResult();
+            hideNoProductFound();
+        }
+    }
 </script>
 
 

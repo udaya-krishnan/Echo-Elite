@@ -1,7 +1,8 @@
 const Category = require("../model/categoryModel");
 const Brand = require("../model/brandModel");
-
+const Rating=require("../model/ratingModel")
 const Product = require("../model/productModel");
+const generateDate=require("../controller/dateGenrator")
 
 const loadProduct = async (req, res) => {
   try {
@@ -175,13 +176,64 @@ const blockPro = async (req, res) => {
   }
 };
 
-// const productDetails=async(req,res)=>{
-//     try {
-//         // res.render()
-//     } catch (error) {
-//         console.log(error.message)
-//     }
-// }
+const ratingProduct=async(req,res)=>{
+  console.log("out side try")
+  try {
+    console.log("hello")
+    const {name,dis,email,rating,id}=req.body
+    console.log(name,dis,email,rating,id)
+
+   
+      const findPro=await Product.findById({_id:id})
+    const date=generateDate()
+
+    const newRating=new Rating({
+      productId:findPro._id,
+      name:name,
+      description:dis,
+      email:email,
+      date:date,
+      star:rating
+    })
+
+    const saveRating=await newRating.save()
+
+    if(saveRating){
+      const totalRating=await Rating.find({productId:findPro._id},{star:true})
+
+      // console.log(totalRating)
+      let total=[]
+      for(let i=0;i<totalRating.length;i++){
+        total.push(totalRating[i].star)
+      }
+      console.log(total)
+      const sumTotal=total.reduce((acc,curr)=>acc+curr)
+      console.log(sumTotal)
+      const avgTotal=sumTotal/totalRating.length
+      console.log(avgTotal)
+      let totalAvg=(avgTotal*2)*10
+      const updateProduct=await Product.findByIdAndUpdate({_id:id},{
+        $set:{
+          rating:totalAvg
+        }
+      })
+      res.json({status:true,avg:totalAvg,id:findPro._id})
+    }
+    
+    
+   
+
+    
+
+   
+
+
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 
 module.exports = {
   loadProduct,
@@ -190,4 +242,5 @@ module.exports = {
   loadEdit,
   editPro,
   blockPro,
+  ratingProduct
 };

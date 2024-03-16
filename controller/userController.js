@@ -16,6 +16,7 @@ const CouponModel = require("../model/CouponModel");
 const referralCode = require("../controller/refferalCode");
 const generateDate = require("../controller/dateGenrator");
 const generateTransaction=require("../controller/transationId")
+const Rating=require("../model/ratingModel")
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
@@ -138,13 +139,20 @@ const insertUser = async (req, res) => {
     }
     
 
-     
-
       const mailOptions = await {
         form: Email,
         to: req.body.email,
         subject: "Your OTP for Verification",
-        text: `your otp ${otp}`,
+         html: `
+        <div style="font-family: Helvetica, Arial, sans-serif; min-width: 100px; overflow: auto; line-height: 2">
+            <div style="margin: 50px auto; width: 70%; padding: 20px 0">
+                <p style="font-size: 1.1em">Hi ${email},</p>
+                <p>This message from ECHO ELITE. Use the following OTP to complete your register procedures. OTP is valid for 1 minutes</p>
+                <h2 style="background: #00466a; margin: 0 auto; width: max-content; padding: 0 10px; color: #fff; border-radius: 4px;">${otp}</h2>
+                <p style="font-size: 0.9em;">Regards,<br />ECHO EILTE</p>
+                <hr style="border: none; border-top: 1px solid #eee" />
+            </div>
+        </div>`,
       };
       if (mailOptions) {
         transporter.sendMail(mailOptions, (err) => {
@@ -465,10 +473,47 @@ const loadProduct = async (req, res) => {
     // console.log(proData)
 
     const user = req.session.email;
+    const totalRating=await Rating.find({productId:proData._id},{star:true})
+    const reviews=totalRating.length
+
+    const allRatingData=await Rating.find({productId:proData._id})
 
     if (proData) {
       const fullData = await Product.find({});
       if (req.session.email) {
+
+
+        const order=await Order.find({userEmail:req.session.email,status:"Delivered"})
+        console.log(order)
+        let ratingShow=false
+        let product=false
+
+        if(order.length>0){
+          // console.log("inside order");
+          for(let i=0;i<order.length;i++){
+            // console.log("order array");
+           for(let j=0;j<order[i].items.length;j++){
+            // console.log(("j loop"));
+            // console.log("productId  "+proData._id);
+            // console.log("orderid  "+order[i].items[j].productsId)
+            if(proData._id.toString()===order[i].items[j].productsId.toString()){
+              // console.log("product in the order");
+              product=true
+              break;
+            }
+           }
+          }
+          if(product){
+            // console.log(("rating Show"));
+            ratingShow=true
+          }else{
+            // console.log("no product");
+          }
+        }
+
+
+
+
         const userData = await User.findOne({ email: req.session.email });
         const cartData = await Cart.findOne({
           userId: userData._id,
@@ -488,8 +533,12 @@ const loadProduct = async (req, res) => {
             cartData,
             user,
             findWish,
+            ratingShow,
+            reviews,
+            allRatingData
           });
         } else {
+
           const findWish = await Wishlist.findOne({
             user_id: userData._id,
             "products.productId": proData._id,
@@ -501,12 +550,18 @@ const loadProduct = async (req, res) => {
             cartData,
             user,
             findWish,
+            ratingShow,
+            reviews,
+            allRatingData
           });
         }
       } else {
         const cartData = null;
         const findWish = null;
-        res.render("product", { proData, fullData, cartData, user, findWish });
+        let ratingShow=false
+        
+    
+        res.render("product", { proData, fullData, cartData, user, findWish ,ratingShow,reviews,allRatingData});
       }
     } else {
       res.redirect("/404");
@@ -736,7 +791,7 @@ const loadTrack = async (req, res) => {
     const userData = await User.findOne({ email: req.session.email });
     const userWallet = await Wallet.findOne({ userId: userData._id })
       .sort({ date: 1 })
-      .limit(5);
+      .limit(5);  
     // console.log(userWallet);
 
     res.render("wallet", { userWallet });
@@ -852,39 +907,73 @@ const editAccount = async (req, res) => {
 const loadShop = async (req, res) => {
   try {
     const sort = req.query.sort;
+    const rating=req.query.rating
     // console.log(sort);
-
+    let newNum=1
+    let previous=false;
     if (sort == "lowToHigh") {
+     
       const proData = await Product.find({}).sort({ offerPrice: 1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData });
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     } else if (sort == "highToLow") {
       const proData = await Product.find({}).sort({ offerPrice: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData });
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     } else if (sort == "aA-zZ") {
       const proData = await Product.find({}).sort({ name: 1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData });
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     } else if (sort == "zZ-aA") {
       const proData = await Product.find({}).sort({ name: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData });
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==100){
+      const proData = await Product.find({rating:100}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==80){
+      const proData = await Product.find({rating:80}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==60){
+      const proData = await Product.find({rating:60}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==40){
+      const proData = await Product.find({rating:40}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    }else if(rating==20){
+      const proData = await Product.find({rating:20}).limit(6);
+      const catData = await Category.find({});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
     }
 
     const proData = await Product.find({}).limit(6);
     const catData = await Category.find({});
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
-    res.render("shop", { proData, catData, newPro, brandData });
+   
+    res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
   } catch (error) {
     console.log(error.message);
   }
@@ -912,6 +1001,38 @@ const loadCoupon = async (req, res) => {
     console.log(error.message);
   }
 };
+
+const loadInvoice=async(req,res)=>{
+  try {
+    const id=req.query.id
+    console.log(id)
+    const findOrder=await Order.findById({_id:id})
+
+
+    const proId = [];
+
+    for (let i = 0; i < findOrder.items.length; i++) {
+      proId.push(findOrder.items[i].productsId);
+    }
+
+    const proData = [];
+
+    for (let i = 0; i < proId.length; i++) {
+      proData.push(await Product.findById({ _id: proId[i] }));
+    }
+
+    
+    console.log(proData)
+    console.log(findOrder)
+
+
+
+    res.render("invoice",{proData, findOrder})
+    
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 module.exports = {
   loadLanding,
@@ -945,4 +1066,5 @@ module.exports = {
   editAccount,
   loadShop,
   loadCoupon,
+  loadInvoice
 };

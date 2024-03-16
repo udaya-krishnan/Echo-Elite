@@ -184,6 +184,17 @@
                             <small class="text-muted">Order ID: <%= findOrder.orderNumber %></small>
                         </div>
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            <!-- <button style="background-color: #001cba; /* Blue */
+                            border: none;
+                            color: white;
+                            padding: 15px 32px;
+                            text-align: center;
+                            text-decoration: none;
+                            display: inline-block;
+                            font-size: 16px;
+                            margin: 4px 2px;
+                            cursor: pointer;
+                            border-radius: 10px;">Invoice</button> -->
                             <% if (findOrder.status=="Delivered"||findOrder.status=="Canceled"||findOrder.status=="Returned") { %>
 
                                 <a class="btn btn-primary" onclick="back()">Back</a>
