@@ -109,7 +109,7 @@ const applyCoupon=async(req,res)=>{
                 if(userIncoupon){
                     res.json({status:"invalid"})
                 }else{
-                    const amount= findCart.total/findCode.discount
+                    const amount= (findCart.total/100)*findCode.discount
                     console.log(amount);
                     // const updateCart=await Cart.findByIdAndUpdate({_id:findCart._id},{
                     //     $inc:{

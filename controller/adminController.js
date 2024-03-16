@@ -96,7 +96,7 @@ const loadDash = async (req, res) => {
         
         for(let j=0;j<allId.length;j++){
           console.log(allId[j]+"     all id");
-          console.log(productData[i].category+"       productid");
+          console.log(productData[i].category+"productid");
           if(allId[j]==productData[i].category.toString()){
             console.log(quantity[i]); 
             
@@ -106,7 +106,29 @@ const loadDash = async (req, res) => {
         
       }
 
-      console.log(sales)
+      // console.log(sales)
+
+      console.log("PRODUCT ID"+productId)
+      let productSales=[]
+      for(let i=0;i<productId.length;i++){
+        productSales.push({salesCount:1})
+      }
+      
+
+      for(let i=0;i<productId.length;i++){
+        for(let j=i+1;j<productId.length;j++){
+          if(productId[i].toString()==productId[j].toString()){
+            productSales[i].salesCount+=1
+            const proData=await Product 
+            productSales
+ 
+          }
+        }
+      }
+
+      console.log(productSales);
+
+      
  
   
 
@@ -170,7 +192,9 @@ const loadDash = async (req, res) => {
         month,
         yValues,
         allName,
-        sales
+        sales,
+        productData,
+        productSales
       });
       //  console.log("hhhhhhhhhheeeeeeelo"+month)
     } else {
@@ -186,7 +210,9 @@ const loadDash = async (req, res) => {
         month,
         yValues,
         allName,
-        sales
+        sales,
+        productData,
+        productSales
       });
     }
 

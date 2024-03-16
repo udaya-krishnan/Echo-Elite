@@ -1607,6 +1607,13 @@
             }else if(response.status==true){
                 // alert("hello")
                 location.href="/checkOutPage"
+            }else if(response.status=="empty"){
+                Swal.fire({
+                        icon: "warning",
+                        title: "Oops...",
+                        text: "your Cart is Empty!",
+
+                    });
             }
         }
 

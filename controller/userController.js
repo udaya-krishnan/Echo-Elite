@@ -139,13 +139,20 @@ const insertUser = async (req, res) => {
     }
     
 
-     
-
       const mailOptions = await {
         form: Email,
         to: req.body.email,
         subject: "Your OTP for Verification",
-        text: `your otp ${otp}`,
+         html: `
+        <div style="font-family: Helvetica, Arial, sans-serif; min-width: 100px; overflow: auto; line-height: 2">
+            <div style="margin: 50px auto; width: 70%; padding: 20px 0">
+                <p style="font-size: 1.1em">Hi ${email},</p>
+                <p>This message from ECHO ELITE. Use the following OTP to complete your register procedures. OTP is valid for 1 minutes</p>
+                <h2 style="background: #00466a; margin: 0 auto; width: max-content; padding: 0 10px; color: #fff; border-radius: 4px;">${otp}</h2>
+                <p style="font-size: 0.9em;">Regards,<br />ECHO EILTE</p>
+                <hr style="border: none; border-top: 1px solid #eee" />
+            </div>
+        </div>`,
       };
       if (mailOptions) {
         transporter.sendMail(mailOptions, (err) => {
@@ -995,6 +1002,38 @@ const loadCoupon = async (req, res) => {
   }
 };
 
+const loadInvoice=async(req,res)=>{
+  try {
+    const id=req.query.id
+    console.log(id)
+    const findOrder=await Order.findById({_id:id})
+
+
+    const proId = [];
+
+    for (let i = 0; i < findOrder.items.length; i++) {
+      proId.push(findOrder.items[i].productsId);
+    }
+
+    const proData = [];
+
+    for (let i = 0; i < proId.length; i++) {
+      proData.push(await Product.findById({ _id: proId[i] }));
+    }
+
+    
+    console.log(proData)
+    console.log(findOrder)
+
+
+
+    res.render("invoice",{proData, findOrder})
+    
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 module.exports = {
   loadLanding,
   loadRegister,
@@ -1027,4 +1066,5 @@ module.exports = {
   editAccount,
   loadShop,
   loadCoupon,
+  loadInvoice
 };

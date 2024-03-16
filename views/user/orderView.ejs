@@ -827,14 +827,18 @@
                                                     <p
                                                     style="color: rgb(20, 226, 30); font-size: 20px; font-weight: bold; margin-bottom: 30px;">
                                                     The Order Returned </p>
-                                                    <% }else{ %>
-                                                        <a onclick="cancel('<%= findOrder._id %>')" class="btn btn-rounded">
-                                                            <i class="fa fa-share-square mr-10"></i> Cancel Order</a>
-    
+                                                    <% }else if(findOrder.status="Payment Failed"){ %>
+                                                        <a onclick="payment('<%= findOrder._id %>')" class="btn btn-rounded">
+                                                            <i class="fa fa-share-square mr-10"></i>Continue Payment</a>
 
-                                                        <% } %>
+                                                        <% }else{ %>
+
+                                                            <a onclick="cancel('<%= findOrder._id %>')" class="btn btn-rounded">
+                                                                <i class="fa fa-share-square mr-10"></i> Cancel Order</a>
+                                                            <% } %>
                                                     
-                                  
+                                      
+    
 
                                 </div>
                             </div>
@@ -1000,6 +1004,8 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 </body>
 
 <script>
@@ -1202,11 +1208,64 @@
     }
 
     function invoice(id){
+        window.location.href="/loadInvoice?id="+id
+    }
+
+    function payment(id){
         $.ajax({
-            url:"/loadInvoice",
+            url:"/continue-Payment",
             method:"post",
             data:{
                 id
+            },
+            success:(response)=>{
+                if(response.status===true){
+                    console.log("working")
+                    alert("hello")
+                    let orderId=response.orderId
+
+                    var options = {
+                        "key": "rzp_test_iPZZ7eS2qqkR1R", // Enter the Key ID generated from the Dashboard
+                        "amount": response.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "currency": "INR",
+                        "name": "Echo Elite",
+                        "description": "Test Transaction",
+                        "image": "https://example.com/your_logo",
+                        "order_id": response.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                        "handler": function (response) {
+
+                            
+                            // alert(addressId)
+                            // alert(order_id)
+                            // alert("heeeei")
+                            alert(response.razorpay_payment_id);
+                            alert(response.razorpay_order_id);
+                            alert(response.razorpay_signature)
+                            // alert(response.address)
+                            // alert(response.orderNum)
+                            // alert(orderId)
+
+                            verifyPayment(response, orderId)
+                        },
+                        "prefill": {
+                            "name": "Gaurav Kumar",
+                            "email": "gaurav.kumar@example.com",
+                            "contact": "9000090000"
+                        },
+                        "notes": {
+                            "address": "Razorpay Corporate Office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
+
+                    var rzp = new Razorpay(options);
+                    rzp.open();
+
+
+
+                }
             }
         })
     }

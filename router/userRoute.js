@@ -113,6 +113,10 @@ user_router.get('/',userController.loadLanding)
 
   .post("/verify-payment",userAuth.isBlocked,userAuth.islogin,orderController.rezopayment)
 
+  .post("/paymentFaild",userAuth.isBlocked,userAuth.islogin,orderController.paymentFaild)
+
+  .post("/continue-Payment",userAuth.isBlocked,userAuth.islogin,orderController.continuePayment)
+
 
 
   //***********************************************Order**************************** */
@@ -154,6 +158,8 @@ user_router.get('/',userController.loadLanding)
 //*********************************************Rating************************ */
 
 .post("/rating",userAuth.islogin,userAuth.isBlocked,productController.ratingProduct)
+
+.get("/loadInvoice",userAuth.isBlocked,userAuth.islogin,userController.loadInvoice)
 
 
 
