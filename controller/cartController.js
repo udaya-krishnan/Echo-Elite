@@ -122,12 +122,39 @@ const loadCartpage = async (req, res) => {
         proData.push(await Product.findById({ _id: arr[i] }));
       }
 
-      console.log(proData);
+      // console.log(proData);
 
+    //   for(let i=0;i<cartData.items.length;i++){
+    //     for(let j=0;j<proData.length;j++){
+    //       console.log("not WORKIN");
+    //       if(cartData.items[i].productsId.toString()==proData[j]._id.toString()){
+            
+    //       if(cartData.items[i].subTotal/cartData.items[i].quantity!=proData[j].offerPrice){
+    //         console.log("cart id       "+cartData.items[i].productsId)
+    //         console.log("product id                "+cartData.items[i].productsId)
+    //         const subTotal=proData[j].offerPrice*cartData.items[i].quantity
+    //         console.log("gduggggggggggggggg"+subTotal)
+    //         cartData.items[i].subTotal=subTotal
+    //       }
+    //     }
+    //     }
+    //   }
      
-    }
+    // }
+    // let sum=0
 
-    console.log(proData,cartData)
+    // for(let i=0;i<cartData.items.length;i++){
+    //   console.log(cartData.items[i].subTotal)
+    //   sum=sum+cartData.items[i].subTotal
+    // }
+
+    // console.log(sum)  
+
+    // cartData.total=sum
+    // cartData.save()
+    }
+    console.log("cartDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+cartData)
+    console.log("prrrrrrrrrrrrrrroDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+proData)
     res.render("cart", { proData, cartData });
 
     // console.log(cartData)
@@ -238,30 +265,37 @@ const loadCheckOut = async (req, res) => {
 
     const cartData = await Cart.findOne({ userId: userData._id });
     const quantity = [];
-
-    for (let i = 0; i < cartData.items.length; i++) {
-      quantity.push(cartData.items[i].quantity);
-    }
-
-    const proId = [];
-    for (let i = 0; i < cartData.items.length; i++) {
-      proId.push(cartData.items[i].productsId);
-    }
-    const proData = [];
-
-    for (let i = 0; i < proId.length; i++) {
-      proData.push(await Product.findById({ _id: proId[i] }));
-    }
-
-    for (let i = 0; i < proData.length; i++) {
-      for (let j = 0; j < quantity.length; j++) {
-        if (proData[i].stock < quantity[i]) {
-          res.json({ status: "checked" });
+    // console.log("acaaaafudfaiagdig"+cartData);
+    if(cartData.items.length==0){
+      // console.log("emptyyyyyyyyyyy")
+      res.json({status:"empty"})
+    }else{
+      for (let i = 0; i < cartData.items.length; i++) {
+        quantity.push(cartData.items[i].quantity);
+      }
+  
+      const proId = [];
+      for (let i = 0; i < cartData.items.length; i++) {
+        proId.push(cartData.items[i].productsId);
+      }
+      const proData = [];
+  
+      for (let i = 0; i < proId.length; i++) {
+        proData.push(await Product.findById({ _id: proId[i] }));
+      }
+  
+      for (let i = 0; i < proData.length; i++) {
+        for (let j = 0; j < quantity.length; j++) {
+          if (proData[i].stock < quantity[i]) {
+            res.json({ status: "checked" });
+          }
         }
       }
+  
+      res.json({ status: true });
     }
 
-    res.json({ status: true });
+    
   } catch (error) {
     console.log(error.message);
   }
@@ -293,6 +327,8 @@ const loadCheckOutPage = async (req, res) => {
 
 
     const CouponDataArray=await Coupon.find({isActive:true})
+
+    console.log(cartData)
 
     res.render("checkOut", { proData, cartItems, cartData, address ,CouponDataArray});
   } catch (error) {}

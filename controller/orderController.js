@@ -659,6 +659,134 @@ const addCash = async (req, res) => {
   }
 };
 
+const paymentFaild=async(req,res)=>{
+  try {
+    console.log("payment faild");
+    const {address,amount,couponCode}=req.body
+    console.log(address,amount);
+    console.log("codddddddddde"+couponCode);
+    const userData=await User.findOne({email:req.session.email})
+    const cartData=await Cart.findOne({userId:userData._id})
+    const date = generateDate();
+    const orderNum = generateOrder.generateOrder();
+    const addressData=await Address.findById({_id:address})
+
+    const proData=[]
+
+    for(let i=0;i<cartData.items.length;i++){
+      proData.push(cartData.items[i])
+    }
+
+    const orderData=new Order({
+      userId:userData._id,
+      userEmail:userData.email,
+      orderNumber:orderNum,
+      items:proData,
+      totalAmount:amount,
+      orderType:"Razorpay",
+      orderDate:date,
+      status:"Payment Failed",
+      shippingAddress:addressData
+    })
+
+    orderData.save();
+
+
+
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
+const continuePayment=async(req,res)=>{
+  try {
+    console.log("continue payment");
+    const id=req.body.id
+
+    const findOrder=await Order.findById({_id:id})
+    const proData=[]
+    for(let i=0;i<findOrder.items.length;i++){
+        proData.push(findOrder.items[i])
+    }
+    const quantity=[]
+
+    for(let i=0;i<findOrder.items.length;i++){
+      quantity.push(findOrder.items[i].quantity)
+    }
+    // console.log(proData)
+    const products=[]
+    for(let i=0;i<proData.length;i++){
+      products.push(await Product.findById({_id:proData[i].productsId}))
+    }
+
+
+    for(let i=0;i<products.length;i++){
+      console.log("checked");
+      if(products[i].stock!=quantity[i]){
+        res.json({status:"checked"})
+      }
+    }
+
+    const stringOrder_id=findOrder.orderNumber.toString()
+
+    var options={
+      amount:findOrder.totalAmount*100,
+      currency:"INR",
+      receipt:stringOrder_id
+    }
+
+    console.log(options)
+
+    instance.orders.create(options,async(error,razorpayOrder)=>{
+      console.log("inside the order")
+      console.log(razorpayOrder);
+      if(!error){
+        console.log("with out the ERROR");
+      
+
+        res.json({status:true,order:razorpayOrder,orderId:findOrder._id})
+      
+
+      }else{
+        console.log("full error");
+        console.error(error);
+      }
+    })
+
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+const successPayment=async(req,res)=>{
+  try {
+    const {response,order}=req.body
+    console.log(response,order)
+
+    let hmac = crypto.createHmac("sha256", key_secret);
+    hmac.update(response.razorpay_order_id + "|" + response.razorpay_payment_id);
+    hmac = hmac.digest("hex");
+
+    if(hmac == response.razorpay_signature){
+      const updateOrder=await Order.findByIdAndUpdate({_id:order},{
+        $set:{
+          status:"Processing"
+        }
+      })
+
+      res.json({status:true})
+
+    }
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
 module.exports = {
   loadViewOrder,
   cancelOrder,
@@ -671,4 +799,7 @@ module.exports = {
   rezopayment,
   addWalletCash,
   addCash,
+  paymentFaild,
+  continuePayment,
+  successPayment
 };

@@ -190,12 +190,18 @@
                                 <div class="row">
                                     <div class="col-lg-2 " style="display: inline;">
                                         <input type="date"  id="date" class="form-control">
+                                       
+                                        
+                                    </div>
+                                    <div class="col-lg-2 " style="display: inline;">
+                                        <input type="date" id="date1" class="form-control">
+                                       
                                         
                                     </div>
                                    
                                     <button style="width: 150px; height: 40px; margin-left: 20px;" onclick="date()" class="btn btn-primary">Search</button>
                                     
-                                    <div class="col-lg-2 col-6" style="margin-left: 280px;">
+                                    <div class="col-lg-2 col-6" style="margin-left: 150px;">
                                         <select class="form-select" id="sort">
                                             <option value="All">All</option>
                                             <option value="Day">Day</option>
@@ -319,21 +325,23 @@
 <script>
    function date() {
         const customdateValue = document.getElementById("date").value;
+        const customdateValue1 = document.getElementById("date1").value;
         const today = new Date();
-        if (!customdateValue) {
+        if (!customdateValue&&!customdateValue1) {
             document.getElementById("custmerror").textContent = "Please select a date"
             setTimeout(() => {
                 document.getElementById("custmerror").textContent = ""
             }, 2000);
         } else {
             const customdate = new Date(customdateValue);
-            if (customdate >= today) {
+            const customdate1 = new Date(customdateValue1);
+            if (customdate >= today&&customdate1>=today) {
                 document.getElementById("custmerror").textContent = "You can only view today's or previous day's orders"
                 setTimeout(() => {
                     document.getElementById("custmerror").textContent = ""
                 }, 2000);
             } else {
-                window.location.href= `/admin/salesDate?value=${customdateValue}`
+                window.location.href= `/admin/salesDate?value=${customdateValue}&&value1=${customdateValue1}`
             }
     }
     }

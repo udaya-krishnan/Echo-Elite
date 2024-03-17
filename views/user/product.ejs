@@ -17,6 +17,82 @@
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
+<style>
+    
+    .search-result {
+        display: none;
+        position: absolute;
+        height: auto;
+    }
+
+    .no-product-found {
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    #searchResultsContainer {
+        background-color: rgb(255, 255, 255); 
+        position: absolute;
+        z-index: 1;
+        width: 592px;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+       
+    }
+
+    .product-container {
+        width: 200px;
+        margin: 10px;
+        text-align: left;
+    }
+
+    .product-container img {
+        margin-left: -2px;
+        max-width: 20%;
+        height: auto;
+        transform: rotate(0deg);
+        transition: transform 0.5s ease; 
+       
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: -50px;
+    }
+
+    .product-info p {
+        margin: 2px 0;
+        margin-left: 40px;
+        font-size: 10px;
+        margin-top: 5px;
+        color: black;
+        font-weight: bold;
+    }
+
+  
+    .rotate-90 {
+        transform: rotate(90deg);
+    }
+
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
+    .rotate-270 {
+        transform: rotate(270deg);
+    }
+</style>
+
+
 <body>
     <header class="header-area header-height-2">
         <!-- <div class="header-top header-top-ptb-1 d-none d-lg-block">
@@ -65,25 +141,34 @@
                     <div class="logo logo-width-1">
                         <a href="index.html"><img src="/assets/imgs/theme/echo.png" alt="logo"></a>
                     </div>
-                    <div class="search-style-2">
-                        <form action="#">
-                            <!-- <select class="select-active">
-                                <option>All Categories</option>
-                                <option>Women's Clothing</option>
-                                <option>Men's Clothing</option>
-                                <option>Cellphones</option>
-                                <option>Computer & Office</option>
-                                <option>Consumer Electronics</option>
-                                <option>Jewelry & Accessories</option>
-                                <option>Home & Garden</option>
-                                <option>Luggage & Bags</option>
-                                <option>Shoes</option>
-                                <option>Mother & Kids</option>
-                            </select> -->
-                            <input type="text" placeholder="Search for items…">
-                            <button type="submit"> <i class="far fa-search"></i> </button>
-                        </form>
-                    </div>
+                    <div class="search-style-2" style="width: 600px;">
+                       
+                        <div class="search-style-2">
+                       
+                            <input type="text" id="input" style="width: 100%;margin-top: 5px;" placeholder="Search" onkeyup="SearchProduct()">
+                            
+                          
+                          
+                               
+                        </div>
+                  
+
+                        <div class="search-result">
+
+                            <div id="searchResultsContainer">
+    
+                            </div>
+    
+                        </div> 
+    
+                        <h5 class="no-product-found">No products found</h5>
+
+
+
+
+
+
+                </div>
                     <div class="header-action-right">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
@@ -601,37 +686,43 @@
                                             </div>
                                             <div class="product-rate-cover text-end">
                                                 <div class="product-rate d-inline-block">
-                                                    <div class="product-rating" style="width:90%">
+                                                    <div class="product-rating" id="rating"
+                                                        style="width:<%=proData.rating%>%">
                                                     </div>
                                                 </div>
-                                                <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                                                <span class="font-small ml-5 text-muted"> (<%=reviews%> reviews)</span>
                                             </div>
                                         </div>
                                         <div class="clearfix product-price-cover">
                                             <% if (proData.offerPrice) { %>
-                                                <% var percentage=(proData.regularPrice-proData.offerPrice)/proData.regularPrice*100 %>
-                                                <div class="product-price primary-color float-left">
-                                                    <ins><span id="offerPrice" class="text-brand">₹<%= proData.offerPrice %>
-                                                        </span></ins>
-                                                    <ins><span class="old-price font-md ml-15">₹<%= proData.regularPrice %>
-                                                        </span></ins>
-                                                    <span class="save-price  font-md color3 ml-15">
-                                                        <%= percentage.toFixed() %>%
-                                                    </span>
-                                                </div>
-                                             
-                                            <% }else{ %>
+                                                <% var
+                                                    percentage=(proData.regularPrice-proData.offerPrice)/proData.regularPrice*100
+                                                    %>
+                                                    <div class="product-price primary-color float-left">
+                                                        <ins><span id="offerPrice" class="text-brand">₹<%=
+                                                                    proData.offerPrice %>
+                                                            </span></ins>
+                                                        <ins><span class="old-price font-md ml-15">₹<%=
+                                                                    proData.regularPrice %>
+                                                            </span></ins>
+                                                        <span class="save-price  font-md color3 ml-15">
+                                                            <%= percentage.toFixed() %>%
+                                                        </span>
+                                                    </div>
 
-                                                <div class="product-price primary-color float-left">
-                                                   
-                                                    <ins><span id="offerPrice" class="text-brand">₹<%= proData.regularPrice %>
-                                                        </span></ins>
-                                                    <!-- <span class="save-price  font-md color3 ml-15">
+                                                    <% }else{ %>
+
+                                                        <div class="product-price primary-color float-left">
+
+                                                            <ins><span id="offerPrice" class="text-brand">₹<%=
+                                                                        proData.regularPrice %>
+                                                                </span></ins>
+                                                            <!-- <span class="save-price  font-md color3 ml-15">
                                                     
                                                     </span> -->
-                                                </div>
-                                                <% } %>
-                                           
+                                                        </div>
+                                                        <% } %>
+
                                         </div>
                                         <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                         <div class="short-desc mb-30">
@@ -768,8 +859,8 @@
                                             dachshund.
                                         </p>
                                     </div>
-                                    <h3 class="section-title style-1 mb-30">Additional info</h3>
-                                    <table class="font-md mb-30">
+                                    <!-- <h3 class="section-title style-1 mb-30">Additional info</h3> -->
+                                    <!-- <table class="font-md mb-30">
                                         <tbody>
                                             <tr class="stand-up">
                                                 <th>Stand Up</th>
@@ -856,7 +947,7 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-                                    </table>
+                                    </table> -->
                                     <div class="single-social-share clearfix mt-50 mb-15">
                                         <p class="mb-15 mt-30 font-sm"> <i class="fa fa-share-alt mr-5"></i> Share this
                                         </p>
@@ -872,111 +963,68 @@
                                         Friend</a>
                                     <h3 class="section-title style-1 mb-30 mt-30">Reviews (3)</h3>
                                     <!--Comments-->
+
+
                                     <div class="comments-area">
                                         <div class="row">
                                             <div class="col-lg-8">
                                                 <h4 class="mb-30">Customer questions & answers</h4>
                                                 <div class="comment-list">
-                                                    <div class="single-comment justify-content-between d-flex">
-                                                        <div class="user justify-content-between d-flex">
-                                                            <div class="thumb text-center">
-                                                                <img src="assets/imgs/page/avatar-6.jpg" alt="">
-                                                                <h6><a href="#">Jacky Chan</a></h6>
-                                                                <p class="font-xxs">Since 2012</p>
-                                                            </div>
-                                                            <div class="desc">
-                                                                <div class="product-rate d-inline-block">
-                                                                    <div class="product-rating" style="width:90%">
+                                                  
+
+                                                        <% if (allRatingData.length) { %>
+                                                            <% for( let i = 0; i < allRatingData.length; i++ ) { %>
+                                                                <div class="single-comment justify-content-between d-flex">
+                                                                <div class="user justify-content-between d-flex">
+                                                                    <div class="thumb text-center">
+        
+                                                                        <h5><a href="#"><%= allRatingData[i].name %></a></h5>
+        
                                                                     </div>
-                                                                </div>
-                                                                <p>Thank you very fast shipping from Poland only 3days.
-                                                                </p>
-                                                                <div class="d-flex justify-content-between">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <p class="font-xs mr-30">December 4, 2020 at
-                                                                            3:12 pm </p>
-                                                                        <a href="#" class="text-brand">Reply <i
-                                                                                class="fa fa-arrow-right font-xs"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--single-comment -->
-                                                    <div class="single-comment justify-content-between d-flex">
-                                                        <div class="user justify-content-between d-flex">
-                                                            <div class="thumb text-center">
-                                                                <img src="assets/imgs/page/avatar-7.jpg" alt="">
-                                                                <h6><a href="#">Ana Rosie</a></h6>
-                                                                <p class="font-xxs">Since 2008</p>
-                                                            </div>
-                                                            <div class="desc">
-                                                                <div class="product-rate d-inline-block">
-                                                                    <div class="product-rating" style="width:90%">
-                                                                    </div>
-                                                                </div>
-                                                                <p>Great low price and works well.</p>
-                                                                <div class="d-flex justify-content-between">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <p class="font-xs mr-30">December 4, 2020 at
-                                                                            3:12 pm </p>
-                                                                        <a href="#" class="text-brand">Reply <i
-                                                                                class="fa fa-arrow-right font-xs"></i>
-                                                                        </a>
+                                                                    <div class="desc">
+                                                                        <div class="product-rate d-inline-block">
+                                                                            <div class="product-rating" style="width:<%= allRatingData[i].star*2*10%>%">
+                                                                            </div>
+                                                                        </div>
+                                                                        <p><%= allRatingData[i].description %>
+                                                                        </p>
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <div class="d-flex align-items-center">
+                                                                                <p class="font-xs mr-30"><%=  allRatingData[i].date %>
+                                                                                </p>
+        
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--single-comment -->
-                                                    <div class="single-comment justify-content-between d-flex">
-                                                        <div class="user justify-content-between d-flex">
-                                                            <div class="thumb text-center">
-                                                                <img src="assets/imgs/page/avatar-8.jpg" alt="">
-                                                                <h6><a href="#">Steven Keny</a></h6>
-                                                                <p class="font-xxs">Since 2010</p>
-                                                            </div>
-                                                            <div class="desc">
-                                                                <div class="product-rate d-inline-block">
-                                                                    <div class="product-rating" style="width:90%">
-                                                                    </div>
-                                                                </div>
-                                                                <p>Authentic and Beautiful, Love these way more than
-                                                                    ever expected They are Great earphones</p>
-                                                                <div class="d-flex justify-content-between">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <p class="font-xs mr-30">December 4, 2020 at
-                                                                            3:12 pm </p>
-                                                                        <a href="#" class="text-brand">Reply <i
-                                                                                class="fa fa-arrow-right font-xs"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--single-comment -->
+                                                            
+                                                            <% } %>
+                                                            
+                                                         
+                                                        <% } %>
+
+                                
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <!-- <div class="col-lg-4">
                                                 <h4 class="mb-30">Customer reviews</h4>
                                                 <div class="d-flex mb-30">
                                                     <div class="product-rate d-inline-block mr-15">
-                                                        <div class="product-rating" style="width:90%">
+                                                        <div class="product-rating" style="width:<%=proData.rating%>%">
                                                         </div>
                                                     </div>
                                                     <h6>4.8 out of 5</h6>
                                                 </div>
                                                 <div class="progress">
                                                     <span>5 star</span>
-                                                    <div class="progress-bar" role="progressbar" style="width: 50%;"
+                                                    <div class="progress-bar" role="progressbar" style="width: 0%;"
                                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%
                                                     </div>
                                                 </div>
                                                 <div class="progress">
                                                     <span>4 star</span>
-                                                    <div class="progress-bar" role="progressbar" style="width: 25%;"
+                                                    <div class="progress-bar" role="progressbar" style="width: 0%;"
                                                         aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%
                                                     </div>
                                                 </div>
@@ -998,55 +1046,92 @@
                                                         aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%
                                                     </div>
                                                 </div>
-                                                <a href="#" class="font-xs text-muted">How are ratings calculated?</a>
+                                                <a href="#" class="font-xs text-muted">How are ratings
+                                                    calculated?</a>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!--comment form-->
 
-
-                                    <div class="comment-form">
-                                        <h4 class="mb-15">Add a review</h4>
-                                        <div class="product-rate d-inline-block mb-30">
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-8 col-md-12">
-                                                <form class="form-contact comment_form" action="#" id="commentForm">
+                                    <% if (ratingShow) { %>
+                                        <div class="comment-form">
+                                            <h4 class="mb-15">Add a review</h4>
+                                            <!-- <div class="product-rate d-inline-block mb-30">
+                                            </div> -->
+                                            <div class="custom-star-rating"
+                                                style="display: inline-block; margin-bottom: 30px;">
+                                                <input type="radio" id="star5" name="rating" value="5"
+                                                    style="display: none;" /><label for="star5" id="5-star"
+                                                    title="5 stars"
+                                                    style="float: right; cursor: pointer; font-size: 24px;">&#9733;</label>
+                                                <input type="radio" id="star4" name="rating" value="4"
+                                                    style="display: none;" /><label for="star4" id="4-star"
+                                                    title="4 stars"
+                                                    style="float: right; cursor: pointer; font-size: 24px;">&#9733;</label>
+                                                <input type="radio" id="star3" name="rating" value="3"
+                                                    style="display: none;" /><label for="star3" id="3-star"
+                                                    title="3 stars"
+                                                    style="float: right; cursor: pointer; font-size: 24px;">&#9733;</label>
+                                                <input type="radio" id="star2" name="rating" value="2"
+                                                    style="display: none;" /><label for="star2" id="2-star"
+                                                    title="2 stars"
+                                                    style="float: right; cursor: pointer; font-size: 24px;">&#9733;</label>
+                                                <input type="radio" id="star1" name="rating" value="1"
+                                                    style="display: none;" /><label for="star1" id="1-star"
+                                                    title="1 star"
+                                                    style="float: right; cursor: pointer; font-size: 24px;">&#9733;</label>
+                                            </div>
+                                            <p id="starErr" class="text-danger"></p>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-md-12">
+                                                    <!-- <form class="form-contact comment_form" action="#" id="commentForm"> -->
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="form-group">
                                                                 <textarea class="form-control w-100" name="comment"
                                                                     id="comment" cols="30" rows="9"
-                                                                    placeholder="Write Comment"></textarea>
+                                                                    placeholder="Write Comment"
+                                                                    onblur="disfun()"></textarea>
+                                                                <p id="disErr" class="text-danger"></p>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
-                                                                <input class="form-control" name="name" id="name"
-                                                                    type="text" placeholder="Name">
+                                                                <input class="form-control" name="name"
+                                                                    onblur="namefun()" id="name" type="text"
+                                                                    placeholder="Name"
+                                                                    onkeydown="return /[a-zA-Z _]/i.test(event.key)">
+                                                                <p id="nameErr" class="text-danger"></p>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
                                                                 <input class="form-control" name="email" id="email"
-                                                                    type="email" placeholder="Email">
+                                                                    type="email" placeholder="Email"
+                                                                    onblur="emailfun()">
+                                                                <p id="emailErr" class="text-danger"></p>
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <input class="form-control" name="website" id="website"
-                                                                    type="text" placeholder="Website">
-                                                            </div>
-                                                        </div>
+                                                        <!-- <div class="col-12">
+                                                                <div class="form-group">
+                                                                    <input class="form-control" name="website" id="website"
+                                                                        type="text" placeholder="Website">
+                                                                </div>
+                                                            </div> -->
+                                                        <p id="submitErr" class="text-danger"></p>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <button type="submit" class="button button-contactForm">Submit
+                                                    <div>
+                                                        <button type="submit" onclick="review('<%=proData._id%>')"
+                                                            class="button button-contactForm">Submit
                                                             Review</button>
                                                     </div>
-                                                </form>
+                                                    <!-- </form> -->
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <% } %>
+
+
                                 </div>
                             </div>
                             <div class="row mt-60">
@@ -1094,15 +1179,16 @@
 
                                                         <div class="product-price">
                                                             <span>₹<%= fullData[i].offerPrice %> </span>
-                                                            <span class="old-price">₹<%= fullData[i].regularPrice %></span>
+                                                            <span class="old-price">₹<%= fullData[i].regularPrice %>
+                                                            </span>
                                                         </div>
-                                                    <% }else{ %>
-                                                        <div class="product-price">
-                                                           
-                                                            <span >₹<%= fullData[i].regularPrice %></span>
-                                                        </div>
-                                                        <% } %>
-                                                    
+                                                        <% }else{ %>
+                                                            <div class="product-price">
+
+                                                                <span>₹<%= fullData[i].regularPrice %></span>
+                                                            </div>
+                                                            <% } %>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -1373,22 +1459,22 @@
                         document.getElementById("removeWish").style.display = "inline-block"
                         //    alert('hello')
                     })
-        } else if (response.status == "login") {
-            Swal.fire({
+                } else if (response.status == "login") {
+                    Swal.fire({
 
-                text: "You want to login the page?!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Go to login!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/login"
+                        text: "You want to login the page?!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Go to login!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/login"
+                        }
+                    })
                 }
-            })
-        }
-    }
+            }
         })
     }
 
@@ -1408,7 +1494,7 @@
                         position: "bottom",
                         showConfirmButton: false,
                         timer: 1500,
-                        
+
                         // timerProgressBar: true,
                         didOpen: (toast) => {
                             toast.onmouseenter = Swal.stopTimer;
@@ -1428,6 +1514,243 @@
         })
     }
 
+
+    const stars = document.querySelectorAll('.custom-star-rating input[type="radio"]');
+    // alert(stars)
+    let rating;
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            rating = star.value;
+
+            if (rating == 5) {
+                document.getElementById("5-star").style.color = "#ffc107"
+                document.getElementById("4-star").style.color = "#ffc107"
+                document.getElementById("3-star").style.color = "#ffc107"
+                document.getElementById("2-star").style.color = "#ffc107"
+                document.getElementById("1-star").style.color = "#ffc107"
+            } else if (rating == 4) {
+                document.getElementById("5-star").style.color = "#4f5d77"
+                document.getElementById("4-star").style.color = "#ffc107"
+                document.getElementById("3-star").style.color = "#ffc107"
+                document.getElementById("2-star").style.color = "#ffc107"
+                document.getElementById("1-star").style.color = "#ffc107"
+            } else if (rating == 3) {
+                document.getElementById("5-star").style.color = "#4f5d77"
+                document.getElementById("4-star").style.color = "#4f5d77"
+                document.getElementById("3-star").style.color = "#ffc107"
+                document.getElementById("2-star").style.color = "#ffc107"
+                document.getElementById("1-star").style.color = "#ffc107"
+            } else if (rating == 2) {
+                document.getElementById("5-star").style.color = "#4f5d77"
+                document.getElementById("4-star").style.color = "#4f5d77"
+                document.getElementById("3-star").style.color = "#4f5d77"
+                document.getElementById("2-star").style.color = "#ffc107"
+                document.getElementById("1-star").style.color = "#ffc107"
+            } else if (rating == 1) {
+                document.getElementById("5-star").style.color = "#4f5d77"
+                document.getElementById("4-star").style.color = "#4f5d77"
+                document.getElementById("3-star").style.color = "#4f5d77"
+                document.getElementById("2-star").style.color = "#4f5d77"
+                document.getElementById("1-star").style.color = "#ffc107"
+            }
+        });
+    });
+
+    function disfun() {
+        const dis = document.getElementById("comment").value
+
+        if (dis == "") {
+            document.getElementById("disErr").innerHTML = "Please write your response"
+        } else {
+            document.getElementById("disErr").innerHTML = ""
+        }
+    }
+
+    function namefun() {
+        const name = document.getElementById('name').value
+        if (name == "") {
+            document.getElementById("nameErr").innerHTML = "please mention your name"
+        } else {
+            document.getElementById("nameErr").innerHTML = ""
+        }
+    }
+
+
+    function emailfun() {
+        const email = document.getElementById("email").value
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email == "") {
+            document.getElementById("emailErr").innerHTML = "please Enter your Email"
+        } else {
+            document.getElementById("emailErr").innerHTML = ""
+        }
+        if (!emailRegex.test(email)) {
+            document.getElementById("emailErr").innerHTML = "invalid format"
+        } else {
+            document.getElementById("emailErr").innerHTML = ""
+        }
+    }
+
+
+
+
+
+    function review(id) {
+        // alert(rating)
+        namefun()
+        disfun()
+        emailfun()
+
+        const nameErr = document.getElementById("nameErr")
+        const emailErr = document.getElementById("emailErr")
+        const disErr = document.getElementById("disErr")
+
+
+        if (nameErr.innerHTML || emailErr.innerHTML || disErr.innerHTML) {
+            // alert("hai")
+            document.getElementById("submitErr").innerHTML = "please fill the correct"
+
+            setTimeout(() => {
+                document.getElementById("submitErr").innerHTML = ""
+            }, 2000)
+        } else if (rating == undefined) {
+            // alert("hello")
+            document.getElementById("starErr").innerHTML = "please put your Rating"
+
+            setTimeout(() => {
+                document.getElementById("starErr").innerHTML = ""
+            }, 2000)
+        } else {
+            // alert(id)
+            const dis = document.getElementById("comment").value
+            // alert(dis)
+            const name = document.getElementById('name').value
+            // alert(name)
+            const email = document.getElementById("email").value
+            // alert(email)
+            // alert(rating)
+
+
+            $.ajax({
+                url: "/rating",
+                method: "post",
+                data: {
+                    name,
+                    dis,
+                    email,
+                    rating,
+                    id
+                },
+                success: (response) => {
+                    if (response.status == true) {
+                        alert("helloo")
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "bottom",
+                            showConfirmButton: false,
+                            timer: 1500,
+
+                            // timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: "Your Response Sended"
+                        }).then((result) => {
+                            window.location.href = `/showproduct?id=${response.id}`
+                        })
+
+                    }
+                }
+            })
+        }
+
+    }
+
+    const inputElement = document.getElementById('input');
+    let timeoutId;
+
+    function debounce(func, delay) {
+        return function () {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func();
+            }, delay);
+        };
+    }
+
+    function showSearchResult() {
+        const searchResult = document.querySelector('.search-result');
+        searchResult.style.display = 'block';
+    }
+
+    function hideSearchResult() {
+        const searchResult = document.querySelector('.search-result');
+        searchResult.style.display = 'none';
+    }
+
+    function showNoProductFound() {
+        const noProductFound = document.querySelector('.no-product-found');
+        noProductFound.style.display = 'block';
+    }
+
+    function hideNoProductFound() {
+        const noProductFound = document.querySelector('.no-product-found');
+        noProductFound.style.display = 'none';
+    }
+
+    function SearchProduct() {
+        const searchDataValue = inputElement.value.trim();
+
+
+        if (searchDataValue !== "") {
+            showSearchResult();
+            debounce(() => {
+                console.log(searchDataValue)
+                $.ajax({
+                    url: "/search",
+                    method: "post",
+                    data: {
+                        searchDataValue
+                    },
+                    success: (response) => {
+                        const searchResultsContainer = document.getElementById('searchResultsContainer')
+                        searchResultsContainer.innerHTML = ""
+
+                        if (response.searchProducts.length > 0) {
+                            response.searchProducts.forEach(element => {
+                                const productContainer = document.createElement('div');
+                                productContainer.classList.add('product-container');
+
+                                const productElement = document.createElement('div');
+                                productElement.innerHTML = `
+                                <a href="/showproduct?id=${element._id}" class="product-link">
+                                    <img src="/productImages/${element.image[0]}" alt="product">
+                                    <div class="product-info">
+                                        <p>${element.name}</p>
+                                        <p>₹${element.regularPrice}</p>
+                                    </div>
+                                `;
+
+                                productContainer.appendChild(productElement);
+                                searchResultsContainer.appendChild(productContainer);
+                            });
+                            hideNoProductFound();
+                        } else {
+                            hideSearchResult();
+                            showNoProductFound();
+                        }
+                    }
+                })
+            }, 500)();
+        } else {
+            hideSearchResult();
+            hideNoProductFound();
+        }
+    }
 
 
 </script>

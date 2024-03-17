@@ -3,6 +3,8 @@ const Order = require("../model/orderModel");
 const Product = require("../model/productModel");
 const Category = require("../model/categoryModel");
 const Coupon = require("../model/CouponModel");
+const Chart = require("chart.js");
+const Brand=require("../model/brandModel")
 // const bcrypt=require('bcrypt')
 
 const adminEmail = process.env.ADMINEMAIL;
@@ -45,6 +47,143 @@ const verifyAdmin = async (req, res) => {
 
 const loadDash = async (req, res) => {
   try {
+    const yValues = [0, 0, 0, 0, 0, 0, 0];
+    const order = await Order.find({
+      status: { $nin: ["Ordered","Processing", "Canceled", "Shipped"] },
+    });
+    // console.log("ORDERS START");
+    // console.log(order);
+    // console.log("ORDERS END");
+
+
+    for (let i = 0; i < order.length; i++) {
+      var date = order[i].createdAt;
+      // console.log(date + "dddddddddddddddddddddddddddddddddddddd");
+      const value = date.getDay();
+      yValues[value] += order[i].totalAmount;
+    }
+
+    const allData = await Category.find({});
+
+    const sales = [];
+
+    for (let i = 0; i < allData.length; i++) {
+      sales.push(0);
+    }
+
+
+    // console.log("SALES START");
+    // console.log(sales);
+    // console.log("SALES END");
+
+
+    const allName = allData.map((x) => x.name);
+    const allId = allData.map((x) => x._id);
+
+    // console.log(allName);
+    let productId = [];
+    let quantity = [];
+
+    for (let i = 0; i < order.length; i++) {
+      for (let j = 0; j < order[i].items.length; j++) {
+        productId.push(order[i].items[j].productsId);
+        quantity.push(order[i].items[j].quantity);
+      }
+    }
+
+    // console.log("QUANTITY");
+    // console.log(quantity);
+    // console.log(productId);
+    // console.log("PRODUCT");
+
+
+    const productData = [];
+    for (let i = 0; i < productId.length; i++) {
+      productData.push(await Product.findById({ _id: productId[i] }));
+    }
+
+    //  console.log(productData);
+
+    for (let i = 0; i < productData.length; i++) {
+      for (let j = 0; j < allId.length; j++) {
+      
+        if (allId[j] == productData[i].category.toString()) {
+          console.log(quantity[i]);
+          sales[j] += quantity[i];
+        }
+      }
+    }
+
+    const allBrand=await Brand.find({})
+
+    const brandName=allBrand.map((x)=>x.name)
+
+    const topBrand=[]
+
+    for(let i=0;i<brandName.length;i++){
+      topBrand.push({count:0,brand:allBrand[i]})
+    }
+    
+
+    for (let i = 0; i < productData.length; i++) {
+      for (let j = 0; j < brandName.length; j++) {
+      
+        if (brandName[j] == productData[i].brand) {
+          // console.log(quantity[i]);
+          topBrand[j].count += quantity[i];
+        
+        }
+      }
+    }
+
+    // console.log(topBrand)
+
+    topBrand.sort((a, b) => b.count - a.count);
+
+
+
+
+
+
+
+
+
+
+    let topProduct = [];
+
+
+
+
+const productQuantityMap = new Map();
+
+// Iterate over each order and update the quantity sold for each product ID
+order.forEach(order => {
+  order.items.forEach(item => {
+    const productId = item.productsId.valueOf();
+    const quantity = item.quantity;
+    productQuantityMap.set(productId, (productQuantityMap.get(productId) || 0) + quantity);
+  });
+});
+
+// Convert the map to an array of objects
+const productQuantityArray = [...productQuantityMap.entries()].map(([productId, quantity]) => ({ productId, quantity }));
+
+productQuantityArray.sort((a, b) => b.quantity - a.quantity);
+
+console.log(productQuantityArray);
+
+
+
+    for(let key in productQuantityArray){
+     
+      topProduct.push(await Product.findById({_id:productQuantityArray[key].productId}))
+    }
+
+    console.log(topProduct)
+
+
+
+
     const orderData = await Order.find({ status: "Delivered" });
     let sum = 0;
     for (let i = 0; i < orderData.length; i++) {
@@ -52,9 +191,9 @@ const loadDash = async (req, res) => {
     }
     const product = await Product.find({});
     const category = await Category.find({});
-    const order = await Order.find({
-      status: { $nin: ["Ordered", "Canceled", "Shipped"] },
-    });
+    // const order = await Order.find({
+    //   status: { $nin: ["Ordered", "Canceled", "Shipped"] },
+    // });
     // Aggregate pipeline to calculate monthly earnings from delivered orders
     if (order.length > 0) {
       const month = await Order.aggregate([
@@ -85,6 +224,7 @@ const loadDash = async (req, res) => {
         // Sort by year and month
         { $sort: { "_id.year": 1, "_id.month": 1 } },
       ]);
+
       const proLength = product.length;
       const catLength = category.length;
       const orderLength = order.length;
@@ -94,6 +234,15 @@ const loadDash = async (req, res) => {
         catLength,
         orderLength,
         month,
+        yValues,
+        allName,
+        sales,
+        productData,
+        topProduct,
+        productQuantityArray,
+        topBrand
+        // idCountArray
+        // productSales,
       });
       //  console.log("hhhhhhhhhheeeeeeelo"+month)
     } else {
@@ -107,6 +256,15 @@ const loadDash = async (req, res) => {
         catLength,
         orderLength,
         month,
+        yValues,
+        allName,
+        sales,
+        productData,
+        topProduct,
+        productQuantityArray,
+        topBrand
+        // idCountArray
+        // productSales,
       });
     }
 
@@ -222,16 +380,29 @@ const loadSales = async (req, res) => {
 const dateFilter = async (req, res) => {
   try {
     const date = req.query.value;
+    const date2 = req.query.value1;
+    console.log(date,"                 ",date2)
     const parts = date.split("-");
+    const parts1=date2.split("-");
     const day = parseInt(parts[2], 10);
+    const day1=parseInt(parts1[2], 10)
+
     const month = parseInt(parts[1], 10);
+    const month1 =parseInt(parts1[1], 10);
 
     const rotatedDate = day + "-" + month + "-" + parts[0];
+    const rotatedDate1 = day1 + "-" + month1 + "-" + parts1[0];
+
+
+    console.log(rotatedDate,"         ",rotatedDate1)
     // console.log(rotatedDate)
 
     const order = await Order.find({
       status: { $nin: ["Ordered", "Canceled", "Shipped"] },
-      orderDate: rotatedDate,
+      orderDate:{
+        $gte:rotatedDate,
+        $lte:rotatedDate1
+      }
     });
 
     // console.log(order)
@@ -244,56 +415,57 @@ const dateFilter = async (req, res) => {
 
 const sortDate = async (req, res) => {
   try {
-   const sort = req.query.value;
-let orderDateQuery = {};
+    const sort = req.query.value;
+    let orderDateQuery = {};
 
-// Get the current date
-const currentDate = new Date();
+    // Get the current date
+    const currentDate = new Date();
 
-// Parse the current date into the format "8-3-2024"
-const currentDateString = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+    // Parse the current date into the format "8-3-2024"
+    const currentDateString = `${currentDate.getDate()}-${
+      currentDate.getMonth() + 1
+    }-${currentDate.getFullYear()}`;
 
-// Depending on the sort value, adjust the orderDateQuery accordingly
-if (sort === "Day") {
-    // For Day sorting, query orders for the current day
-    orderDateQuery = currentDateString;
-} else if (sort === "Week") {
-    // For Week sorting, query orders for the current week
-    // Calculate the start and end dates of the week
-    const firstDayOfWeek = new Date(currentDate);
-    firstDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Start of the current week
-    const lastDayOfWeek = new Date(currentDate);
-    lastDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 6); // End of the current week
-    const firstDayOfWeekString = `${firstDayOfWeek.getDate()}-${firstDayOfWeek.getMonth() + 1}-${firstDayOfWeek.getFullYear()}`;
-    const lastDayOfWeekString = `${lastDayOfWeek.getDate()}-${lastDayOfWeek.getMonth() + 1}-${lastDayOfWeek.getFullYear()}`;
-    orderDateQuery = {
+    // Depending on the sort value, adjust the orderDateQuery accordingly
+    if (sort === "Day") {
+      // For Day sorting, query orders for the current day
+      orderDateQuery = currentDateString;
+    } else if (sort === "Week") {
+      // For Week sorting, query orders for the current week
+      // Calculate the start and end dates of the week
+      const firstDayOfWeek = new Date(currentDate);
+      firstDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Start of the current week
+      const lastDayOfWeek = new Date(currentDate);
+      lastDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 6); // End of the current week
+      const firstDayOfWeekString = `${firstDayOfWeek.getDate()}-${
+        firstDayOfWeek.getMonth() + 1
+      }-${firstDayOfWeek.getFullYear()}`;
+      const lastDayOfWeekString = `${lastDayOfWeek.getDate()}-${
+        lastDayOfWeek.getMonth() + 1
+      }-${lastDayOfWeek.getFullYear()}`;
+      orderDateQuery = {
         $gte: firstDayOfWeekString,
-        $lte: lastDayOfWeekString
-    };
-   } else if (sort === "Month") {
+        $lte: lastDayOfWeekString,
+      };
+    } else if (sort === "Month") {
       // For Month sorting, query orders for the current month
       orderDateQuery = {
-          $regex: `-${currentDate.getMonth() + 1}-`
+        $regex: `-${currentDate.getMonth() + 1}-`,
       };
-   } else if (sort === "Year") {
+    } else if (sort === "Year") {
       // For Year sorting, query orders for the current year
       orderDateQuery = {
-          $regex: `-${currentDate.getFullYear()}$`
+        $regex: `-${currentDate.getFullYear()}$`,
       };
-  }
+    }
 
-console.log(orderDateQuery)
+    console.log(orderDateQuery);
 
-// Query orders based on status and order date
-const order = await Order.find({
-    status: { $nin: ["Ordered", "Canceled", "Shipped"] },
-    orderDate: orderDateQuery
-});
-
-   
-
-   //  console.log(order)
-
+    // Query orders based on status and order date
+    const order = await Order.find({
+      status: { $nin: ["Ordered", "Canceled", "Shipped"] },
+      orderDate: orderDateQuery,
+    });
 
     res.render("adminSales", { order });
   } catch (error) {

@@ -17,6 +17,82 @@
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
+<style>
+    
+    .search-result {
+        display: none;
+        position: absolute;
+        height: auto;
+    }
+
+    .no-product-found {
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    #searchResultsContainer {
+        background-color: rgb(255, 255, 255); 
+        position: absolute;
+        z-index: 1;
+        width: 592px;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+       
+    }
+
+    .product-container {
+        width: 200px;
+        margin: 10px;
+        text-align: left;
+    }
+
+    .product-container img {
+        margin-left: -2px;
+        max-width: 20%;
+        height: auto;
+        transform: rotate(0deg);
+        transition: transform 0.5s ease; 
+       
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: -50px;
+    }
+
+    .product-info p {
+        margin: 2px 0;
+        margin-left: 40px;
+        font-size: 10px;
+        margin-top: 5px;
+        color: black;
+        font-weight: bold;
+    }
+
+  
+    .rotate-90 {
+        transform: rotate(90deg);
+    }
+
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
+    .rotate-270 {
+        transform: rotate(270deg);
+    }
+</style>
+
+
 <body>
     <header class="header-area header-height-2">
         <!-- <div class="header-top header-top-ptb-1 d-none d-lg-block">
@@ -65,25 +141,34 @@
                     <div class="logo logo-width-1">
                         <a href="index.html"><img src="/assets/imgs/theme/echo.png" alt="logo"></a>
                     </div>
-                    <div class="search-style-2">
-                        <form action="#">
-                            <!-- <select class="select-active">
-                                <option>All Categories</option>
-                                <option>Women's Clothing</option>
-                                <option>Men's Clothing</option>
-                                <option>Cellphones</option>
-                                <option>Computer & Office</option>
-                                <option>Consumer Electronics</option>
-                                <option>Jewelry & Accessories</option>
-                                <option>Home & Garden</option>
-                                <option>Luggage & Bags</option>
-                                <option>Shoes</option>
-                                <option>Mother & Kids</option>
-                            </select> -->
-                            <input type="text" placeholder="Search for items…">
-                            <button type="submit"> <i class="far fa-search"></i> </button>
-                        </form>
-                    </div>
+                    <div class="search-style-2" style="width: 600px;">
+                       
+                        <div class="search-style-2">
+                       
+                            <input type="text" id="input" style="width: 100%;margin-top: 5px;" placeholder="Search" onkeyup="SearchProduct()">
+                            
+                          
+                          
+                               
+                        </div>
+                  
+
+                        <div class="search-result">
+
+                            <div id="searchResultsContainer">
+    
+                            </div>
+    
+                        </div> 
+    
+                        <h5 class="no-product-found">No products found</h5>
+
+
+
+
+
+
+                </div>
                     <div class="header-action-right">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
@@ -546,11 +631,32 @@
                 </div>
             </div>
         </div>
+        
         <section class="mt-60 mb-60">
+           
             <div class="container">
+             
                 <div class="row">
+                   
                     <div class="col-12">
+                        <% if (findOrder.status=="Delivered") { %>
+                            <button style="background-color: #0d6efd; /* Blue */
+                            border: none;
+                            color: white;
+                            padding: 15px 32px;
+                            text-align: center;
+                            text-decoration: none;
+                            display: inline-block;
+                            font-size: 16px;
+                            margin: 4px 2px;
+                            margin-left: 1000px;
+                            margin-bottom: 30px;
+                            cursor: pointer;
+                            border-radius: 10px;" onclick="invoice('<%=findOrder._id%>')">Invoice</button>
+                        <% } %>
+                        
                         <div class="table-responsive">
+                            
                             <table class="table shopping-summery text-center clean">
                                 <thead>
                                     <tr class="main-heading">
@@ -721,14 +827,59 @@
                                                     <p
                                                     style="color: rgb(20, 226, 30); font-size: 20px; font-weight: bold; margin-bottom: 30px;">
                                                     The Order Returned </p>
-                                                    <% }else{ %>
-                                                        <a onclick="cancel('<%= findOrder._id %>')" class="btn btn-rounded">
-                                                            <i class="fa fa-share-square mr-10"></i> Cancel Order</a>
-    
+                                                    <% }else if(findOrder.status=="Payment Failed"){ %>
+                                                        <a onclick="payment('<%= findOrder._id %>')" class="btn btn-rounded">
+                                                            <i class="fa fa-share-square mr-10"></i>Continue Payment</a>
 
-                                                        <% } %>
+                                                        <% }else { %>
+
+
+                                                            <button onclick="reason()"
+                                                            style="padding: 8px 16px; font-size: 14px; background-color: #2c52fc; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 30px;">
+                                                            Cancel Order
+                                                        </button>
+            
+                                                        <div id="reason2" style="display: none;">
+                                                            <input type="radio" id="dont_want" name="reason1"
+                                                                value="Don't want the product anymore"
+                                                                style="width: 15px; height: 15px; margin-right: 5px;">
+                                                            <label for="dont_want">Don't want the product anymore</label><br>
+            
+                                                            <input type="radio" id="quality" name="reason1"
+                                                                value="Quality of the product not as expected"
+                                                                style="width: 15px; height: 15px; margin-right: 5px;">
+                                                            <label for="quality">Quality of the product not as expected</label><br>
+            
+                                                            <input type="radio" id="received_wrong" name="reason1"
+                                                                value="Received wrong item"
+                                                                style="width: 15px; height: 15px; margin-right: 5px;">
+                                                            <label for="received_wrong">Received wrong item</label><br>
+            
+                                                            <input type="radio" id="received_broken" name="reason1"
+                                                                value="Received a broken/damaged item"
+                                                                style="width: 15px; height: 15px; margin-right: 5px;">
+                                                            <label for="received_broken">Received a broken/damaged item</label><br>
+            
+                                                            <input type="radio" id="received_broken" name="reason1"
+                                                                value="Received a broken/damaged item"
+                                                                style="width: 15px; height: 15px; margin-right: 5px;">
+                                                            <label for="received_broken">Other reason</label><br>
+            
+                                                            <p class="text-danger" id="error" style="display: none;">Select one</p>
+
+
+
+
+
+
+                                                            <a onclick="cancel('<%= findOrder._id %>')" class="btn btn-rounded">
+                                                                <i class="fa fa-share-square mr-10"></i> Submit</a>
+                                                         </div>
+
+                                                            <% } %>
                                                     
-                                  
+                                      
+    
 
                                 </div>
                             </div>
@@ -894,12 +1045,18 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 </body>
 
 <script>
     function cancel(id) {
-        alert(id)
-        $.ajax({
+
+        var selectedReason = document.querySelector('input[name="reason1"]:checked');
+
+        if(selectedReason){
+
+            $.ajax({
             url: "/cancelOrder",
             method: "post",
             data: {
@@ -936,10 +1093,26 @@
                 }
             }
         })
+
+        }else{
+            document.getElementById("error").style.display = "block"
+
+            setTimeout(() => {
+                document.getElementById("error").style.display = "none"
+            }, 2000)
+
+        }
+
+        // alert(id)
+       
     }
 
     function Return() {
         document.getElementById("reason").style.display = "block"
+    }
+
+    function reason(){
+        document.getElementById("reason2").style.display = "block"
     }
 
     function submit(id) {
@@ -1013,7 +1186,166 @@
         })
     }
 
+    const inputElement = document.getElementById('input');
+    let timeoutId;
 
+    function debounce(func, delay) {
+        return function () {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func();
+            }, delay);
+        };
+    }
+
+    function showSearchResult() {
+        const searchResult = document.querySelector('.search-result');
+        searchResult.style.display = 'block';
+    }
+
+    function hideSearchResult() {
+        const searchResult = document.querySelector('.search-result');
+        searchResult.style.display = 'none';
+    }
+
+    function showNoProductFound() {
+        const noProductFound = document.querySelector('.no-product-found');
+        noProductFound.style.display = 'block';
+    }
+
+    function hideNoProductFound() {
+        const noProductFound = document.querySelector('.no-product-found');
+        noProductFound.style.display = 'none';
+    }
+
+    function SearchProduct() {
+        const searchDataValue = inputElement.value.trim();
+
+
+        if (searchDataValue !== "") {
+            showSearchResult();
+            debounce(() => {
+                console.log(searchDataValue)
+                $.ajax({
+                    url: "/search",
+                    method: "post",
+                    data: {
+                        searchDataValue
+                    },
+                    success: (response) => {
+                        const searchResultsContainer = document.getElementById('searchResultsContainer')
+                        searchResultsContainer.innerHTML = ""
+
+                        if (response.searchProducts.length > 0) {
+                            response.searchProducts.forEach(element => {
+                                const productContainer = document.createElement('div');
+                                productContainer.classList.add('product-container');
+
+                                const productElement = document.createElement('div');
+                                productElement.innerHTML = `
+                                <a href="/showproduct?id=${element._id}" class="product-link">
+                                    <img src="/productImages/${element.image[0]}" alt="product">
+                                    <div class="product-info">
+                                        <p>${element.name}</p>
+                                        <p>₹${element.regularPrice}</p>
+                                    </div>
+                                `;
+
+                                productContainer.appendChild(productElement);
+                                searchResultsContainer.appendChild(productContainer);
+                            });
+                            hideNoProductFound();
+                        } else {
+                            hideSearchResult();
+                            showNoProductFound();
+                        }
+                    }
+                })
+            }, 500)();
+        } else {
+            hideSearchResult();
+            hideNoProductFound();
+        }
+    }
+
+    function invoice(id){
+        window.location.href="/loadInvoice?id="+id
+    }
+
+    function payment(id){
+        $.ajax({
+            url:"/continue-Payment",
+            method:"post",
+            data:{
+                id
+            },
+            success:(response)=>{
+                if(response.status==="wrk"){
+                    console.log("working")
+                    alert("hello")
+                    let orderId=response.orderId
+
+                    var options = {
+                        "key": "rzp_test_iPZZ7eS2qqkR1R", // Enter the Key ID generated from the Dashboard
+                        "amount": response.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "currency": "INR",
+                        "name": "Echo Elite",
+                        "description": "Test Transaction",
+                        "image": "https://example.com/your_logo",
+                        "order_id": response.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                        "handler": function (response) {
+
+                            
+                            // alert(addressId)
+                            // alert(order_id)
+                            // alert("heeeei")
+                            alert(response.razorpay_payment_id);
+                            alert(response.razorpay_order_id);
+                            alert(response.razorpay_signature)
+                            // alert(response.address)
+                            // alert(response.orderNum)
+                            // alert(orderId)
+
+                            verifyPayment(response, orderId)
+                        },
+                        "prefill": {
+                            "name": "Gaurav Kumar",
+                            "email": "gaurav.kumar@example.com",
+                            "contact": "9000090000"
+                        },
+                        "notes": {
+                            "address": "Razorpay Corporate Office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
+
+                    var rzp = new Razorpay(options);
+                    rzp.open();
+
+
+
+                }
+            }
+        })
+    }
+
+    function verifyPayment(response,order){
+        $.ajax({
+            url:"/payment-sucess",
+            method:"post",
+            data:{
+                response,
+                order
+            },
+            success:(data)=>{
+                if(data.status==true){
+                    window.location.href="/orders"
+                }
+            }
+        })
+    }
 </script>
 
 </html>
