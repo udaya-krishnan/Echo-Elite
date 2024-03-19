@@ -98,7 +98,7 @@ const nextPage = async (req, res) => {
     let newNum = number + 1;
 
       let previous=true
-    res.json({status:true})
+    res.json({status:true,page:newNum})
     // res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
   } catch (error) {
     console.log(error.message);

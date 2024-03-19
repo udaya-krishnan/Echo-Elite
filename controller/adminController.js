@@ -144,6 +144,58 @@ const loadDash = async (req, res) => {
 
 
 
+    //*******************************************************************8 */
+      console.log("ATRAT")
+      console.log("ATRAT")
+
+      console.log(order)
+
+
+      const month=await Order.aggregate([
+        {
+          $project: {
+            _id: { $dateToString: { format: "%m-%Y", date: "$createdAt" } },
+            totalAmount: 1
+          }
+        },
+        {
+          $group: {
+            _id: "$_id",
+            totalEarnings: { $sum: "$totalAmount" }
+          }
+        },
+        {
+          $sort: { _id: 1 }
+        }
+      ])
+      
+      console.log("ATRAT")
+
+      console.log(month)
+
+      let array=[0,0,0,0,0,0,0,0,0,0,0,0]
+
+      let months=["01-2024","02-2024","03-2024","04-2024","05-2024","06-2024","07-2024","08-2024","09-2024","10-2024","11-2024","12-2024"]
+
+
+      for(let i=0;i<array.length;i++){
+        for(let j=0;j<month.length;j++){
+          if(month[j]._id==months[i]){
+            array[i]+=month[j].totalEarnings
+          }
+        }
+      }
+
+      console.log(array)
+      console.log("ATRAT")
+
+    
+
+
+    //************************************************************8 */
+
+
+
 
 
 
@@ -240,7 +292,8 @@ console.log(productQuantityArray);
         productData,
         topProduct,
         productQuantityArray,
-        topBrand
+        topBrand,
+        array
         // idCountArray
         // productSales,
       });
@@ -262,7 +315,8 @@ console.log(productQuantityArray);
         productData,
         topProduct,
         productQuantityArray,
-        topBrand
+        topBrand,
+        array
         // idCountArray
         // productSales,
       });

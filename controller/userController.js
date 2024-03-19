@@ -442,7 +442,7 @@ const loadHome = async (req, res) => {
     // }
 
 
-    
+
 
     // const populate= await Product.find({}).populate(catData)
 
@@ -953,8 +953,10 @@ const loadShop = async (req, res) => {
     const sort = req.query.sort;
     const rating=req.query.rating
     // console.log(sort);
+
     let newNum=1
     let previous=false;
+    
     if (sort == "lowToHigh") {
      
       const proData = await Product.find({}).sort({ offerPrice: 1 }).limit(6);

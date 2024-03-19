@@ -1186,12 +1186,17 @@
 
         const number=document.getElementById("pageNumber").innerHTML
 
-        
+         
         $.ajax({
             url:"/next-page",
             method:"post",
             data:{
                 number
+            },
+            success:(response)=>{
+                if(response.status==true){
+                    window.location.href=
+                }
             }
         })
         // alert(number)
