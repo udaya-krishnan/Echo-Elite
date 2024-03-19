@@ -430,12 +430,7 @@ const orderSuccess = async (req, res) => {
 const rezopayment = async (req, res) => {
   try {
 
-    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", req.body.order);
-    // console.log(
-    //   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-    //   req.body.payment
-    // );
-
+   
     const { payment, order, addressId, order_id ,amount,couponCode} = req.body;
     const findCoupon=await Coupon.findOne({couponCode:couponCode})
 

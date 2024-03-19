@@ -315,6 +315,7 @@
                             <!-- </div> -->
                         </div>
                         <div class="col-lg-7">
+                            <canvas id="revenueChart" width="800" height="400"></canvas>
                             <!-- <div class="card mb-4">
                                 <article class="card-body">
                                     <h5 class="card-title">Recent activities</h5>
@@ -825,6 +826,41 @@
 
 
 
+
+
+
+    
+const data1 = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [{
+        label: 'Yearly Revenue',
+        data: [10000, 12000, 11000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 21000],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1
+    }]
+};
+
+const config = {
+    type: 'line',
+    data: data1,
+    options: {
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    displayFormats: {
+                        'day': 'MM/YY'
+                    },
+                    unit: 'month',
+                }
+            }
+        }
+    }
+};
+
+var ctx = document.getElementById('revenueChart').getContext('2d');
+var myChart = new Chart(ctx, config);
 
 
 

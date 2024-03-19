@@ -52,7 +52,7 @@ const loadLanding = async (req, res) => {
 
     const brandData = await Brand.find({});
 
-    const newArrivals = await Product.find({}).sort({ _id: -1 }).limit(6);
+    const newArrivals = await Product.find({}).sort({ _id: -1 }).limit(6); 
 
     res.render("landing", { catData, proData, brandData, newArrivals });
   } catch (error) {
@@ -432,6 +432,22 @@ const loadHome = async (req, res) => {
     //   proId.push(await Product.findById({_id:proId}))
     // }
 
+
+    // for(let i=0;i<proData.length;i++){
+    //   for(let j=0;catData.length;j++){
+    //   if(proData[i].category==catData[i]._id){
+
+    //   }
+    //   }
+    // }
+
+
+    
+
+    // const populate= await Product.find({}).populate(catData)
+
+    // console.log(populate);
+
     res.render("home", { catData, proData, brandData, newArrivals });
   } catch (error) {
     console.log(error.massage);
@@ -470,6 +486,30 @@ const loadProduct = async (req, res) => {
     const id = req.query.id;
     //  console.log(id,"heloooooooooooooooooooooooooooooooooooooooooooooo")
     const proData = await Product.findById({ _id: id });
+
+    const catgory=await Category.findById({_id:proData.category})
+    let discount;
+    if(catgory.offer.discount){
+      // console.log("CAT OFFFFFFFFFFFFFFFER");
+       discount=(proData.regularPrice* catgory.offer.discount)/100
+      //  console.log("discount");
+       console.log(discount);
+    }
+    console.log(proData.offerPrice);
+    let offer;
+   
+    if(discount<proData.offerPrice){
+      // console.log("DISCOUNT IS GRATER");
+      offer=discount
+      console.log(offer);
+    }else{
+      // console.log("OFFER IS GRATER");
+      offer=proData.offerPrice
+      console.log((offer));
+    }
+    if(offer==null){
+      offer=discount
+    }
     // console.log(proData)
 
     const user = req.session.email;
@@ -519,6 +559,8 @@ const loadProduct = async (req, res) => {
           userId: userData._id,
           "items.productsId": id,
         });
+
+        const catagory=await Category.find({is_blocked:false})
         // console.log("ctrdddddddddddddddddd",cartData)
         if (cartData) {
           // console.log("inside cart")
@@ -535,7 +577,8 @@ const loadProduct = async (req, res) => {
             findWish,
             ratingShow,
             reviews,
-            allRatingData
+            allRatingData,
+            offer
           });
         } else {
 
@@ -552,7 +595,8 @@ const loadProduct = async (req, res) => {
             findWish,
             ratingShow,
             reviews,
-            allRatingData
+            allRatingData,
+            offer
           });
         }
       } else {
@@ -561,7 +605,7 @@ const loadProduct = async (req, res) => {
         let ratingShow=false
         
     
-        res.render("product", { proData, fullData, cartData, user, findWish ,ratingShow,reviews,allRatingData});
+        res.render("product", { proData, fullData, cartData, user, findWish ,ratingShow,reviews,allRatingData,offer});
       }
     } else {
       res.redirect("/404");

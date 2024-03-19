@@ -88,7 +88,7 @@ user_router.get('/',userController.loadLanding)
 
 .get("/shop",userController.loadShop)
  
-  .get("/next-page",shopController.nextPage)
+  .post("/next-page",shopController.nextPage)
 
   .get("/catagory",shopController.categoryfilter)
 .get("/brandFiter",shopController.brandFilter)

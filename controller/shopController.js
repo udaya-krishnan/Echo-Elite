@@ -80,7 +80,7 @@ const Wishlist = require("../model/wishlistModel");
 
 const nextPage = async (req, res) => {
   try {
-    const num = req.query.num;
+    const num = req.body.number;
     console.log(typeof num);
     const number = parseInt(num);
     const skip = number * 6;
@@ -98,8 +98,8 @@ const nextPage = async (req, res) => {
     let newNum = number + 1;
 
       let previous=true
-    
-    res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
+    res.json({status:true})
+    // res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
   } catch (error) {
     console.log(error.message);
   }

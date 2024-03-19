@@ -431,7 +431,7 @@ const addOrder = async (req, res) => {
           orderType: paymentOption,
           orderDate:date,
           status: "Processing",
-          shippingAddress: addressData,
+          shippingAddress: addressData, 
         });
     
         console.log(proData);
@@ -468,15 +468,7 @@ const addOrder = async (req, res) => {
         proId.push(proData[i].productsId)
       }
   
-      // for(let i=0;i<proId.length;i++){
-  
-      //   const product=await Product.findByIdAndUpdate({_id:proId[i]},
-      //     {
-      //       $inc:{
-      //         stock:-quantity[i]
-      //       }
-      //     })
-      // }
+     
       const orderNum = generateOrder.generateOrder();
       const stringOrder_id=orderNum.toString()
       console.log(orderNum);

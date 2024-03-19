@@ -179,7 +179,7 @@ const blockPro = async (req, res) => {
 const ratingProduct=async(req,res)=>{
   console.log("out side try")
   try {
-    console.log("hello")
+    console.log("hello hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
     const {name,dis,email,rating,id}=req.body
     console.log(name,dis,email,rating,id)
 
@@ -199,9 +199,10 @@ const ratingProduct=async(req,res)=>{
     const saveRating=await newRating.save()
 
     if(saveRating){
+      console.log("INSIDE THE SAVE RATING");
       const totalRating=await Rating.find({productId:findPro._id},{star:true})
 
-      // console.log(totalRating)
+      console.log(totalRating)
       let total=[]
       for(let i=0;i<totalRating.length;i++){
         total.push(totalRating[i].star)
@@ -212,6 +213,7 @@ const ratingProduct=async(req,res)=>{
       const avgTotal=sumTotal/totalRating.length
       console.log(avgTotal)
       let totalAvg=(avgTotal*2)*10
+      console.log("AVG TOTAL",totalAvg);
       const updateProduct=await Product.findByIdAndUpdate({_id:id},{
         $set:{
           rating:totalAvg
