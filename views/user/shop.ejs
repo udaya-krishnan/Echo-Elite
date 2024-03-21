@@ -183,13 +183,13 @@
                             <div class="header-action-icon-2">
                                 <a href="shop-wishlist.html">
                                     <img class="svgInject" alt="wowy" src="/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">4</span>
+                                    <span class="pro-count blue"><%= wish %></span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="/cart">
                                     <img alt="wowy" src="/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue">2</span>
+                                    <span class="pro-count blue"><%= cart %></span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -739,7 +739,7 @@
                                                     <% var
                                                         percentage=(proData[i].regularPrice-proData[i].offerPrice)/proData[i].regularPrice*100
                                                         %>
-                                                        <div  title="90%">
+                                                        <div  >
                                                             <div class="product-rate">
                                                                 <div class="product-rating" style="width:<%=proData[i].rating%>%"></div>
                                                             </div>
@@ -815,13 +815,13 @@
                                 <ul class="pagination justify-content-start">
                                      <% if (previous) { %>
 
-                                        <li class="page-item"><a class="page-link" onclick="decrease()"><i
+                                        <li class="page-item"><a class="page-link" href="/previous-page?page=<%=newNum%>" ><i
                                             class="fa fa-angle-left"></i> </a></li>
  
                                      <% } %>
                                   
                                     <li class="page-item active"><a class="page-link" id="pageNumber"><%=newNum%></a></li>
-                                    <li class="page-item"><a class="page-link" onclick="increase()"><i
+                                    <li class="page-item"><a class="page-link" href="/next-page?page=<%=newNum%>"><i
                                                 class="fa fa-angle-right"></i> </a></li>
                                 </ul>
                             </nav>
@@ -1186,9 +1186,22 @@
 
         const number=document.getElementById("pageNumber").innerHTML
 
+         
+        // $.ajax({
+        //     url:"/next-page",
+        //     method:"post",
+        //     data:{
+        //         number
+        //     },
+        //     success:(response)=>{
+        //         if(response.status==true){
+        //             window.location.href=
+        //         }
+        //     }
+        // })
         // alert(number)
 
-       window.location.href=`/next-page?num=${number}`
+    //    window.location.href=`/next-page?num=${number}`
 
     }
 

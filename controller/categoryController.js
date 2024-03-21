@@ -1,4 +1,5 @@
 const Category=require("../model/categoryModel")
+const mongoose=require("mongoose")
 
 const loadCategory=async(req,res)=>{
     try {
@@ -185,6 +186,73 @@ const cancelCat=async(req,res)=>{
     }
 }
 
+const loadCategoryOffer=async(req,res)=>{
+    try {
+        const findCat=await Category.find({is_blocked:false})
+        res.render("offerCategory",{findCat})
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const addOfferLoad=async(req,res)=>{
+    try {
+        const catData = await Category.find({
+            is_blocked: false,
+            $or: [
+                { offer: { $exists: false } }, 
+                { offer: false }    
+            ]
+        });
+        console.log(catData)
+        res.render("addOffer",{catData})
+    } catch (error) {
+       console.log(error.message) 
+    }
+}
+
+const addOffer=async(req,res)=>{
+    try {
+        const {discount,startDate,endDate,catname}=req.body
+        // console.log(discount,startDate,endDate,catname) 
+        console.log(typeof catname )
+        
+  
+        const findCat=await Category.findOne({name:catname})
+        // console.log(findCat)
+     
+         const updateCat=await Category.findByIdAndUpdate({_id:findCat._id},{
+            $set:{
+                offer:{
+                    discount:discount,
+                    startDate:startDate,
+                    endDate:endDate
+                }
+            }
+         })
+
+         res.json({status:true})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+const deleteOffer=async(req,res)=>{
+    try {
+        const id=req.body.id
+        console.log(id)
+        const findCat=await Category.findByIdAndUpdate({_id:id},{
+            $unset:{offer:""}
+        })
+
+        res.json({status:true})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 module.exports={
     loadCategory,
     loadCreate,
@@ -192,5 +260,9 @@ module.exports={
     listCat,
     loadEdit,
     editCat,
-    cancelCat
+    cancelCat,
+    loadCategoryOffer,
+    addOfferLoad,
+    addOffer,
+    deleteOffer
 }

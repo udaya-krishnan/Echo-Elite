@@ -184,17 +184,6 @@
                             <small class="text-muted">Order ID: <%= findOrder.orderNumber %></small>
                         </div>
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                            <!-- <button style="background-color: #001cba; /* Blue */
-                            border: none;
-                            color: white;
-                            padding: 15px 32px;
-                            text-align: center;
-                            text-decoration: none;
-                            display: inline-block;
-                            font-size: 16px;
-                            margin: 4px 2px;
-                            cursor: pointer;
-                            border-radius: 10px;">Invoice</button> -->
                             <% if (findOrder.status=="Delivered"||findOrder.status=="Canceled"||findOrder.status=="Returned") { %>
 
                                 <a class="btn btn-primary" onclick="back()">Back</a>
@@ -336,7 +325,26 @@
                                                             </dl>
                                                             <dl class="dlist">
                                                                 <dt>Shipping cost:</dt>
-                                                                <dd>₹0.00</dd>
+                                                                <dd>₹100</dd>
+                                                            </dl>
+                                                            <dl class="dlist">
+                                                                <dt>Coupon:</dt>
+                                                                <% if (findOrder.coupon) { %>
+                                                                    <dd><%=findOrder.coupon%></dd>
+                                                                <% }else{ %>
+                                                                    <dd>Nil</dd>
+                                                                    <% } %>
+
+                                                                
+                                                            </dl>
+                                                            <dl class="dlist">
+                                                                <dt>Discount:</dt>
+                                                                <% if (findOrder.discount) { %>
+                                                                    <dd><%=findOrder.discount%></dd>
+                                                                <% }else{ %>
+                                                                    <dd>0</dd>
+                                                                    <% } %>
+                                                                
                                                             </dl>
                                                             <dl class="dlist">
                                                                 <dt>Grand total:</dt>

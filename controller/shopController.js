@@ -80,8 +80,12 @@ const Wishlist = require("../model/wishlistModel");
 
 const nextPage = async (req, res) => {
   try {
-    const num = req.query.num;
+    const cart=req.session.cart
+    const wish=req.session.wish
+    const num = req.query.page;
     console.log(typeof num);
+    console.log(num)
+
     const number = parseInt(num);
     const skip = number * 6;
     console.log(skip);
@@ -89,17 +93,18 @@ const nextPage = async (req, res) => {
     const proData = await Product.find({ is_blocked: false })
       .skip(skip)
       .limit(6);
-
+    console.log(proData)
     const catData = await Category.find({ is_blocked: false });
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
-    if (proData.length < 0) {
+    if (proData.length <= 0) {
+      
     }
-    let newNum = number + 1;
+    let newNum = parseInt(num) + 1;
 
       let previous=true
-    
-    res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
+    // res.json({status:true,page:newNum})
+    res.render("shop", { proData, catData, newPro, brandData, newNum ,previous,wish,cart});
   } catch (error) {
     console.log(error.message);
   }
@@ -110,7 +115,9 @@ const categoryfilter = async (req, res) => {
     const id = req.query.id;
     const sort = req.query.sort;
     const rating=req.query.rating
-    let num = req.query.num;
+
+    let newNum = 1
+    let previous=false
 
     // console.log(id);
     // console.log(sort);
@@ -126,7 +133,7 @@ const categoryfilter = async (req, res) => {
       const catData = await Category.find({ is_blocked: false });
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous});
     } else if (sort == "highToLow") {
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({
@@ -139,7 +146,7 @@ const categoryfilter = async (req, res) => {
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat,newNum,previous });
     } else if (sort == "aA-zZ") {
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({
@@ -152,7 +159,7 @@ const categoryfilter = async (req, res) => {
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous});
     } else if (sort == "zZ-aA") {
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({ category: findCat._id, is_blocked: false, })
@@ -162,7 +169,7 @@ const categoryfilter = async (req, res) => {
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous});
     } else if(rating==100) {
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({ category: findCat._id, is_blocked: false, rating:100 })
@@ -172,7 +179,7 @@ const categoryfilter = async (req, res) => {
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat,newNum,previous });
     }else if(rating==80){
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({ category: findCat._id, is_blocked: false, rating:80 })
@@ -182,7 +189,7 @@ const categoryfilter = async (req, res) => {
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat,newNum,previous });
     }else if(rating==60){
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({ category: findCat._id, is_blocked: false, rating:60 })
@@ -192,7 +199,7 @@ const categoryfilter = async (req, res) => {
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous});
     }else if(rating==40){
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({ category: findCat._id, is_blocked: false, rating:40 })
@@ -202,7 +209,7 @@ const categoryfilter = async (req, res) => {
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous});
     }else if(rating==20){
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({ category: findCat._id, is_blocked: false, rating:20 })
@@ -212,7 +219,7 @@ const categoryfilter = async (req, res) => {
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous});
     }
 
 
@@ -228,7 +235,7 @@ const categoryfilter = async (req, res) => {
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
 
-    res.render("catagory", { proData, catData, newPro, brandData, findCat });
+    res.render("catagory", { proData, catData, newPro, brandData, findCat,newNum,previous });
   } catch (error) {
     console.log(error.message);
   }
@@ -245,7 +252,7 @@ const brandFilter = async (req, res) => {
     const catData = await Category.find({});
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
-    res.render("shop", { proData, catData, newPro, brandData });
+    res.render("shop", { proData, catData, newPro, brandData,newNum,previous });
   } catch (error) {
     console.log(error.message);
   }
@@ -253,6 +260,9 @@ const brandFilter = async (req, res) => {
 
 const loadWishlist = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
+
     const findUser = await User.findOne({ email: req.session.email });
 
     const wishData = await Wishlist.findOne({ user_id: findUser._id });
@@ -284,7 +294,7 @@ const loadWishlist = async (req, res) => {
 
     console.log(cartData, "caaaaaaaaaaartttttttttt");
 
-    res.render("wishList", { wishData, proData });
+    res.render("wishList", { wishData, proData ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -399,10 +409,12 @@ const search = async (req, res) => {
 
 const previousPage=async(req,res)=>{
   try {
-    const num=req.query.num
+    const cart=req.session.cart
+    const wish=req.session.wish
+    const num=req.query.page
     // console.log(num)
-    const number = parseInt(num)-2;
-    // console.log("nummmmmmmmmmmmmmmmmmbbbbbb"+number)
+    const number = parseInt(num)-1;
+    console.log("nummmmmmmmmmmmmmmmmmbbbbbb"+number)
     const skip = number * 6;
     console.log(skip);
 
@@ -414,7 +426,7 @@ const previousPage=async(req,res)=>{
       const brandData = await Brand.find({});
       let previous=false
       let newNum=number
-      res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
+      res.render("shop", { proData, catData, newPro, brandData, newNum ,previous,cart,wish});
     }
 
     const proData = await Product.find({ is_blocked: false })
@@ -429,7 +441,7 @@ const previousPage=async(req,res)=>{
     console.log("nnnnnnnnnnew numbbbbbbber"+newNum)
       let previous=true
     
-    res.render("shop", { proData, catData, newPro, brandData, newNum ,previous});
+    res.render("shop", { proData, catData, newPro, brandData, newNum ,previous,cart,wish});
   } catch (error) {
     console.log(error.message)
   }
@@ -452,6 +464,38 @@ const searchProducts = async(req,res)=>{
  }
 
 
+const categoryNextpage=async(req,res)=>{
+  try {
+    const cart=req.session.cart
+    const wish=req.session.wish
+    const num = req.query.page;
+    const id=req.query.id
+
+    const number = parseInt(num);
+    const skip = number * 6;
+    const findCat=await Category.findById({_id:id})
+
+    const proData=await Product.find({category:findCat._id,is_blocked:false}) .skip(skip)
+    .limit(6);
+
+    let newNum = parseInt(num) + 1;
+
+      let previous=true
+
+      const catData = await Category.find({is_blocked:false});
+      const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
+      const brandData = await Brand.find({is_blocked:false});
+
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous});
+
+
+    
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
 
 module.exports = {
   nextPage,
@@ -463,5 +507,6 @@ module.exports = {
   removeFromwishlist,
   search,
   previousPage,
-  searchProducts
+  searchProducts,
+  categoryNextpage
 };

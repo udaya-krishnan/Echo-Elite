@@ -172,15 +172,15 @@
                     <div class="header-action-right">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="/wishlist">
                                     <img class="svgInject" alt="wowy" src="/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">4</span>
+                                    <span class="pro-count blue"><%= wish %></span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="/cart">
                                     <img alt="wowy" src="/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue">2</span>
+                                    <span class="pro-count blue"><%= cart %></span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -694,13 +694,16 @@
                                             </div>
                                         </div>
                                         <div class="clearfix product-price-cover">
-                                            <% if (proData.offerPrice) { %>
+
+                                          
+
+                                            <% if (offer) { %>
                                                 <% var
-                                                    percentage=(proData.regularPrice-proData.offerPrice)/proData.regularPrice*100
+                                                    percentage=(proData.regularPrice-offer)/proData.regularPrice*100
                                                     %>
                                                     <div class="product-price primary-color float-left">
                                                         <ins><span id="offerPrice" class="text-brand">₹<%=
-                                                                    proData.offerPrice %>
+                                                                    offer.toFixed() %>
                                                             </span></ins>
                                                         <ins><span class="old-price font-md ml-15">₹<%=
                                                                     proData.regularPrice %>
@@ -983,7 +986,7 @@
                                                                     </div>
                                                                     <div class="desc">
                                                                         <div class="product-rate d-inline-block">
-                                                                            <div class="product-rating" style="width:<%= allRatingData[i].star*2*10%>%">
+                                                                            <div class="product-rating" style="width:<%=allRatingData[i].star*2*10%>%">
                                                                             </div>
                                                                         </div>
                                                                         <p><%= allRatingData[i].description %>
@@ -1621,14 +1624,13 @@
                 document.getElementById("starErr").innerHTML = ""
             }, 2000)
         } else {
-            // alert(id)
+         
             const dis = document.getElementById("comment").value
-            // alert(dis)
+           
             const name = document.getElementById('name').value
-            // alert(name)
+            
             const email = document.getElementById("email").value
-            // alert(email)
-            // alert(rating)
+        
 
 
             $.ajax({
@@ -1660,7 +1662,7 @@
                             icon: "success",
                             title: "Your Response Sended"
                         }).then((result) => {
-                            window.location.href = `/showproduct?id=${response.id}`
+                            window.location.href = `/showproduct?id=${response.id}` 
                         })
 
                     }

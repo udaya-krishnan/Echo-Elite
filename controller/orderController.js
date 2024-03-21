@@ -23,6 +23,8 @@ const generateDate = require("../controller/dateGenrator");
 
 const loadViewOrder = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
     const id = req.query.id;
     const findOrder = await Order.findById({ _id: id });
     console.log(findOrder);
@@ -43,7 +45,7 @@ const loadViewOrder = async (req, res) => {
 
 
 
-    res.render("orderView", { proData, findOrder });
+    res.render("orderView", { proData, findOrder ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -430,12 +432,7 @@ const orderSuccess = async (req, res) => {
 const rezopayment = async (req, res) => {
   try {
 
-    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", req.body.order);
-    // console.log(
-    //   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-    //   req.body.payment
-    // );
-
+   
     const { payment, order, addressId, order_id ,amount,couponCode} = req.body;
     const findCoupon=await Coupon.findOne({couponCode:couponCode})
 
@@ -692,6 +689,8 @@ const paymentFaild=async(req,res)=>{
     orderData.save();
 
 
+    // res.json({status:true})
+
 
 
   } catch (error) {
@@ -761,6 +760,31 @@ const continuePayment=async(req,res)=>{
   }
 }
 
+const successPayment=async(req,res)=>{
+  try {
+    const {response,order}=req.body
+    console.log(response,order)
+
+    let hmac = crypto.createHmac("sha256", key_secret);
+    hmac.update(response.razorpay_order_id + "|" + response.razorpay_payment_id);
+    hmac = hmac.digest("hex");
+
+    if(hmac == response.razorpay_signature){
+      const updateOrder=await Order.findByIdAndUpdate({_id:order},{
+        $set:{
+          status:"Processing"
+        }
+      })
+
+      res.json({status:true})
+
+    }
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 
 module.exports = {
   loadViewOrder,
@@ -775,5 +799,6 @@ module.exports = {
   addWalletCash,
   addCash,
   paymentFaild,
-  continuePayment
+  continuePayment,
+  successPayment
 };

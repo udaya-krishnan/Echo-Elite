@@ -3,11 +3,22 @@ const mongoose=require("mongoose")
 const categorySchema=new mongoose.Schema({
     name:{
         type:String,
-        require:true
+        required:true
     },
     discription:{
         type:String,
-        require:true
+        required:true
+    },
+    offer: {
+            discount:{
+                type:Number
+            },
+            startDate:{
+                type:String,
+            },
+            endDate:{
+                type:String
+            },
     },
     is_blocked:{
         type:Boolean,

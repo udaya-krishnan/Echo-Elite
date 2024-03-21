@@ -18,10 +18,15 @@ const storage = multer.diskStorage({
 });
 
 const proStorage = multer.diskStorage({
+  
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/productImages"));
+    console.log("hello");
+    // console.log(file)
+    cb(null, path.join(__dirname, "../public/productImages")); 
   },
   filename: function (req, file, cb) {
+    console.log("hai");
+    // console.log(file.originalname)
     cb(null, file.originalname);
   },
 });
@@ -61,6 +66,14 @@ admin_route.post("/editCategoryPost", isAdmin, CategoryControle.editCat);
 
 admin_route.post("/cat-cancel", isAdmin, CategoryControle.cancelCat);
 
+admin_route.get("/catagoryOffer",isAdmin,CategoryControle.loadCategoryOffer)
+
+admin_route.get("/addOffer",isAdmin,CategoryControle.addOfferLoad)
+
+admin_route.post("/addOfferPost",isAdmin,CategoryControle.addOffer)
+
+admin_route.post("/deleteOffer",isAdmin,CategoryControle.deleteOffer)
+
 /*******************************************Product Route***************************** */
 
 admin_route.get("/product", isAdmin, productControle.loadProduct);
@@ -85,9 +98,12 @@ admin_route.post(
 
 admin_route.get("/block-pro", isAdmin, productControle.blockPro);
 
-admin_route.get("/image-delete");
+// admin_route.get("/image-delete");
 
 // admin_route.get("/productDetails",isAdmin)
+
+admin_route.post("/editImage",isAdmin,productControle.imageEdit)
+admin_route.post("/single-image",isAdmin,proUpload.single("proImage"),productControle.singleImage)
 
 /***************************************Brand Route**************************** */
 
@@ -123,5 +139,8 @@ admin_route.post("/editCoupon",isAdmin,couponController.editCoupon)
 admin_route.get("/sales",isAdmin,adminController.loadSales)
 admin_route.get("/salesDate",isAdmin,adminController.dateFilter)
 admin_route.get("/Date",isAdmin,adminController.sortDate)
+
+
+
 
 module.exports = admin_route;
