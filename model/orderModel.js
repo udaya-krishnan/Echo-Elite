@@ -16,7 +16,7 @@ const order_schema=new mongoose.Schema({
         unique:true
     },
     items:[ 
-        {
+         {
             productsId:{
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"products",
@@ -91,17 +91,15 @@ const order_schema=new mongoose.Schema({
             type:Number,
           
         },
-
     },
-    coupon:{
+     coupon:{
         type:String,
     },
     discount:{
         type:Number,
     }
-    
 
 },{versionKey:false,timestamps:true});
 
-
-module.exports=mongoose.model("order",order_schema)
+const order=mongoose.model("order",order_schema)
+module.exports=order

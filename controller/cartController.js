@@ -48,7 +48,7 @@ const loadCart = async (req, res) => {
              proCart =true
              break;
           }
-        }
+        } 
         console.log("falssssssssssssssssss")
         // const proCart = await Cart.findOne({ userId:userData._id,"items.productsId": id });
         if (proCart) {
@@ -103,6 +103,8 @@ const loadCart = async (req, res) => {
 const loadCartpage = async (req, res) => {
   try {
     const email = req.session.email;
+    const cart=req.session.cart
+    const wish=req.session.wish
     // const userData = req.
     const userData = await User.findOne({ email: email });
 
@@ -155,7 +157,7 @@ const loadCartpage = async (req, res) => {
     }
     console.log("cartDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+cartData)
     console.log("prrrrrrrrrrrrrrroDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+proData)
-    res.render("cart", { proData, cartData });
+    res.render("cart", { proData, cartData ,cart,wish});
 
     // console.log(cartData)
   } catch (error) {
@@ -303,6 +305,8 @@ const loadCheckOut = async (req, res) => {
 
 const loadCheckOutPage = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
     const userData = await User.findOne({ email: req.session.email });
 
     const cartData = await Cart.findOne({ userId: userData._id });
@@ -330,7 +334,7 @@ const loadCheckOutPage = async (req, res) => {
 
     console.log(cartData)
 
-    res.render("checkOut", { proData, cartItems, cartData, address ,CouponDataArray});
+    res.render("checkOut", { proData, cartItems, cartData, address ,CouponDataArray,wish,cart});
   } catch (error) {}
 };
 
@@ -431,7 +435,7 @@ const addOrder = async (req, res) => {
           orderType: paymentOption,
           orderDate:date,
           status: "Processing",
-          shippingAddress: addressData,
+          shippingAddress: addressData, 
         });
     
         console.log(proData);
@@ -468,15 +472,7 @@ const addOrder = async (req, res) => {
         proId.push(proData[i].productsId)
       }
   
-      // for(let i=0;i<proId.length;i++){
-  
-      //   const product=await Product.findByIdAndUpdate({_id:proId[i]},
-      //     {
-      //       $inc:{
-      //         stock:-quantity[i]
-      //       }
-      //     })
-      // }
+     
       const orderNum = generateOrder.generateOrder();
       const stringOrder_id=orderNum.toString()
       console.log(orderNum);
@@ -497,7 +493,7 @@ const addOrder = async (req, res) => {
       console.log(amount+"aaaaaaaaaaaaaaaaaaaamountma")
       instance.orders.create(options,async(error,razorpayOrder)=>{
         if(!error){
-          console.log("hello"+razorpayOrder)
+          console.log(razorpayOrder)
           res.json({status:"rezorpay",order:razorpayOrder,address:addressId,orderNumber:orderNum,total:amount,code:code})
         }else{
           console.log(error.message)

@@ -12,6 +12,7 @@ const shopController=require("../controller/shopController")
 const couponController=require("../controller/couponController")
 const productController=require("../controller/productController")
 const userAuth=require("../middleware/auth")
+const count=require("../middleware/wishCart")
 
 
 
@@ -27,21 +28,21 @@ user_router.get('/',userController.loadLanding)
 .post('/forgotPost',userAuth.isLogOut,userController.forgot) 
 .get('/forgotOtp',userAuth.isLogOut,userController.loadForgotOTP)
 .get('/logout',userAuth.islogin,userController.logout)
-.get('/home',userAuth.isBlocked,userAuth.islogin,userController.loadHome)
+.get('/home',count,userAuth.isBlocked,userAuth.islogin,userController.loadHome)
 
 
 
 //**************************************product********************** */
 
-.get('/showproduct',userController.loadProduct)
+.get('/showproduct',count,userController.loadProduct)
 
 
 //"""""""""""""""""""""""""""""""""""""""''UserProfile"""""""""""""""""""""""""""""""""""//
 
 
-.get('/dashboard',userAuth.isBlocked,userAuth.islogin,userController.loadDash)
+.get('/dashboard',count,userAuth.isBlocked,userAuth.islogin,userController.loadDash)
 
-.get("/addAddress",userAuth.isBlocked,userAuth.islogin,userController.loadAddaddress)
+.get("/addAddress",count,userAuth.isBlocked,userAuth.islogin,userController.loadAddaddress)
 .post("/addAddress",userAuth.isBlocked,userAuth.islogin,userController.addAddress)
 
 
@@ -50,19 +51,19 @@ user_router.get('/',userController.loadLanding)
 
 .get('/address-dele',userAuth.isBlocked,userAuth.islogin,userController.deletAddress)
 
-.get("/address-edit",userAuth.isBlocked,userAuth.islogin,userController.loadEditAddress)
+.get("/address-edit",count,userAuth.isBlocked,userAuth.islogin,userController.loadEditAddress)
 .post("/address-edit",userAuth.isBlocked,userAuth.islogin,userController.editAddress)
 
-.get('/orders',userAuth.isBlocked,userAuth.islogin,userController.loadOrder)
-.get('/wallet',userAuth.isBlocked,userAuth.islogin,userController.loadTrack)
-.get('/address',userAuth.isBlocked,userAuth.islogin,userController.loadAddress)
-.get('/change-pass',userAuth.isBlocked,userAuth.islogin,userController.loadChangePass) 
-.get('/account-detail',userAuth.isBlocked,userAuth.islogin,userController.loadAccount) 
+.get('/orders',count,userAuth.isBlocked,userAuth.islogin,userController.loadOrder)
+.get('/wallet',count,userAuth.isBlocked,userAuth.islogin,userController.loadTrack)
+.get('/address',count,userAuth.isBlocked,userAuth.islogin,userController.loadAddress)
+.get('/change-pass',count,userAuth.isBlocked,userAuth.islogin,userController.loadChangePass) 
+.get('/account-detail',count,userAuth.isBlocked,userAuth.islogin,userController.loadAccount) 
 
 .post("/change-pass",userAuth.isBlocked,userAuth.islogin ,userController.changePass)
 
 
-.get("/account-edit",userAuth.isBlocked,userAuth.islogin,userController.loadEditAccount)
+.get("/account-edit",count,userAuth.isBlocked,userAuth.islogin,userController.loadEditAccount)
 
 .post("/account-edit",userController.editAccount) 
 
@@ -73,7 +74,7 @@ user_router.get('/',userController.loadLanding)
 
  .post("/addCatLoad",cartController.loadCart)
 
-  .get("/cart",userAuth.isBlocked,userAuth.islogin,cartController.loadCartpage)
+  .get("/cart",count,userAuth.isBlocked,userAuth.islogin,cartController.loadCartpage)
 
  .post("/cartadd",userAuth.isBlocked,userAuth.islogin,cartController.addCart)
 
@@ -86,26 +87,29 @@ user_router.get('/',userController.loadLanding)
   //*******************************************shop************************************ */
 
 
-.get("/shop",userController.loadShop)
-  // .get("/lowTohigh",shopController.loadWithlowtoHigh)
-  // .get("/highTolow",shopController.highTolow)
-  // .get("/aAzZ",shopController.AtoZ)
-  // .get("/zZaA",shopController.ZtoA)
-  .get("/next-page",shopController.nextPage)
+.get("/shop",count,userController.loadShop)
+ 
+  .get("/next-page",count,shopController.nextPage)
+  .get("/previous-page",count,shopController.previousPage)
 
   .get("/catagory",shopController.categoryfilter)
 .get("/brandFiter",shopController.brandFilter)
 
-// .post("/shop-search",shopController.search)
+.post("/shop-search",shopController.search)
 .get("/previous-page",shopController.previousPage)
 
 .post("/search",shopController.searchProducts)
+
+.get("/catagory/next-page",shopController.categoryNextpage)
+
+
+
   //***************************************************Ckeck Out************************ */
 
 
- .get("/checkOut",userAuth.islogin,userAuth.isBlocked,cartController.loadCheckOut)
+ .get("/checkOut",count,userAuth.islogin,userAuth.isBlocked,cartController.loadCheckOut)
 
-  .get("/checkOutPage",userAuth.isBlocked,userAuth.islogin,cartController.loadCheckOutPage)
+  .get("/checkOutPage",count,userAuth.isBlocked,userAuth.islogin,cartController.loadCheckOutPage)
 
   .post("/checkOutData",userAuth.isBlocked,userAuth.islogin,cartController.addOrder)
 
@@ -116,13 +120,14 @@ user_router.get('/',userController.loadLanding)
   .post("/paymentFaild",userAuth.isBlocked,userAuth.islogin,orderController.paymentFaild)
 
   .post("/continue-Payment",userAuth.isBlocked,userAuth.islogin,orderController.continuePayment)
+  .post("/payment-sucess",userAuth.isBlocked,userAuth.islogin,orderController.successPayment)
 
 
 
   //***********************************************Order**************************** */
 
 
- .get("/orderView",userAuth.isBlocked,userAuth.islogin,orderController.loadViewOrder)
+ .get("/orderView",count,userAuth.isBlocked,userAuth.islogin,orderController.loadViewOrder)
 
  .post("/cancelOrder",userAuth.isBlocked,userAuth.islogin,orderController.cancelOrder)
 
@@ -134,7 +139,7 @@ user_router.get('/',userController.loadLanding)
   //****************************************Wishlist*************88 */
 
 
-  .get('/wishlist',shopController.loadWishlist)
+  .get('/wishlist',count,shopController.loadWishlist)
 .post("/addWishlist",shopController.addWishlist)
 .post("/removeWish",shopController.removeWish)
  .post("/remove-Wishlist",shopController.removeFromwishlist)
@@ -150,7 +155,7 @@ user_router.get('/',userController.loadLanding)
 
  
 
-.get("/coupon",userAuth.isBlocked,userAuth.islogin,userController.loadCoupon)
+.get("/coupon",count,userAuth.isBlocked,userAuth.islogin,userController.loadCoupon)
 
 .post("/applyCoupon",userAuth.islogin,userAuth.isBlocked,couponController.applyCoupon)
 

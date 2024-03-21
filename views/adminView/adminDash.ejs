@@ -315,6 +315,7 @@
                             <!-- </div> -->
                         </div>
                         <div class="col-lg-7">
+
                             <!-- <div class="card mb-4">
                                 <article class="card-body">
                                     <h5 class="card-title">Recent activities</h5>
@@ -403,7 +404,7 @@
                 <div class="col-xl-4 col-lg-12">
                     <div class="card mb-4">
                         <article class="card-body">
-                            <h5 class="card-title">Categories</h5>
+                            <h5 class="card-title"> Top Categories</h5>
                             <canvas id="catChart" height="217"></canvas>
                         </article>
                     </div>
@@ -432,34 +433,91 @@
                             </div>
                         </article>
                     </div> -->
-                </div>  
-                <div class="row">
-                <div style="margin-top: 50px;"><h2>TOP 5 Products</h2></div>
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="card card-product-grid">
-                        <a href="#" class="img-wrap"> <img src="/admin_assets/imgs/items/1.jpg" alt="Product"> </a>
-                        <div class="info-wrap">
-                            <div class="dropdown float-end">
-                                <!-- <a href="#" class="btn btn-sm btn-brand rounded">
-                                    <i class="material-icons md-edit mr-5"></i>Edit
-                                </a> -->
-                                <!-- <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="#">Edit info</a>
-                                    <a class="dropdown-item text-danger" href="#">Delete</a>
-                                </div> -->
-                            </div>
-                            <a href="#" class="title">Just another product name</a>
-                            <div class="price mt-1">$179.00</div>
-                            <div>Sales:0</div> <!-- price-wrap.// -->
-                        </div>
-                    </div> <!-- card-product  end// -->
                 </div>
-            </div>
+                <canvas id="year" style="width:100%;max-width:800px ;height: 200px;" ></canvas>
 
-            <div><h2>TOP 5 Categories</h2></div>
+                <div class="row">
 
-            <div><h2>TOP 5 BRANDS</h2></div>
-            
+                    <div style="margin-top: 50px;">
+                        <h2>TOP 5 Products</h2>
+                    </div>
+                    <% if (topProduct.length>0) { %>
+
+                        <% for( let i=0; i < topProduct.length; i++ ) { %>
+                            <div class="col-xl-3 col-lg-4 col-md-6">
+                                <div class="card card-product-grid">
+                                    <a href="#" class="img-wrap"> <img
+                                            src="/productImages/<%= topProduct[i].image[4] %>" alt="Product"> </a>
+                                    <div class="info-wrap">
+                                        <div class="dropdown float-end">
+
+                                        </div>
+                                        <a href="#" class="title">
+                                            <%= topProduct[i].name %>
+                                        </a>
+                                        <% if (topProduct.offerPrice) { %>
+                                            <div class="price mt-1">
+                                                <%= topProduct.offerPrice %>
+                                            </div>
+                                            <% }else{ %>
+                                                <div class="price mt-1">
+                                                    <%= topProduct.regularPrice %>
+                                                </div>
+                                                <% } %>
+
+                                                    <div>Sales:<%= productQuantityArray[i].quantity %>
+                                                    </div> <!-- price-wrap.// -->
+                                    </div>
+                                </div> <!-- card-product  end// -->
+                            </div>
+
+                            <% } %>
+
+                                <% }else{ %>
+
+                                    <% } %>
+
+                </div>
+
+                <!-- <div><h2>TOP 5 Categories</h2></div> -->
+
+                <div>
+                    <h2>TOP BRANDS</h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="row gx-3">
+
+                        <% if (topBrand.length) { %>
+                            <% for( let i=0; i < topBrand.length; i++ ) { %>
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-6">
+                                    <figure class="card border-1">
+                                        <div class="card-header bg-white text-center">
+                                            <img height="76" src="/brandImages/<%=topBrand[i].brand.image%>"
+                                                class="img-fluid" alt="Logo">
+                                        </div>
+                                        <figcaption class="card-body text-center">
+                                            <h6 class="card-title m-0">
+                                                <%= topBrand[i].brand.name %>
+                                            </h6>
+                                            <a href="#">
+                                                <%= topBrand[i].count %> Sales
+                                            </a>
+                                        </figcaption>
+                                    </figure>
+                                </div>
+
+                                <% } %>
+
+
+                                    <% } %>
+
+
+
+
+                    </div>
+                </div>
+
                 <!-- </div> 
                  <div class="card mb-4">
                 <header class="card-header">
@@ -716,6 +774,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"
         integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="utils.js"></script>
 </body>
 
 <script>
@@ -748,28 +807,28 @@
 
 
     //*********************************************************?
-    let sales='<%= JSON.stringify(sales) %>'
+    let sales = '<%= JSON.stringify(sales) %>'
 
     let value = JSON.parse(sales)
     console.log(value);
     let color = ['rgb(255, 99, 132)', 'rgb(75, 192, 192)', 'rgb(255, 205, 86)', 'rgb(201, 203, 207)']
-      
+
     console.log('<%= JSON.stringify(allName)%>')
 
-    const category='<%= JSON.stringify(allName)%>'
-   
+    const category = '<%= JSON.stringify(allName)%>'
+
     let decodedArray = JSON.parse(category.replace(/&#34;/g, '"'))
 
-  
-   
-  
-    
-    
-    let catName= decodedArray
-    
+
+
+
+
+
+    let catName = decodedArray
+
 
     const data = {
-        labels:catName ,
+        labels: catName,
         datasets: [{
             label: 'My First Dataset',
             data: value,
@@ -783,6 +842,72 @@
         data: data,
         options: {}
     });
+
+
+
+
+
+
+    ///************************************************************************?
+
+
+
+
+//     const ctx = document.getElementById('year');
+
+    // Define the labels and data for the bar chart
+    const labels =["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    const value3='<%=JSON.stringify(array)%>'
+    const amount=JSON.parse(value3)
+    // const amount=[65, 59, 80, 81, 56, 55, 40,30,25,45,12,25]
+    const data1 = { 
+        labels: labels,
+        datasets: [{
+            label:"Year",
+            data: amount,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)',
+                'rgba(200, 203, 207, 0.2)',
+                'rgba(20, 203, 207, 0.2)',
+                'rgba(100, 203, 207, 0.2)',
+                'rgba(250, 203, 207, 0.2)',
+                'rgba(203, 203, 207, 0.2)',
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+
+    new Chart("year",{
+        type: 'line',
+        data: data1,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }) 
+
+
+
+
 
 
 

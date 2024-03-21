@@ -3,7 +3,8 @@ const Order = require("../model/orderModel");
 const Product = require("../model/productModel");
 const Category = require("../model/categoryModel");
 const Coupon = require("../model/CouponModel");
-const Chart=require("chart.js")
+const Chart = require("chart.js");
+const Brand=require("../model/brandModel")
 // const bcrypt=require('bcrypt')
 
 const adminEmail = process.env.ADMINEMAIL;
@@ -46,97 +47,191 @@ const verifyAdmin = async (req, res) => {
 
 const loadDash = async (req, res) => {
   try {
-
-    const yValues=[0,0,0,0,0,0,0]
+    const yValues = [0, 0, 0, 0, 0, 0, 0];
     const order = await Order.find({
-      status: { $nin: ["Ordered", "Canceled", "Shipped"] },
+      status: { $nin: ["Ordered","Processing", "Canceled", "Shipped"] },
     });
+    // console.log("ORDERS START");
+    // console.log(order);
+    // console.log("ORDERS END");
 
-    for(let i=0;i<order.length;i++){
-      const date=order[i].createdAt
-      const value=date.getDay()
-      yValues[value]+=order[i].totalAmount
+
+    for (let i = 0; i < order.length; i++) {
+      var date = order[i].createdAt;
+      // console.log(date + "dddddddddddddddddddddddddddddddddddddd");
+      const value = date.getDay();
+      yValues[value] += order[i].totalAmount;
     }
 
-    const allData=await Category.find({})
+    const allData = await Category.find({});
 
-    const sales=[]
+    const sales = [];
 
-    for(let i=0;i<allData.length;i++){
-      sales.push(0)
+    for (let i = 0; i < allData.length; i++) {
+      sales.push(0);
     }
 
-    console.log(sales)
 
-    const allName=allData.map((x)=>x.name)
-    const allId=allData.map((x)=>x._id)
+    // console.log("SALES START");
+    // console.log(sales);
+    // console.log("SALES END");
+
+
+    const allName = allData.map((x) => x.name);
+    const allId = allData.map((x) => x._id);
+
+    // console.log(allName);
+    let productId = [];
+    let quantity = [];
+
+    for (let i = 0; i < order.length; i++) {
+      for (let j = 0; j < order[i].items.length; j++) {
+        productId.push(order[i].items[j].productsId);
+        quantity.push(order[i].items[j].quantity);
+      }
+    }
+
+    // console.log("QUANTITY");
+    // console.log(quantity);
+    // console.log(productId);
+    // console.log("PRODUCT");
+
+
+    const productData = [];
+    for (let i = 0; i < productId.length; i++) {
+      productData.push(await Product.findById({ _id: productId[i] }));
+    }
+
+    //  console.log(productData);
+
+    for (let i = 0; i < productData.length; i++) {
+      for (let j = 0; j < allId.length; j++) {
+      
+        if (allId[j] == productData[i].category.toString()) {
+          console.log(quantity[i]);
+          sales[j] += quantity[i];
+        }
+      }
+    }
+
+    const allBrand=await Brand.find({})
+
+    const brandName=allBrand.map((x)=>x.name)
+
+    const topBrand=[]
+
+    for(let i=0;i<brandName.length;i++){
+      topBrand.push({count:0,brand:allBrand[i]})
+    }
+    
+
+    for (let i = 0; i < productData.length; i++) {
+      for (let j = 0; j < brandName.length; j++) {
+      
+        if (brandName[j] == productData[i].brand) {
+          // console.log(quantity[i]);
+          topBrand[j].count += quantity[i];
+        
+        }
+      }
+    }
+
+    // console.log(topBrand)
+
+    topBrand.sort((a, b) => b.count - a.count);
+
+
+
+
+
+    //*******************************************************************8 */
+      console.log("ATRAT")
+      console.log("ATRAT")
+
+      console.log(order)
+
+
+      const month=await Order.aggregate([
+        {
+          $project: {
+            _id: { $dateToString: { format: "%m-%Y", date: "$createdAt" } },
+            totalAmount: 1
+          }
+        },
+        {
+          $group: {
+            _id: "$_id",
+            totalEarnings: { $sum: "$totalAmount" }
+          }
+        },
+        {
+          $sort: { _id: 1 }
+        }
+      ])
+      
+      console.log("ATRAT")
+
+      console.log(month)
+
+      let array=[0,0,0,0,0,0,0,0,0,0,0,0]
+
+      let months=["01-2024","02-2024","03-2024","04-2024","05-2024","06-2024","07-2024","08-2024","09-2024","10-2024","11-2024","12-2024"]
+
+
+      for(let i=0;i<array.length;i++){
+        for(let j=0;j<month.length;j++){
+          if(month[j]._id==months[i]){
+            array[i]+=month[j].totalEarnings
+          }
+        }
+      }
+
+      console.log(array)
+      console.log("ATRAT")
+
     
 
 
-    console.log(allName);
-    let productId=[]
-    let quantity=[]
+    //************************************************************8 */
 
-    for(let i=0;i<order.length;i++){
-      for(let j=0;j<order[i].items.length;j++){
-        productId.push(order[i].items[j].productsId)
-        quantity.push(order[i].items[j].quantity)
-      }
+
+
+
+
+
+
+
+    let topProduct = [];
+
+
+
+
+const productQuantityMap = new Map();
+
+// Iterate over each order and update the quantity sold for each product ID
+order.forEach(order => {
+  order.items.forEach(item => {
+    const productId = item.productsId.valueOf();
+    const quantity = item.quantity;
+    productQuantityMap.set(productId, (productQuantityMap.get(productId) || 0) + quantity);
+  });
+});
+
+// Convert the map to an array of objects
+const productQuantityArray = [...productQuantityMap.entries()].map(([productId, quantity]) => ({ productId, quantity }));
+
+productQuantityArray.sort((a, b) => b.quantity - a.quantity);
+
+console.log(productQuantityArray);
+
+
+
+    for(let key in productQuantityArray){
+     
+      topProduct.push(await Product.findById({_id:productQuantityArray[key].productId}))
     }
-    console.log(quantity)
-    console.log(productId)
-    const productData=[]
-    for(let i=0;i<productId.length;i++){
-      productData.push(await Product.findById({_id:productId[i]}))
-    }
-  
-    //  console.log(productData);
 
-      for(let i=0;i<productData.length;i++){
-        
-        for(let j=0;j<allId.length;j++){
-          console.log(allId[j]+"     all id");
-          console.log(productData[i].category+"productid");
-          if(allId[j]==productData[i].category.toString()){
-            console.log(quantity[i]); 
-            
-            sales[j]+=quantity[i]
-          }
-        }
-        
-      }
-
-      // console.log(sales)
-
-      console.log("PRODUCT ID"+productId)
-      let productSales=[]
-      for(let i=0;i<productId.length;i++){
-        productSales.push({salesCount:1})
-      }
-      
-
-      for(let i=0;i<productId.length;i++){
-        for(let j=i+1;j<productId.length;j++){
-          if(productId[i].toString()==productId[j].toString()){
-            productSales[i].salesCount+=1
-            const proData=await Product 
-            productSales
- 
-          }
-        }
-      }
-
-      console.log(productSales);
-
-      
- 
-  
-
-
-
-
-
-
+    console.log(topProduct)
 
 
 
@@ -181,6 +276,7 @@ const loadDash = async (req, res) => {
         // Sort by year and month
         { $sort: { "_id.year": 1, "_id.month": 1 } },
       ]);
+
       const proLength = product.length;
       const catLength = category.length;
       const orderLength = order.length;
@@ -194,7 +290,12 @@ const loadDash = async (req, res) => {
         allName,
         sales,
         productData,
-        productSales
+        topProduct,
+        productQuantityArray,
+        topBrand,
+        array
+        // idCountArray
+        // productSales,
       });
       //  console.log("hhhhhhhhhheeeeeeelo"+month)
     } else {
@@ -212,7 +313,12 @@ const loadDash = async (req, res) => {
         allName,
         sales,
         productData,
-        productSales
+        topProduct,
+        productQuantityArray,
+        topBrand,
+        array
+        // idCountArray
+        // productSales,
       });
     }
 
@@ -328,16 +434,29 @@ const loadSales = async (req, res) => {
 const dateFilter = async (req, res) => {
   try {
     const date = req.query.value;
+    const date2 = req.query.value1;
+    console.log(date,"                 ",date2)
     const parts = date.split("-");
+    const parts1=date2.split("-");
     const day = parseInt(parts[2], 10);
+    const day1=parseInt(parts1[2], 10)
+
     const month = parseInt(parts[1], 10);
+    const month1 =parseInt(parts1[1], 10);
 
     const rotatedDate = day + "-" + month + "-" + parts[0];
+    const rotatedDate1 = day1 + "-" + month1 + "-" + parts1[0];
+
+
+    console.log(rotatedDate,"         ",rotatedDate1)
     // console.log(rotatedDate)
 
     const order = await Order.find({
       status: { $nin: ["Ordered", "Canceled", "Shipped"] },
-      orderDate: rotatedDate,
+      orderDate:{
+        $gte:rotatedDate,
+        $lte:rotatedDate1 
+      }
     });
 
     // console.log(order)
@@ -350,53 +469,58 @@ const dateFilter = async (req, res) => {
 
 const sortDate = async (req, res) => {
   try {
-   const sort = req.query.value;
-let orderDateQuery = {};
+    const sort = req.query.value;
+    let orderDateQuery = {};
 
-// Get the current date
-const currentDate = new Date();
+    // Get the current date
+    const currentDate = new Date();
 
-// Parse the current date into the format "8-3-2024"
-const currentDateString = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+    // Parse the current date into the format "8-3-2024"
+    const currentDateString = `${currentDate.getDate()}-${
+      currentDate.getMonth() + 1
+    }-${currentDate.getFullYear()}`;
 
-// Depending on the sort value, adjust the orderDateQuery accordingly
-if (sort === "Day") {
-    // For Day sorting, query orders for the current day
-    orderDateQuery = currentDateString;
-} else if (sort === "Week") {
-    // For Week sorting, query orders for the current week
-    // Calculate the start and end dates of the week
-    const firstDayOfWeek = new Date(currentDate);
-    firstDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Start of the current week
-    const lastDayOfWeek = new Date(currentDate);
-    lastDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 6); // End of the current week
-    const firstDayOfWeekString = `${firstDayOfWeek.getDate()}-${firstDayOfWeek.getMonth() + 1}-${firstDayOfWeek.getFullYear()}`;
-    const lastDayOfWeekString = `${lastDayOfWeek.getDate()}-${lastDayOfWeek.getMonth() + 1}-${lastDayOfWeek.getFullYear()}`;
-    orderDateQuery = {
+    // Depending on the sort value, adjust the orderDateQuery accordingly
+    if (sort === "Day") {
+      // For Day sorting, query orders for the current day
+      orderDateQuery = currentDateString;
+    } else if (sort === "Week") {
+      // For Week sorting, query orders for the current week
+      // Calculate the start and end dates of the week
+      const firstDayOfWeek = new Date(currentDate);
+      firstDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Start of the current week
+      const lastDayOfWeek = new Date(currentDate);
+      lastDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 6); // End of the current week
+      const firstDayOfWeekString = `${firstDayOfWeek.getDate()}-${
+        firstDayOfWeek.getMonth() + 1
+      }-${firstDayOfWeek.getFullYear()}`;
+      const lastDayOfWeekString = `${lastDayOfWeek.getDate()}-${
+        lastDayOfWeek.getMonth() + 1
+      }-${lastDayOfWeek.getFullYear()}`;
+      orderDateQuery = {
         $gte: firstDayOfWeekString,
-        $lte: lastDayOfWeekString
-    };
-   } else if (sort === "Month") {
+        $lte: lastDayOfWeekString,
+      };
+    } else if (sort === "Month") {
       // For Month sorting, query orders for the current month
       orderDateQuery = {
-          $regex: `-${currentDate.getMonth() + 1}-`
+        $regex: `-${currentDate.getMonth() + 1}-`,
       };
-   } else if (sort === "Year") {
+    } else if (sort === "Year") {
       // For Year sorting, query orders for the current year
       orderDateQuery = {
-          $regex: `-${currentDate.getFullYear()}$`
+        $regex: `-${currentDate.getFullYear()}$`,
       };
-  }
+    }
 
-console.log(orderDateQuery)
+    console.log(orderDateQuery);
 
-// Query orders based on status and order date
-const order = await Order.find({
-    status: { $nin: ["Ordered", "Canceled", "Shipped"] },
-    orderDate: orderDateQuery
-});
+    // Query orders based on status and order date
+    const order = await Order.find({
+      status: { $nin: ["Ordered", "Canceled", "Shipped"] },
+      orderDate: orderDateQuery,
+    });
 
-   
     res.render("adminSales", { order });
   } catch (error) {
     console.log(error.message);
