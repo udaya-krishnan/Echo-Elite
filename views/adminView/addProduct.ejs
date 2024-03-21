@@ -315,17 +315,17 @@
 
         function nameFun() {
             const name = document.getElementById("product_name").value
-            const nameRegex = /^[A-Za-z\s]+$/;
+            // const nameRegex = /^[A-Za-z\s]+$/;
             if (name.trim() == '') {
                 document.getElementById("nameErr").innerHTML = "Product name is require"
             } else {
                 document.getElementById("nameErr").innerHTML = ""
             }
-            if (!nameRegex.test(name)) {
-                document.getElementById("nameErr").innerHTML = "Invalid Name"
-            } else {
-                document.getElementById("nameErr").innerHTML = ""
-            }
+            // if (!nameRegex.test(name)) {
+            //     document.getElementById("nameErr").innerHTML = "Invalid Name"
+            // } else {
+            //     document.getElementById("nameErr").innerHTML = ""
+            // }
         }
 
         function disFun() {

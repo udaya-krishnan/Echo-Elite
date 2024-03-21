@@ -326,6 +326,10 @@
    function date() {
         const customdateValue = document.getElementById("date").value;
         const customdateValue1 = document.getElementById("date1").value;
+        console.log("date1",customdateValue)
+        console.log("date1",customdateValue1)
+
+        
         const today = new Date();
         if (!customdateValue&&!customdateValue1) {
             document.getElementById("custmerror").textContent = "Please select a date"
@@ -335,7 +339,14 @@
         } else {
             const customdate = new Date(customdateValue);
             const customdate1 = new Date(customdateValue1);
+        //    if(customdate1<customdate){
+        //     document.getElementById("custmerror").textContent = "First one is start date "
+        //         setTimeout(() => {
+        //             document.getElementById("custmerror").textContent = ""
+        //         }, 2000);
+        //    }
             if (customdate >= today&&customdate1>=today) {
+                
                 document.getElementById("custmerror").textContent = "You can only view today's or previous day's orders"
                 setTimeout(() => {
                     document.getElementById("custmerror").textContent = ""

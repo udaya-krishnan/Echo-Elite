@@ -236,6 +236,48 @@ const ratingProduct=async(req,res)=>{
   }
 }
 
+const imageEdit=async(req,res)=>{
+  try {
+    const{id,index}=req.body
+    console.log(id,index)
+
+    const findPro=await Product.findById({_id:id})
+
+    findPro.image.splice(index,1,"Nil")
+    findPro.save()
+    console.log(findPro)
+
+
+    res.json({status:true})
+
+
+
+
+  } catch (error) {
+    
+  }
+}
+
+const singleImage=async(req,res)=>{
+  try {
+    console.log(req.body)
+    const {id,index}=req.body
+    const image=req.body.name
+    // console.log( single)
+    console.log(image);
+   
+    // console.log(single);
+    const findPro=await Product.findById({_id:id})
+
+    findPro.image.splice(index,1,image)
+   await findPro.save()
+    res.json({status:true})
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 
 module.exports = {
   loadProduct,
@@ -244,5 +286,7 @@ module.exports = {
   loadEdit,
   editPro,
   blockPro,
-  ratingProduct
+  ratingProduct,
+  imageEdit,
+  singleImage
 };

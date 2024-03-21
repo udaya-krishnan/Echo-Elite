@@ -325,7 +325,26 @@
                                                             </dl>
                                                             <dl class="dlist">
                                                                 <dt>Shipping cost:</dt>
-                                                                <dd>₹0.00</dd>
+                                                                <dd>₹100</dd>
+                                                            </dl>
+                                                            <dl class="dlist">
+                                                                <dt>Coupon:</dt>
+                                                                <% if (findOrder.coupon) { %>
+                                                                    <dd><%=findOrder.coupon%></dd>
+                                                                <% }else{ %>
+                                                                    <dd>Nil</dd>
+                                                                    <% } %>
+
+                                                                
+                                                            </dl>
+                                                            <dl class="dlist">
+                                                                <dt>Discount:</dt>
+                                                                <% if (findOrder.discount) { %>
+                                                                    <dd><%=findOrder.discount%></dd>
+                                                                <% }else{ %>
+                                                                    <dd>0</dd>
+                                                                    <% } %>
+                                                                
                                                             </dl>
                                                             <dl class="dlist">
                                                                 <dt>Grand total:</dt>

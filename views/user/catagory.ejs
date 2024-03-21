@@ -809,8 +809,12 @@
                         <div class="pagination-area mt-15 mb-md-5 mb-lg-0">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-start">
+                                    <% if (previous) { %>
+                                        <li class="page-item"><a class="page-link" href="/catagory/previous?id=<%=findCat._id%>&page=<%=newNum%>"><i
+                                            class="fa fa-angle-left"></i> </a></li>
+                                    <% } %>
                                     <li class="page-item active"><a class="page-link" id="pageNumber">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="//catagory?num="><i
+                                    <li class="page-item"><a class="page-link" href="/catagory/next-page?id=<%=findCat._id%>&page=<%=newNum%>"><i
                                                 class="fa fa-angle-right"></i> </a></li>
                                 </ul>
                             </nav>

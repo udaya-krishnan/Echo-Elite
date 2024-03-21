@@ -455,7 +455,7 @@ const dateFilter = async (req, res) => {
       status: { $nin: ["Ordered", "Canceled", "Shipped"] },
       orderDate:{
         $gte:rotatedDate,
-        $lte:rotatedDate1
+        $lte:rotatedDate1 
       }
     });
 

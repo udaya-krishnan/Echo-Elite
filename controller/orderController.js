@@ -23,6 +23,8 @@ const generateDate = require("../controller/dateGenrator");
 
 const loadViewOrder = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
     const id = req.query.id;
     const findOrder = await Order.findById({ _id: id });
     console.log(findOrder);
@@ -43,7 +45,7 @@ const loadViewOrder = async (req, res) => {
 
 
 
-    res.render("orderView", { proData, findOrder });
+    res.render("orderView", { proData, findOrder ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }

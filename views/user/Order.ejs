@@ -89,13 +89,13 @@
                             <div class="header-action-icon-2">
                                 <a href="shop-wishlist.html">
                                     <img class="svgInject" alt="wowy" src="/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">4</span>
+                                    <span class="pro-count blue"><%= wish %></span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="/cart">
                                     <img alt="wowy" src="/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue">2</span>
+                                    <span class="pro-count blue"><%= cart %></span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -668,6 +668,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="pagination-area mt-30 mb-50">
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination justify-content-start">
+                                                    <li class="page-item active"><a class="page-link" id="num" >1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="" onclick="incerese()"><i class="fa fa-angle-right" ></i></a></li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     <!-- </div>  -->
                                 
                                            
@@ -987,6 +995,20 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
+
+<script>
+    function incerese(){
+        const page=document.getElementById("num").innerHTML
+        alert(page)
+        $.ajax({
+            url:"/orders",
+            method:"post",
+            data:{
+                page
+            }
+        })
+    }
+</script>
 
 
 </html>

@@ -18,10 +18,15 @@ const storage = multer.diskStorage({
 });
 
 const proStorage = multer.diskStorage({
+  
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/productImages"));
+    console.log("hello");
+    // console.log(file)
+    cb(null, path.join(__dirname, "../public/productImages")); 
   },
   filename: function (req, file, cb) {
+    console.log("hai");
+    // console.log(file.originalname)
     cb(null, file.originalname);
   },
 });
@@ -93,9 +98,12 @@ admin_route.post(
 
 admin_route.get("/block-pro", isAdmin, productControle.blockPro);
 
-admin_route.get("/image-delete");
+// admin_route.get("/image-delete");
 
 // admin_route.get("/productDetails",isAdmin)
+
+admin_route.post("/editImage",isAdmin,productControle.imageEdit)
+admin_route.post("/single-image",isAdmin,proUpload.single("proImage"),productControle.singleImage)
 
 /***************************************Brand Route**************************** */
 

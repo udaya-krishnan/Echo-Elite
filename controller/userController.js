@@ -411,6 +411,9 @@ const forgot = async (req, res) => {
 
 const loadHome = async (req, res) => {
   try {
+
+    const cart=req.session.cart
+    const wish=req.session.wish
     const catData = await Category.find({});
 
     const proData = await Product.find({ stock: { $gt: 0 } });
@@ -448,7 +451,7 @@ const loadHome = async (req, res) => {
 
     // console.log(populate);
 
-    res.render("home", { catData, proData, brandData, newArrivals });
+    res.render("home", { catData, proData, brandData, newArrivals,cart,wish });
   } catch (error) {
     console.log(error.massage);
   }
@@ -468,6 +471,8 @@ const loadForgotOTP = async (req, res) => {
 
 const loadDash = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
     const userData = await User.findOne({ email: req.session.email });
     // console.log(userData._id);
 
@@ -475,7 +480,7 @@ const loadDash = async (req, res) => {
     // console.log(address)
 
     // console.log(user)
-    res.render("userProfile", { userData });
+    res.render("userProfile", { userData ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -483,6 +488,8 @@ const loadDash = async (req, res) => {
 
 const loadProduct = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
     const id = req.query.id;
     //  console.log(id,"heloooooooooooooooooooooooooooooooooooooooooooooo")
     const proData = await Product.findById({ _id: id });
@@ -491,7 +498,8 @@ const loadProduct = async (req, res) => {
     let discount;
     if(catgory.offer.discount){
       // console.log("CAT OFFFFFFFFFFFFFFFER");
-       discount=(proData.regularPrice* catgory.offer.discount)/100
+      let amount=(proData.regularPrice*catgory.offer.discount)/100
+       discount=proData.regularPrice-amount
       //  console.log("discount");
        console.log(discount);
     }
@@ -578,7 +586,9 @@ const loadProduct = async (req, res) => {
             ratingShow,
             reviews,
             allRatingData,
-            offer
+            offer,
+            cart,
+            wish
           });
         } else {
 
@@ -596,7 +606,9 @@ const loadProduct = async (req, res) => {
             ratingShow,
             reviews,
             allRatingData,
-            offer
+            offer,
+            cart,
+            wish
           });
         }
       } else {
@@ -605,7 +617,7 @@ const loadProduct = async (req, res) => {
         let ratingShow=false
         
     
-        res.render("product", { proData, fullData, cartData, user, findWish ,ratingShow,reviews,allRatingData,offer});
+        res.render("product", { proData, fullData, cartData, user, findWish ,ratingShow,reviews,allRatingData,offer,cart,wish});
       }
     } else {
       res.redirect("/404");
@@ -680,7 +692,9 @@ const resendOtp = async (req, res) => {
 
 const loadAddaddress = async (req, res) => {
   try {
-    res.render("addAddress");
+    const cart=req.session.cart
+    const wish=req.session.wish
+    res.render("addAddress",{cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -744,6 +758,8 @@ const deletAddress = async (req, res) => {
 
 const loadEditAddress = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
     const id = req.query.id;
 
     const DataAddre = await Adderss.findById({ _id: id });
@@ -751,7 +767,7 @@ const loadEditAddress = async (req, res) => {
     req.session.address = DataAddre;
     // console.log(DataAddre);
 
-    res.render("editAddress", { DataAddre });
+    res.render("editAddress", { DataAddre,cart,wish });
   } catch (error) {
     console.log(error.message);
   }
@@ -816,6 +832,9 @@ const editAddress = async (req, res) => {
 
 const loadOrder = async (req, res) => {
   try {
+    
+    const cart=req.session.cart
+    const wish=req.session.wish
     const userData = await User.findOne({ email: req.session.email });
 
     const orderData = await Order.find({ userId: userData._id }).sort({
@@ -824,7 +843,7 @@ const loadOrder = async (req, res) => {
 
     // console.log(orderData)
 
-    res.render("Order", { orderData });
+    res.render("Order", { orderData ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -832,13 +851,20 @@ const loadOrder = async (req, res) => {
 
 const loadTrack = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
+
+    console.log("WALTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTET");
     const userData = await User.findOne({ email: req.session.email });
     const userWallet = await Wallet.findOne({ userId: userData._id })
-      .sort({ date: 1 })
-      .limit(5);  
+      
+
+    console.log(userWallet)
+      
+
     // console.log(userWallet);
 
-    res.render("wallet", { userWallet });
+    res.render("wallet", { userWallet ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -847,10 +873,12 @@ const loadTrack = async (req, res) => {
 const loadAddress = async (req, res) => {
   try {
     // console.log("hello");
+    const cart=req.session.cart
+    const wish=req.session.wish
     console.log(req.session.email);
     const address = await Adderss.find({ userId: req.session.userId });
     // console.log(address);
-    res.render("adderss", { address });
+    res.render("adderss", { address ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -858,7 +886,9 @@ const loadAddress = async (req, res) => {
 
 const loadChangePass = async (req, res) => {
   try {
-    res.render("changePassword");
+    const cart=req.session.cart
+    const wish=req.session.wish
+    res.render("changePassword",{cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -866,9 +896,11 @@ const loadChangePass = async (req, res) => {
 
 const loadAccount = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
     const findUser = await User.findOne({ email: req.session.email });
 
-    res.render("accountDetalis", { findUser });
+    res.render("accountDetalis", { findUser ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -913,10 +945,12 @@ const changePass = async (req, res) => {
 
 const loadEditAccount = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
     // console.log("hello" + req.session.email);
     const userData = await User.findOne({ email: req.session.email });
-
-    res.render("Editaccount", { userData });
+  
+    res.render("Editaccount", { userData ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -950,68 +984,71 @@ const editAccount = async (req, res) => {
 
 const loadShop = async (req, res) => {
   try {
+    const cart=req.session.cart
+    const wish=req.session.wish
+
     const sort = req.query.sort;
     const rating=req.query.rating
     // console.log(sort);
 
     let newNum=1
     let previous=false;
-    
+
     if (sort == "lowToHigh") {
      
-      const proData = await Product.find({}).sort({ offerPrice: 1 }).limit(6);
+      const proData = await Product.find({}).sort({ regularPrice: 1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     } else if (sort == "highToLow") {
-      const proData = await Product.find({}).sort({ offerPrice: -1 }).limit(6);
+      const proData = await Product.find({}).sort({ regularPrice: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     } else if (sort == "aA-zZ") {
       const proData = await Product.find({}).sort({ name: 1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     } else if (sort == "zZ-aA") {
       const proData = await Product.find({}).sort({ name: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     }else if(rating==100){
       const proData = await Product.find({rating:100}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     }else if(rating==80){
       const proData = await Product.find({rating:80}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     }else if(rating==60){
       const proData = await Product.find({rating:60}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     }else if(rating==40){
       const proData = await Product.find({rating:40}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     }else if(rating==20){
       const proData = await Product.find({rating:20}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
     }
 
     const proData = await Product.find({}).limit(6);
@@ -1019,7 +1056,7 @@ const loadShop = async (req, res) => {
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
    
-    res.render("shop", { proData, catData, newPro, brandData ,newNum,previous});
+    res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
   } catch (error) {
     console.log(error.message);
   }
@@ -1029,6 +1066,8 @@ const loadCoupon = async (req, res) => {
   try {
     const findUser = await User.findOne({ email: req.session.email });
 
+    const cart=req.session.cart
+    const wish=req.session.wish
     
 
     const CouponDataArray = await Coupon.find({
@@ -1042,7 +1081,7 @@ const loadCoupon = async (req, res) => {
 
     // console.log(readeemCoupon);
 
-    res.render("coupon", { CouponDataArray, readeemCoupon });
+    res.render("coupon", { CouponDataArray, readeemCoupon ,cart,wish});
   } catch (error) {
     console.log(error.message);
   }

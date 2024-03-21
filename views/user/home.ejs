@@ -89,13 +89,13 @@
                             <div class="header-action-icon-2">
                                 <a href="/wishlist">
                                     <img class="svgInject" alt="wowy" src="/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">4</span>
+                                    <span class="pro-count blue"><%= wish %></span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="/cart">
                                     <img alt="wowy" src="/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue">2</span>
+                                    <span class="pro-count blue"><%= cart %></span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -743,7 +743,10 @@
                                                 
                                                 <% if (proData[i].offerPrice) { %>
                                                     <% var percentage=(proData[i].regularPrice-proData[i].offerPrice)/proData[i].regularPrice*100 %>
-                                                    <div class="rating-result" title="90%">
+                                                    <div  >
+                                                        <div class="product-rate">
+                                                            <div class="product-rating" style="width:<%=proData[i].rating%>%"></div>
+                                                        </div>
                                                         <span>
                                                             <span>
                                                                 <%= percentage.toFixed(0) %>%
@@ -756,10 +759,13 @@
                                                     </div>
                                                  
                                                 <% }else{ %>
-                                                    <div class="rating-result" title="90%">
+                                                    <div  >
+                                                        <div class="product-rate">
+                                                            <div class="product-rating" style="width:<%=proData[i].rating%>%"></div>
+                                                        </div>
                                                         <span>
                                                             <span>
-                                                               0%
+                                                                0%
                                                             </span>
                                                         </span>
                                                     </div>
@@ -836,8 +842,12 @@
                                 </div>
                                 <div class="product-content-wrap">
                                     <h2 class="title text-truncate"><a href="/showproduct?id=<%= newArrivals[i]._id %>"><%= newArrivals[i].name %></a></h2>
-                                    <div class="rating-result" title="90%">
+                                    <div  >
+                                        <div class="product-rate">
+                                            <div class="product-rating" style="width:<%=newArrivals[i].rating%>%"></div>
+                                        </div>
                                         <span>
+                                           
                                         </span>
                                     </div>
                                     <% if (newArrivals[i].offerPrice) { %>
