@@ -88,6 +88,7 @@ user_router.get('/',userController.loadLanding)
 
 
 .get("/shop",count,userController.loadShop)
+
  
   .get("/next-page",count,shopController.nextPage)
   .get("/previous-page",count,shopController.previousPage)
@@ -100,7 +101,8 @@ user_router.get('/',userController.loadLanding)
 
 .post("/search",shopController.searchProducts)
 
-.get("/catagory/next-page",shopController.categoryNextpage)
+.get("/catgoryNext-page",shopController.categoryNextpage)
+.get("/catagoryPrevious",shopController.categoryPreviousPage)
 
 
 

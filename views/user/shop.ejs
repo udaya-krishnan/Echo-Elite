@@ -181,7 +181,7 @@
 
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="/wishlist">
                                     <img class="svgInject" alt="wowy" src="/assets/imgs/theme/icons/icon-heart.svg">
                                     <span class="pro-count blue"><%= wish %></span>
                                 </a>
@@ -821,8 +821,11 @@
                                      <% } %>
                                   
                                     <li class="page-item active"><a class="page-link" id="pageNumber"><%=newNum%></a></li>
-                                    <li class="page-item"><a class="page-link" href="/next-page?page=<%=newNum%>"><i
-                                                class="fa fa-angle-right"></i> </a></li>
+                                    <% if(nextPage){ %>
+                                        <li class="page-item"><a class="page-link" onclick="NextPage()" ><i
+                                            class="fa fa-angle-right"></i> </a></li>
+                                        <% } %>
+                                  
                                 </ul>
                             </nav>
                         </div>
@@ -1318,6 +1321,17 @@
             hideSearchResult();
             hideNoProductFound();
         }
+    }
+
+    function NextPage(){
+        const num=document.getElementById("pageNumber").innerHTML
+        $.ajax({
+            ulr:"/next-page",
+            method:"post",
+            data:{
+                num
+            }
+        })
     }
 
 

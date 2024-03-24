@@ -1000,63 +1000,122 @@ const loadShop = async (req, res) => {
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     } else if (sort == "highToLow") {
       const proData = await Product.find({}).sort({ regularPrice: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     } else if (sort == "aA-zZ") {
       const proData = await Product.find({}).sort({ name: 1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     } else if (sort == "zZ-aA") {
       const proData = await Product.find({}).sort({ name: -1 }).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     }else if(rating==100){
       const proData = await Product.find({rating:100}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     }else if(rating==80){
       const proData = await Product.find({rating:80}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     }else if(rating==60){
       const proData = await Product.find({rating:60}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     }else if(rating==40){
       const proData = await Product.find({rating:40}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     }else if(rating==20){
       const proData = await Product.find({rating:20}).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+      let nextPage;
+      if(proData.length>=6){
+        nextPage=true
+      }else{
+        nextPage=false
+      }
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     }
 
     const proData = await Product.find({}).limit(6);
     const catData = await Category.find({});
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
-   
-    res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish});
+    let nextPage;
+    if(proData.length>=6){
+      nextPage=true
+    }else{
+      nextPage=false
+    }
+    res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
   } catch (error) {
     console.log(error.message);
   }

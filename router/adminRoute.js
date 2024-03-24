@@ -20,12 +20,12 @@ const storage = multer.diskStorage({
 const proStorage = multer.diskStorage({
   
   destination: function (req, file, cb) {
-    console.log("hello");
+    // console.log("hello");
     // console.log(file)
     cb(null, path.join(__dirname, "../public/productImages")); 
   },
   filename: function (req, file, cb) {
-    console.log("hai");
+    // console.log("hai");
     // console.log(file.originalname)
     cb(null, file.originalname);
   },

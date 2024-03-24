@@ -29,7 +29,7 @@ const addBrand=async(req,res)=>{
       if(!unique){
         const brand=new Brand({
             name:newName,
-            image:req.file.filename
+            image:req.file.filename 
          })
       const brandData= await brand.save()
       res.redirect("/admin/brand")

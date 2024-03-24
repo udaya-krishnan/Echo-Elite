@@ -140,12 +140,7 @@ const editPro = async (req, res) => {
 
 
 
-const imagDelete = async (req, res) => {
-  try {
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+
 
 const blockPro = async (req, res) => {
   try {

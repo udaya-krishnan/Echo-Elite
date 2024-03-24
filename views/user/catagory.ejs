@@ -379,13 +379,13 @@
                     <div class="header-action-right d-block d-lg-none">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="/wishlist">
                                     <img alt="wowy" src="/assets/imgs/theme/icons/icon-heart-white.svg">
                                     <span class="pro-count white">4</span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="shop-cart.html">
+                                <a class="mini-cart-icon" href="/cart">
                                     <img alt="wowy" src="/assets/imgs/theme/icons/icon-cart-white.svg">
                                     <span class="pro-count white">02</span>
                                 </a>
@@ -757,11 +757,11 @@
                                                                 <div class="product-rate">
                                                                     <div class="product-rating" style="width:<%=proData[i].rating%>%"></div>
                                                                 </div>
-                                                                <!-- <span>
                                                                 <span>
-                                                                   
+                                                                <span>
+                                                                   0%
                                                                 </span>
-                                                            </span> -->
+                                                            </span>
                                                             </div>
                                                             <div class="product-price">
                                                                 <!-- <span id="offerPrice">₹</span> -->
@@ -810,12 +810,16 @@
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-start">
                                     <% if (previous) { %>
-                                        <li class="page-item"><a class="page-link" href="/catagory/previous?id=<%=findCat._id%>&page=<%=newNum%>"><i
+                                        <li class="page-item"><a class="page-link" href="/catagoryPrevious?id=<%=findCat._id%>&page=<%=newNum%>"><i
                                             class="fa fa-angle-left"></i> </a></li>
                                     <% } %>
                                     <li class="page-item active"><a class="page-link" id="pageNumber">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="/catagory/next-page?id=<%=findCat._id%>&page=<%=newNum%>"><i
-                                                class="fa fa-angle-right"></i> </a></li>
+                                    <% if (nextPage) { %>
+
+                                        <li class="page-item"><a class="page-link" href="/catgoryNext-page?id=<%=findCat._id%>&page=<%=newNum%>"><i
+                                            class="fa fa-angle-right"></i> </a></li>
+                                    <% } %>
+                                    
                                 </ul>
                             </nav>
                         </div>
