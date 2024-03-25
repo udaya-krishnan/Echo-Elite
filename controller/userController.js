@@ -1115,6 +1115,7 @@ const loadShop = async (req, res) => {
     }else{
       nextPage=false
     }
+    
     res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
   } catch (error) {
     console.log(error.message);

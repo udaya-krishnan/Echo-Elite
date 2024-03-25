@@ -684,12 +684,12 @@
                                             <span><i class="fa fa-sort-amount-down"></i>Sort by:</span>
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
-                                            <span> Featured <i class="far fa-angle-down"></i></span>
+                                            <span> All<i class="far fa-angle-down"></i></span>
                                         </div>
                                     </div>
                                     <div class="sort-by-dropdown">
                                         <ul>
-                                            <li><a class="active" href="#">Featured</a></li>
+                                            <li><a class="active" href="/shop">All</a></li>
                                             <li><a href="/shop?sort=lowToHigh">Price: Low to High</a></li>
                                             <li><a href="/shop?sort=highToLow">Price: High to Low</a></li>
                                             <li><a href="/shop?sort=aA-zZ">aA-zZ</a></li>
@@ -822,7 +822,7 @@
                                   
                                     <li class="page-item active"><a class="page-link" id="pageNumber"><%=newNum%></a></li>
                                     <% if(nextPage){ %>
-                                        <li class="page-item"><a class="page-link" onclick="NextPage()" ><i
+                                        <li class="page-item"><a class="page-link" href="/next-page?page=<%=newNum%>"><i
                                             class="fa fa-angle-right"></i> </a></li>
                                         <% } %>
                                   
@@ -1321,17 +1321,6 @@
             hideSearchResult();
             hideNoProductFound();
         }
-    }
-
-    function NextPage(){
-        const num=document.getElementById("pageNumber").innerHTML
-        $.ajax({
-            ulr:"/next-page",
-            method:"post",
-            data:{
-                num
-            }
-        })
     }
 
 
