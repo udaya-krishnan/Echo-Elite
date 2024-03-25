@@ -390,6 +390,7 @@ const addOrder = async (req, res) => {
       // console.log(" quantityyyyyyyyyyyyyyyyyy"+quantity)
   
       const orderNum = generateOrder.generateOrder();
+      const time=generateOrder.getCurrentTime()
       console.log(orderNum);
   
       const addressData = await Address.findOne({ _id: addressId });
@@ -412,7 +413,8 @@ const addOrder = async (req, res) => {
           status: "Processing",
           shippingAddress: addressData,
           coupon:findCoupon.couponCode,
-          discount:findCoupon.discount
+          discount:findCoupon.discount,
+          time:time
         });
     
         console.log(proData);
@@ -436,6 +438,7 @@ const addOrder = async (req, res) => {
           orderDate:date,
           status: "Processing",
           shippingAddress: addressData, 
+          time:time
         });
     
         console.log(proData);
@@ -474,6 +477,8 @@ const addOrder = async (req, res) => {
   
      
       const orderNum = generateOrder.generateOrder();
+      
+
       const stringOrder_id=orderNum.toString()
       console.log(orderNum);
       const addressData = await Address.findOne({ _id: addressId });

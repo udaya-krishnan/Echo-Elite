@@ -1,7 +1,12 @@
 const mongoose=require("mongoose")
 
 function connectDb(){
-    mongoose.connect("mongodb://localhost:27017/E-commerce")
+    // mongoose.connect("mongodb://localhost:27017/E-commerce")
+    const uri = "mongodb+srv://udayan:udayan2003@cluster0.wa6vfuy.mongodb.net/E-commmerce?retryWrites=true&w=majority&appName=Cluster0";
+    mongoose.connect(uri)
+    .then(()=>{ 
+        console.log("connect")
+    })
 }
 
 connectDb()

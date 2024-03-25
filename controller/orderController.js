@@ -448,7 +448,7 @@ const rezopayment = async (req, res) => {
     hmac = hmac.digest("hex");
 
     if (hmac == payment.razorpay_signature) {
-    
+      const time=generateOrder.getCurrentTime()
       const userData = await User.findOne({ email: req.session.email });
       const cartData = await Cart.findOne({ userId: userData._id });
 
@@ -497,7 +497,8 @@ const rezopayment = async (req, res) => {
           status: "Processing",
           shippingAddress: addressData,
           coupon:findCoupon.couponCode,
-          discount:findCoupon.discount
+          discount:findCoupon.discount,
+          time:time
         });
   
         orderData.save();
@@ -519,8 +520,9 @@ const rezopayment = async (req, res) => {
           totalAmount: amount,
           orderType: "Razorpay",
           orderDate: date,
-          status: "Processing",
+          status: "Processing", 
           shippingAddress: addressData,
+          time:time
         });
   
         orderData.save();

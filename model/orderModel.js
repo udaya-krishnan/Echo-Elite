@@ -97,6 +97,10 @@ const order_schema=new mongoose.Schema({
     },
     discount:{
         type:Number,
+    },
+    time:{
+        type:String,
+        require:true
     }
 
 },{versionKey:false,timestamps:true});
