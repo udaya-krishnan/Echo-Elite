@@ -1173,7 +1173,7 @@
                             document.getElementById('otpErr').style.display = 'none'
                         }, 1000)
                     } else if (response.status === true) {
-                        window.location.href = "http://localhost:2003/login"
+                        window.location.href = "/login"
                     }
                 }
             })
@@ -1186,7 +1186,7 @@
             method:"get",
             success:(response)=>{
                 if(response.status==true){
-                    window.location.href = "http://localhost:2003/otp"
+                    window.location.href = "/otp"
                 }
             }
             

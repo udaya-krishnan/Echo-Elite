@@ -1389,11 +1389,11 @@
                         showConfirmButton: false,
                         timer: 1500
                     }).then((result) => {
-                        window.location.href = "http://localhost:2003/cart"
+                        window.location.href = "/cart"
                     })
 
                 } else if (response.status == "viewCart") {
-                    window.location.href = "http://localhost:2003/cart"
+                    window.location.href = "/cart"
                 } else if (response.status == "login") {
 
                     Swal.fire({
