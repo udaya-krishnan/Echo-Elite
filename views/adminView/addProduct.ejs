@@ -489,7 +489,7 @@
             const col = document.getElementById("color").value.trim()
 
             if(name==''&&dis==''&&rp==''&&op==''&&st==''&&col==''){
-                window.location.href = "http://localhost:2003/admin/product"
+                window.location.href = "/admin/product"
             }else{
                 //  alert("h")
                  Swal.fire({
@@ -508,7 +508,7 @@
                             text: "Your filed has been removed.",
                             icon: "success"
                         }).then(()=>{
-                            window.location.href = "http://localhost:2003/admin/product"
+                            window.location.href = "/admin/product"
                         })
                     }
                 })

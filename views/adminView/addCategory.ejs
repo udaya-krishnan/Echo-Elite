@@ -300,7 +300,7 @@
                             }, 1500)
 
                         } else if (response.status === true) {
-                            window.location.href = "http://localhost:2003/admin/category"
+                            window.location.href = "/admin/category"
                         }
                     }
 
@@ -321,7 +321,7 @@
             const dis = document.getElementById("description").value.trim()
 
             if (name == '' && dis == '') {
-                window.location.href = "http://localhost:2003/admin/category"
+                window.location.href = "/admin/category"
             } else {
                 // alert("h")
                 Swal.fire({
@@ -340,7 +340,7 @@
                             text: "Your filed has been removed.",
                             icon: "success"
                         }).then(() => {
-                            window.location.href = "http://localhost:2003/admin/category"
+                            window.location.href = "/admin/category"
                         })
                     }
                 })
