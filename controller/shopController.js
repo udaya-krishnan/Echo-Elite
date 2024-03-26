@@ -90,7 +90,7 @@ const nextPage = async (req, res) => {
     console.log(typeof num);
     console.log(num)
 
-    const number = parseInt(num);
+    const number =parseInt(num);
     const skip = number * 6;
     console.log(skip);
 
@@ -110,7 +110,7 @@ const nextPage = async (req, res) => {
     }else{
       nextPage=false
     }
-    let newNum = parseInt(num) + 1;
+    let newNum = number+ 1;
 
     
     // res.json({status:true,page:newNum})
