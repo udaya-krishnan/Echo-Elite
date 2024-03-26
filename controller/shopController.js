@@ -82,7 +82,7 @@ const nextPage = async (req, res) => {
   try {
     const cart=req.session.cart
     const wish=req.session.wish
-    const num = req.query.page;
+    const num =req.query.page;
     // const sort=req.query.sort;
     console.log("NUMBER")
     console.log(num)

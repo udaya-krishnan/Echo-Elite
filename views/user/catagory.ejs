@@ -462,10 +462,10 @@
             </div>
             <div class="mobile-header-content-area">
                 <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="#">
-                        <input type="text" placeholder="Search…">
+                    <!-- <form action="#"> -->
+                        <input type="text" placeholder="Search…" onkeyup="SearchProduct()">
                         <button type="submit"> <i class="far fa-search"></i> </button>
-                    </form>
+                    <!-- </form> -->
                 </div>
                 <div class="mobile-menu-wrap mobile-header-border">
                     <div class="main-categori-wrap mobile-header-border">
@@ -1188,21 +1188,21 @@
     }
 
 
-    function key() {
-        const search = document.getElementById("search").value
-        $.ajax({
-            url: "/shop-search",
-            method: "post",
-            data: {
-                search
-            },
-            success: (response) => {
-                if (response.status == true) {
-                    document.getElementById("result").style.display = "block"
-                }
-            }
-        })
-    }
+    // function key() {
+    //     const search = document.getElementById("search").value
+    //     $.ajax({
+    //         url: "/shop-search",
+    //         method: "post",
+    //         data: {
+    //             search
+    //         },
+    //         success: (response) => {
+    //             if (response.status == true) {
+    //                 document.getElementById("result").style.display = "block"
+    //             }
+    //         }
+    //     })
+    // }
 
     function catagory(id) {
         window.location.href = `/catagory?id=${id}`
