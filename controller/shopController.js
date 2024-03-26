@@ -84,6 +84,7 @@ const nextPage = async (req, res) => {
     const wish=req.session.wish
     const num = req.query.page;
     // const sort=req.query.sort;
+    console.log("NUMBER")
     console.log(num)
     // console.log(sort)
     console.log(typeof num);
