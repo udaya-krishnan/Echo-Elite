@@ -997,16 +997,43 @@ const loadShop = async (req, res) => {
     const cart=req.session.cart
     const wish=req.session.wish
 
+    const page=req.query.next||0
+    const pre=req.query.pre||0
+    let number=0
+    if(page!=0){
+    
+      number=parseInt(page)
+    }else if(pre!=0){
+     
+      number=parseInt(pre)-2
+    }
+    console.log("PAGE",page)
+    
+    const skip=number*6
+    console.log("SKIP",skip)
     const sort = req.query.sort;
     const rating=req.query.rating
     // console.log(sort);
+ 
+      let newNum
+      let previous
+      if(skip==0){
+       
+        previous=false;
+         newNum=1
+        
+      }else{
+        
+        
+        previous=true
+        newNum=number+1
+      }
+      
 
-    let newNum=1
-    let previous=false;
 
     if (sort == "lowToHigh") {
      
-      const proData = await Product.find({}).sort({ regularPrice: 1 }).limit(6);
+      const proData = await Product.find({}).sort({ regularPrice: 1 }).skip(skip).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
@@ -1016,9 +1043,9 @@ const loadShop = async (req, res) => {
       }else{
         nextPage=false
       }
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage,sort});
     } else if (sort == "highToLow") {
-      const proData = await Product.find({}).sort({ regularPrice: -1 }).limit(6);
+      const proData = await Product.find({}).sort({ regularPrice: -1 }).skip(skip).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
@@ -1028,9 +1055,9 @@ const loadShop = async (req, res) => {
       }else{
         nextPage=false
       }
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage,sort});
     } else if (sort == "aA-zZ") {
-      const proData = await Product.find({}).sort({ name: 1 }).limit(6);
+      const proData = await Product.find({}).sort({ name: 1 }).skip(skip).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
@@ -1040,9 +1067,9 @@ const loadShop = async (req, res) => {
       }else{
         nextPage=false
       }
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage,sort});
     } else if (sort == "zZ-aA") {
-      const proData = await Product.find({}).sort({ name: -1 }).limit(6);
+      const proData = await Product.find({}).sort({ name: -1 }).skip(skip).limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({});
@@ -1052,7 +1079,7 @@ const loadShop = async (req, res) => {
       }else{
         nextPage=false
       }
-      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
+      res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage,sort});
     }else if(rating==100){
       const proData = await Product.find({rating:100}).limit(6);
       const catData = await Category.find({});
@@ -1115,7 +1142,7 @@ const loadShop = async (req, res) => {
       res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
     }
 
-    const proData = await Product.find({}).limit(6);
+    const proData = await Product.find({}).skip(skip).limit(6);
     const catData = await Category.find({});
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
