@@ -1139,10 +1139,13 @@ const loadCoupon = async (req, res) => {
     const cart=req.session.cart
     const wish=req.session.wish
     
+    const date=generateDate()
+    console.log(date)
 
     const CouponDataArray = await Coupon.find({
       users: { $nin: [findUser._id] },
-      // isActive: true
+      EndDate:{ $gte: date },
+      isActive:true
     });
 
     const readeemCoupon = await Coupon.find({
