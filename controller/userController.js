@@ -839,11 +839,15 @@ const loadOrder = async (req, res) => {
 
     const orderData = await Order.find({ userId: userData._id }).sort({
       _id: -1,
-    });
+    }).limit(7)
 
     // console.log(orderData)
 
-    res.render("Order", { orderData ,cart,wish});
+    let previous=false;
+    let nextPage=true;
+    let newNum=1;
+
+    res.render("Order", { orderData ,cart,wish,previous,nextPage,newNum});
   } catch (error) {
     console.log(error.message);
   }
@@ -1115,7 +1119,7 @@ const loadShop = async (req, res) => {
     }else{
       nextPage=false
     }
-    
+
     res.render("shop", { proData, catData, newPro, brandData ,newNum,previous,cart,wish,nextPage});
   } catch (error) {
     console.log(error.message);

@@ -136,6 +136,9 @@ user_router.get('/',userController.loadLanding)
   .post("/cancelReturn",userAuth.isBlocked,userAuth.islogin,orderController.cancelReturn)
 
 .post("/return",userAuth.isBlocked,userAuth.islogin,orderController.returnRequest)
+.get("/Ordernext-page",userAuth.isBlocked,userAuth.islogin,orderController.orderNextpage)
+.get("/Orderprevious-page",userAuth.isBlocked,userAuth.islogin,orderController.orderPreviousPage)
+
 
 
   //****************************************Wishlist*************88 */

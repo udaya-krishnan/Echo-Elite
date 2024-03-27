@@ -120,6 +120,8 @@ const nextPage = async (req, res) => {
   }
 };
 
+
+
 const categoryfilter = async (req, res) => {
   try {
     const id = req.query.id;
@@ -567,7 +569,6 @@ const categoryNextpage=async(req,res)=>{
       nextPage=false
     }
       
-
       const catData = await Category.find({is_blocked:false});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
       const brandData = await Brand.find({is_blocked:false});

@@ -787,6 +787,98 @@ const successPayment=async(req,res)=>{
   }
 }
 
+const orderNextpage=async(req,res)=>{
+  try {
+    const cart=req.session.cart
+    const wish=req.session.wish
+    const page=req.query.page
+    const num=parseInt(page)
+    const skip=num*7
+
+    const userData = await User.findOne({ email: req.session.email });
+
+
+    const orderData = await Order.find({ userId: userData._id }).skip(skip).
+    sort({
+      _id: -1,
+    }).limit(7)
+
+    // console.log(orderData)
+
+    let previous=true;
+    let nextPage=true;
+    let newNum=1+num;
+
+    if(orderData.length>=7){
+      nextPage=true
+    }else{
+      nextPage=false
+    }
+
+    res.render("Order", { orderData ,cart,wish,previous,nextPage,newNum});
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+const orderPreviousPage=async(req,res)=>{
+  try {
+    const cart=req.session.cart
+    const wish=req.session.wish
+    const page=req.query.page
+    const num=parseInt(page)-1
+    const skip=num*7
+
+    const userData = await User.findOne({ email: req.session.email });
+
+    if(num==1){
+      const orderData = await Order.find({ userId: userData._id }).
+    sort({
+      _id: -1,
+    }).limit(7)
+
+    let previous=false;
+    let nextPage=true;
+    let newNum=num;
+
+    
+    if(orderData.length>=7){
+      nextPage=true
+    }else{
+      nextPage=false
+    }
+    
+    res.render("Order", { orderData ,cart,wish,previous,nextPage,newNum});
+    }
+    const orderData = await Order.find({ userId: userData._id }).skip(skip).
+    sort({
+      _id: -1,
+    }).limit(7)
+    
+
+    // console.log(orderData)
+    
+    if(orderData.length>=7){
+      nextPage=true
+    }else{
+      nextPage=false
+    }
+
+    
+
+    
+    let previous=true;
+    let nextPage=true;
+    
+    res.render("Order", { orderData ,cart,wish,previous,nextPage,newNum});
+
+
+    
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 
 module.exports = {
   loadViewOrder,
@@ -802,5 +894,7 @@ module.exports = {
   addCash,
   paymentFaild,
   continuePayment,
-  successPayment
+  successPayment,
+  orderNextpage,
+  orderPreviousPage
 };
