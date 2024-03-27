@@ -82,16 +82,30 @@ const nextPage = async (req, res) => {
   try {
     const cart=req.session.cart
     const wish=req.session.wish
-    const num =req.query.page;
+   
+    const page=req.query.next||0
+    const pre=req.query.pre||0
+
+    let number=0
+    if(page!=0){
+    
+      number=parseInt(page)
+    }else if(pre!=0){
+     
+      number=parseInt(pre)-2
+    }
+    const skip=number*6
+
+
     // const sort=req.query.sort;
     console.log("NUMBER")
-    console.log(num)
-    // console.log(sort)
-    console.log(typeof num);
-    console.log(num)
+    // console.log(num)
+    // // console.log(sort)
+    // console.log(typeof num);
+    // console.log(num)
 
-    const number =parseInt(num);
-    const skip = number * 6;
+    // const number =parseInt(num);
+    // const skip = number * 6;
     console.log(skip);
 
     const proData = await Product.find({ is_blocked: false })
@@ -128,19 +142,44 @@ const categoryfilter = async (req, res) => {
     const sort = req.query.sort;
     const rating=req.query.rating
 
-    let newNum = 1
-    let previous=false
+    const page=req.query.next||0
+    const pre=req.query.pre||0
+
+    let number=0
+    if(page!=0){
+    
+      number=parseInt(page)
+    }else if(pre!=0){
+     
+      number=parseInt(pre)-2
+    }
+    const skip=number*6
+
+    console.log("SKippp",skip)
+
+   
+    let newNum
+      let previous
+      if(skip==0){
+       
+        previous=false;
+         newNum=1
+        
+      }else{
+        previous=true
+        newNum=number+1
+      }
 
     // console.log(id);
     // console.log(sort);
 
     if (sort == "lowToHigh") {
-      const findCat = await Category.findById({ _id: id });
+      const findCat = await Category.findById({ _id: id })
       const proData = await Product.find({
         category: findCat._id,
         is_blocked: false,
       })
-        .sort({ regularPrice: 1 })
+        .sort({ regularPrice: 1 }).skip(skip)
         .limit(6);
       const catData = await Category.find({ is_blocked: false });
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
@@ -151,14 +190,14 @@ const categoryfilter = async (req, res) => {
       }else{
         nextPage=false
       }
-      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous,nextPage});
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous,nextPage,sort});
     } else if (sort == "highToLow") {
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({
         category: findCat._id,
         is_blocked: false,
       })
-        .sort({ regularPrice: -1 })
+        .sort({ regularPrice: -1 }).skip(skip)
         .limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
@@ -169,14 +208,14 @@ const categoryfilter = async (req, res) => {
       }else{
         nextPage=false
       }
-      res.render("catagory", { proData, catData, newPro, brandData, findCat,newNum,previous,nextPage });
+      res.render("catagory", { proData, catData, newPro, brandData, findCat,newNum,previous,nextPage ,sort});
     } else if (sort == "aA-zZ") {
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({
         category: findCat._id,
         is_blocked: false,
       })
-        .sort({ name: 1 })
+        .sort({ name: 1 }).skip(skip)
         .limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
@@ -188,11 +227,11 @@ const categoryfilter = async (req, res) => {
         nextPage=false
       }
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous,nextPage});
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous,nextPage,sort});
     } else if (sort == "zZ-aA") {
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({ category: findCat._id, is_blocked: false, })
-        .sort({ name: -1 })
+        .sort({ name: -1 }).skip(skip)
         .limit(6);
       const catData = await Category.find({});
       const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
@@ -204,7 +243,7 @@ const categoryfilter = async (req, res) => {
         nextPage=false
       }
 
-      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous,nextPage});
+      res.render("catagory", { proData, catData, newPro, brandData, findCat ,newNum,previous,nextPage,sort});
     } else if(rating==100) {
       const findCat = await Category.findById({ _id: id });
       const proData = await Product.find({ category: findCat._id, is_blocked: false, rating:100 })
@@ -293,7 +332,7 @@ const categoryfilter = async (req, res) => {
     const proData = await Product.find({
       category: findCat._id,
       is_blocked: false,
-    }).limit(6);
+    }).skip(skip).limit(6);
     const catData = await Category.find({ is_blocked: false });
     const newPro = await Product.find({}).sort({ _id: -1 }).limit(3);
     const brandData = await Brand.find({});
@@ -304,7 +343,7 @@ const categoryfilter = async (req, res) => {
       nextPage=false
     }
 
-    res.render("catagory", { proData, catData, newPro, brandData, findCat,newNum,previous ,nextPage});
+    res.render("catagory", { proData, catData, newPro, brandData, findCat,newNum,previous ,nextPage,sort});
   } catch (error) {
     console.log(error.message);
   }
