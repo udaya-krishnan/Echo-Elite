@@ -847,7 +847,11 @@ const loadOrder = async (req, res) => {
     let nextPage=true;
     let newNum=1;
 
-    console.log(previous)
+    console.log(previous,'This is prvieus')
+    console.log(nextPage,'This is previous')
+    console.log(previous,'This is prvieus')
+
+
 
     res.render("Order", { orderData ,cart,wish,previous,nextPage,newNum});
   } catch (error) {
