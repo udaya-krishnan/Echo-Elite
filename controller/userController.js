@@ -885,9 +885,10 @@ const loadAddress = async (req, res) => {
     // console.log("hello");
     const cart=req.session.cart
     const wish=req.session.wish
+
     console.log(req.session.email);
     const address = await Adderss.find({ userId: req.session.userId });
-    // console.log(address);
+    console.log(address);
     res.render("adderss", { address ,cart,wish});
   } catch (error) {
     console.log(error.message);

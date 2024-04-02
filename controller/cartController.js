@@ -154,6 +154,32 @@ const loadCartpage = async (req, res) => {
 
     // cartData.total=sum
     // cartData.save()
+
+  //  console.log(proData)
+
+   for(let i=0;i<proData.length;i++){
+    if((proData[i].offerPrice*cartData.items[i].quantity)!==cartData.items[i].subTotal){
+      cartData.items[i].subTotal=proData[i].offerPrice*cartData.items[i].quantity;
+     await cartData.save()
+    }
+   }
+   let sub=[]
+
+   for(let i=0;i<cartData.items.length;i++){
+    sub.push(cartData.items[i].subTotal)
+   }
+   let total
+   if(sub.length>0){
+    total=sub.reduce((acc,curr)=>acc+curr)
+   }else{
+    total=0
+   }
+  
+
+   cartData.total=total;
+   await cartData.save()
+
+
     }
     console.log("cartDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+cartData)
     console.log("prrrrrrrrrrrrrrroDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+proData)
@@ -217,6 +243,7 @@ const decrement = async (req, res) => {
     const quantity = parseInt(qty);
 
     if (quantity > 1) {
+      console.log("decrement")
       const addPrice = await Cart.findOneAndUpdate(
         { userId: req.session.userId, "items.productsId": proIdString },
         {

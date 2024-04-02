@@ -91,13 +91,17 @@
                             <div class="header-action-icon-2">
                                 <a href="/wishlist">
                                     <img class="svgInject" alt="wowy" src="/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue"><%= wish %></span>
+                                    <span class="pro-count blue">
+                                        <%= wish %>
+                                    </span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="/cart">
                                     <img alt="wowy" src="/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue"><%= cart %></span>
+                                    <span class="pro-count blue">
+                                        <%= cart %>
+                                    </span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -600,43 +604,71 @@
                             <div class="col-md-8" style="display: flex;">
                                 <div style="justify-content: space-between; align-items: flex-start; height: 100vh;">
                                     <div style="display: flex; flex-wrap: wrap;">
-                                        <% if (CouponDataArray.length > 0) { %>
-                                            <% for(let i = 0; i < CouponDataArray.length; i++) { %>
+                                        <% if (CouponDataArray.length> 0) { %>
+                                            <% for(let i=0; i < CouponDataArray.length; i++) { %>
                                                 <% if (CouponDataArray[i].isActive==true) { %>
-                            
-                                                    <div style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; background-color: #f9f9f9; color: #333; margin-bottom: 20px; flex: 0 0 calc(50% - 20px);">
-                                                        <h2 style="margin-bottom: 10px;"><%= CouponDataArray[i].name %>!</h2>
-                                                        <p>Get <span style="color: #16e643; font-weight: bold;" id="code"><%= CouponDataArray[i].discount %>% OFF</span> on your next purchase</p>
-                                                        <p>Use coupon code: <span id="couponCode" style="font-size: 1.2em; background-color: #6175e9; color: #fff; padding: 5px 9px; border-radius: 5px; margin: 5px;"><%= CouponDataArray[i].couponCode %></span><i class="fa-regular fa-copy" onclick="copyText()" style="cursor: pointer; margin-left: 5px;"></i></p>
-                                                        <p style="margin-top: 10px;">Valid until: <span style="color: #666;"><%= CouponDataArray[i].EndDate %></span></p>
+
+                                                    <div
+                                                        style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; background-color: #f9f9f9; color: #333; margin-bottom: 20px; flex: 0 0 calc(50% - 20px);">
+                                                        <h2 style="margin-bottom: 10px;">
+                                                            <%= CouponDataArray[i].name %>!
+                                                        </h2>
+                                                        <p>Get <span style="color: #16e643; font-weight: bold;"
+                                                                id="code">
+                                                                <%= CouponDataArray[i].discount %>% OFF
+                                                            </span> on your next purchase</p>
+                                                        <p>Use coupon code: <span id="couponCode<%=i%>"
+                                                                style="font-size: 1.2em; background-color: #6175e9; color: #fff; padding: 5px 9px; border-radius: 5px; margin: 5px;">
+                                                                <%= CouponDataArray[i].couponCode %>
+                                                            </span><i class="fa-regular fa-copy"
+                                                                onclick="copyText('<%=i%>')"
+                                                                style="cursor: pointer; margin-left: 5px;"></i></p>
+                                                        <p style="margin-top: 10px;">Valid until: <span
+                                                                style="color: #666;">
+                                                                <%= CouponDataArray[i].EndDate %>
+                                                            </span></p>
                                                     </div>
-                                                <% } %>
-                                                
-                                            <% } %>
-                                        <% }  %>
-                                        
-                                        <% if (readeemCoupon.length > 0) { %>
-                                            <% for(let i = 0; i < readeemCoupon.length; i++) { %>
-                                                <div style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; background-color: #f9f9f9; color: #333; margin-bottom: 20px; flex: 0 0 calc(50% - 20px);">
-                                                    <h2 style="font-size: 1.5em; margin-bottom: 10px;">Redeemed Coupon</h2>
-                                                    <p>Offer: <span style="color: #16e643; font-weight: bold;"><%= readeemCoupon[i].discount %>% OFF</span></p>
-                                                    <p>Coupon Code: <span style="font-size: 1.2em; background-color: #0026ff; color: #fff; padding: 5px 10px; border-radius: 5px; margin: 5px;"><%= readeemCoupon[i].couponCode %></span></p>
-                                                    <p style="margin-top: 10px;">Valid until: <span style="color: #666;"><%= readeemCoupon[i].EndDate %></span></p>
-                                                </div>
-                                            <% } %>
-                                        <% } %>
+                                                    <% } %>
+
+                                                        <% } %>
+                                                            <% } %>
+
+                                                                <% if (readeemCoupon.length> 0) { %>
+                                                                    <% for(let i=0; i < readeemCoupon.length; i++) { %>
+                                                                        <div
+                                                                            style="border: 2px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px; background-color: #f9f9f9; color: #333; margin-bottom: 20px; flex: 0 0 calc(50% - 20px);">
+                                                                            <h2
+                                                                                style="font-size: 1.5em; margin-bottom: 10px;">
+                                                                                Redeemed Coupon</h2>
+                                                                            <p>Offer: <span
+                                                                                    style="color: #16e643; font-weight: bold;">
+                                                                                    <%= readeemCoupon[i].discount %>%
+                                                                                        OFF
+                                                                                </span></p>
+                                                                            <p>Coupon Code: <span
+                                                                                    style="font-size: 1.2em; background-color: #0026ff; color: #fff; padding: 5px 10px; border-radius: 5px; margin: 5px;">
+                                                                                    <%= readeemCoupon[i].couponCode %>
+                                                                                </span></p>
+                                                                            <p style="margin-top: 10px;">Valid until:
+                                                                                <span style="color: #666;">
+                                                                                    <%= readeemCoupon[i].EndDate %>
+                                                                                </span>
+                                                                            </p>
+                                                                        </div>
+                                                                        <% } %>
+                                                                            <% } %>
                                     </div>
-                                  
+
                                 </div>
                             </div>
-                            
-                            
 
-                            
-                                
-                           
 
-                            
+
+
+
+
+
+
                         </div>
                     </div>
                 </div>
@@ -796,17 +828,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 <script>
-     function copyText() {
-        // alert("helllo")
-     const code =document.getElementById("couponCode").innerHTML
-     /* Copy text into clipboard */
-     navigator.clipboard.writeText
-         (code);
+    function copyText(index) {
+       
+        var couponCodeElement = document.getElementById('couponCode' + index);
+
         
-        
- }
+        var tempInput = document.createElement('input');
+        tempInput.value = couponCodeElement.innerText;
+        document.body.appendChild(tempInput);
+
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999); 
+
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+
+       
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "bottom",
+            showConfirmButton: false,
+            timer: 1000,
+           
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: "Coupon Copied"
+        })
+    }
 </script>
 
 </html>
