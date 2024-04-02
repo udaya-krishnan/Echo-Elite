@@ -154,9 +154,9 @@
                             <div class="mb-4">
                                 <input type="hidden" id="id" name="user_id" value="<%= findCoupon._id%>">
                                 <label for="product_title" class="form-label">Coupon Name</label>
-                                <input type="text" placeholder="Type here" id="name" class="form-control"
+                                <input type="text" placeholder="Type here" id="name" class="form-control" onblur="name()"
                                     onkeydown="return /[a-zA-Z\s]/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'"
-                                    onblur="name()" value="<%= findCoupon.name %>">
+                                    value="<%= findCoupon.name %>">
                                 <p id="nameErr" class="text-danger"></p>
                             </div>
                             <div class="row gx-3">
@@ -246,20 +246,25 @@
         const nameValue = document.getElementById("name").value
         const nameErr = document.getElementById("nameErr")
 
-        if (nameValue.trim() == "") {
+        if (nameValue.trim() === "") {
             nameErr.innerHTML = "Name is require"
         } else {
             nameErr.innerHTML = ""
         }
 
     }
+
     function endDate() {
         const endDate = document.getElementById("endDate").value
+        const startDate = document.getElementById("startDate").value
         const endDateErr = document.getElementById("endDateErr")
 
         if (endDate.trim() == "") {
             endDateErr.innerHTML = "End Date is require"
-        } else {
+        }else if(startDate>endDate){
+            endDateErr.innerHTML="End Date will be grater than startDate"
+        }
+         else {
             endDateErr.innerHTML = ""
         }
 
@@ -298,22 +303,30 @@
     }
     function maxCash() {
         const maximum = document.getElementById("maximum").value
+        const mini = document.getElementById("Minimum").value
         const maxAmountErr = document.getElementById("maxAmountErr")
 
         if (maximum.trim() == "") {
             maxAmountErr.innerHTML = "Maximum Amount is require"
-        } else {
+        }else if(parseInt(mini.trim())>parseInt(maximum.trim())){
+            maxAmountErr.innerHTML="Maximum amount will be greter than minimum amount"
+        }
+         else {
             maxAmountErr.innerHTML = ""
         }
 
     }
     function minCash() {
         const maximum = document.getElementById("Minimum").value
+        const max = document.getElementById("maximum").value
         const minAmountErr = document.getElementById("minAmountErr")
 
         if (maximum.trim() == "") {
             minAmountErr.innerHTML = "Maximum Amount is require"
-        } else {
+        }else if(parseInt(maximum.trim())>parseInt(max.trim())){
+            minAmountErr.innerHTML="Maximum amount will be greter than minimum amount"
+        }
+         else {
             minAmountErr.innerHTML = ""
         }
 
@@ -324,7 +337,10 @@
 
         if (discount.trim() == "") {
             disErr.innerHTML = "Discount is require"
-        } else {
+        }else if(parseInt(discount.trim())<1||parseInt(discount.trim())>99){
+            disErr.innerHTML="Discount must be 1 to 99 % "
+        }
+         else {
             disErr.innerHTML = ""
         }
 
