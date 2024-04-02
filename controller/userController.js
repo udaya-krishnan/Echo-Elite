@@ -301,7 +301,7 @@ const loadLogin = async (req, res) => {
 
 const verifylogin = async (req, res) => {
   try {
-    const email = req.body.email;
+    const email = req.body.email;   
     const password = req.body.password;
 
     const userData = await User.findOne({ email: email });
@@ -309,7 +309,7 @@ const verifylogin = async (req, res) => {
     if (userData) {
       console.log("inside the null");
       if (userData.is_blocked == false) {
-        req.session.email = email;
+        req.session.email = email;   
         console.log("verify");
         const passwordMatch = await bcrypt.compare(password, userData.password);
         console.log("passwordMatched");
@@ -885,9 +885,10 @@ const loadAddress = async (req, res) => {
     // console.log("hello");
     const cart=req.session.cart
     const wish=req.session.wish
+
     console.log(req.session.email);
     const address = await Adderss.find({ userId: req.session.userId });
-    // console.log(address);
+    console.log(address);
     res.render("adderss", { address ,cart,wish});
   } catch (error) {
     console.log(error.message);
@@ -1171,7 +1172,7 @@ const loadCoupon = async (req, res) => {
 
     const CouponDataArray = await Coupon.find({
       users: { $nin: [findUser._id] },
-      EndDate:{ $gte: date },
+
       isActive:true
     });
 

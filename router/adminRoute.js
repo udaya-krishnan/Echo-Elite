@@ -92,7 +92,6 @@ admin_route.get("/edit-pro", isAdmin, productControle.loadEdit);
 admin_route.post(
   "/edit-pro",
   isAdmin,
-  proUpload.array("proImage", 5),
   productControle.editPro
 );
 

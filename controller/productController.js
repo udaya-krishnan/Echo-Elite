@@ -76,37 +76,38 @@ const loadEdit = async (req, res) => {
 
 const editPro = async (req, res) => {
   try {
+    
     const id = req.body.id;
 
 
     console.log(id);
-    if (req.files.length > 0) {
+    // if (req.files.length > 0) {
 
-      const catData=await Category.findOne({name:req.body.catName})
+      // const catData=await Category.findOne({name:req.body.catName})
  
-        // console.log(req.files,"ffffffffffffffffffffffffffffffffffffffff")
-      const imageName    = req.files.map((x) => x.originalname);
-      const updatePro = await Product.findByIdAndUpdate(
-        { _id: id },
-        {
-          $set: {
-            name: req.body.product_name,
-            discripiton: req.body.product_dis,
-            regularPrice: req.body.regprice,
-            offerPrice: req.body.offprice,
-            stock: req.body.stock,
-            // offPercentage: req.body.off,
-            image: imageName,
-            category: catData._id,
-            brand: req.body.brandName,
-            color: req.body.color,
-          },
-        }
-      );
-      if (updatePro) {
-        res.redirect("/admin/product");
-      }
-    } else {
+      //   // console.log(req.files,"ffffffffffffffffffffffffffffffffffffffff")
+      // const imageName    = req.files.map((x) => x.originalname);
+      // const updatePro = await Product.findByIdAndUpdate(
+      //   { _id: id },
+      //   {
+      //     $set: {
+      //       name: req.body.product_name,
+      //       discripiton: req.body.product_dis,
+      //       regularPrice: req.body.regprice,
+      //       offerPrice: req.body.offprice,
+      //       stock: req.body.stock,
+      //       // offPercentage: req.body.off,
+      //       image: imageName,
+      //       category: catData._id,
+      //       brand: req.body.brandName,
+      //       color: req.body.color,
+      //     },
+      //   }
+      // );
+      // if (updatePro) {
+      //   res.redirect("/admin/product");
+      // }
+    // } else {
       console.log(req.body.catName+"catttttttttttttttttttttttttttttttt")
       const catData=await Category.findOne({name:req.body.catName})
       const updatePro = await Product.findByIdAndUpdate(
@@ -128,7 +129,7 @@ const editPro = async (req, res) => {
       if (updatePro) {
         res.redirect("/admin/product");
       }
-    }
+    // }
 
     //   console.log(imageName,"ffffffffffffffffffffffffffffffffffffffffff");
 

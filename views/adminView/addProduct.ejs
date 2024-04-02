@@ -321,11 +321,11 @@
             } else {
                 document.getElementById("nameErr").innerHTML = ""
             }
-            // if (!nameRegex.test(name)) {
-            //     document.getElementById("nameErr").innerHTML = "Invalid Name"
-            // } else {
-            //     document.getElementById("nameErr").innerHTML = ""
-            // }
+            if (!nameRegex.test(name)) {
+                document.getElementById("nameErr").innerHTML = "Invalid Name"
+            } else {
+                document.getElementById("nameErr").innerHTML = ""
+            }
         }
 
         function disFun() {

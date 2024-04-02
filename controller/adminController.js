@@ -59,7 +59,7 @@ const loadDash = async (req, res) => {
     for (let i = 0; i < order.length; i++) {
       var date = order[i].createdAt;
       // console.log(date + "dddddddddddddddddddddddddddddddddddddd");
-      const value = date.getDay();
+      const value = date.getDay()
       yValues[value] += order[i].totalAmount;
     }
 

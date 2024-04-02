@@ -253,12 +253,16 @@
 
     }
     function endDate() {
+        const startDate = document.getElementById("startDate").value
         const endDate = document.getElementById("endDate").value
         const endDateErr = document.getElementById("endDateErr")
 
         if (endDate.trim() == "") {
             endDateErr.innerHTML = "End Date is require"
-        } else {
+        }else if(startDate>endDate){
+            endDateErr.innerHTML="End Date will Be greter Than start Date"
+        }
+         else {
             endDateErr.innerHTML = ""
         }
 
@@ -297,22 +301,31 @@
     }
     function maxCash() {
         const maximum = document.getElementById("maximum").value
+        const mini=document.getElementById("Minimum").value
         const maxAmountErr = document.getElementById("maxAmountErr")
 
         if (maximum.trim() == "") {
             maxAmountErr.innerHTML = "Maximum Amount is require"
-        } else {
+        }else if(parseInt(mini.trim())>parseInt(maximum.trim())){
+            maxAmountErr.innerHTML="Maximum amount will be greter than minimum amount"
+        }
+         else {
             maxAmountErr.innerHTML = ""
         }
 
     }
     function minCash() {
         const maximum = document.getElementById("Minimum").value
+        const max = document.getElementById("maximum").value
+    
         const minAmountErr = document.getElementById("minAmountErr")
 
         if (maximum.trim() == "") {
             minAmountErr.innerHTML = "Maximum Amount is require"
-        } else {
+        }else if(parseInt(maximum.trim())>parseInt(max.trim())){
+            minAmountErr.innerHTML="Maximum amount will be greter than minimum amount"
+        }
+         else {
             minAmountErr.innerHTML = ""
         }
 
@@ -323,7 +336,10 @@
 
         if (discount.trim() == "") {
             disErr.innerHTML = "Discount is require"
-        } else {
+        }else if(parseInt(discount.trim())<1||parseInt(discount.trim())>99){
+            disErr.innerHTML="Discount must be 1 to 99 % "
+        }
+         else {
             disErr.innerHTML = ""
         }
 
