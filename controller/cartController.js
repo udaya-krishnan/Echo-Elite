@@ -4,21 +4,18 @@ const Product = require("../model/productModel");
 const Address = require("../model/addressModel");
 const Order = require("../model/orderModel");
 const generateOrder = require("../controller/otpGenrate");
-const generateDate=require("../controller/dateGenrator")
-const Razorpay=require("razorpay")
-const Wallet=require("../model/walletModel")
-const Coupon=require("../model/CouponModel")
+const generateDate = require("../controller/dateGenrator");
+const Razorpay = require("razorpay");
+const Wallet = require("../model/walletModel");
+const Coupon = require("../model/CouponModel");
 
-const key_id=process.env.RAZORPAYID
-const key_secret=process.env.RAZORPAYSECRET
+const key_id = process.env.RAZORPAYID;
+const key_secret = process.env.RAZORPAYSECRET;
 
-
-  var instance = new Razorpay({
-      key_id: key_id,
-      key_secret: key_secret,
-    });
-
-
+var instance = new Razorpay({
+  key_id: key_id,
+  key_secret: key_secret,
+});
 
 const loadCart = async (req, res) => {
   try {
@@ -34,22 +31,22 @@ const loadCart = async (req, res) => {
 
     // console.log(priceOFF);
 
-    if(req.session.email){
-    // console.log("inside session");
+    if (req.session.email) {
+      // console.log("inside session");
       const userData = await User.findOne({ email: req.session.email });
 
       const userCart = await Cart.findOne({ userId: userData._id });
-  
+
       if (userCart) {
-        let proCart=false
-        for(let i=0;i<userCart.items.length;i++){
-          if(id===userCart.items[i].productsId){
+        let proCart = false;
+        for (let i = 0; i < userCart.items.length; i++) {
+          if (id === userCart.items[i].productsId) {
             // console.log("trouuuuuuuuu")
-             proCart =true
-             break;
+            proCart = true;
+            break;
           }
-        } 
-        console.log("falssssssssssssssssss")
+        }
+        console.log("falssssssssssssssssss");
         // const proCart = await Cart.findOne({ userId:userData._id,"items.productsId": id });
         if (proCart) {
           res.json({ status: "viewCart" });
@@ -58,7 +55,7 @@ const loadCart = async (req, res) => {
             { userId: userData._id },
             {
               $push: {
-                items: { 
+                items: {
                   productsId: id,
                   subTotal: priceOFF,
                   quantity: 1,
@@ -82,19 +79,15 @@ const loadCart = async (req, res) => {
           ],
           total: priceOFF,
         });
-  
+
         const cart = carData.save();
       }
-  
+
       res.json({ status: true });
-
-    }else{
+    } else {
       // console.log("with out session")
-      res.json({status:"login"})
+      res.json({ status: "login" });
     }
-
-    
-   
   } catch (error) {
     console.log(error.message);
   }
@@ -103,8 +96,8 @@ const loadCart = async (req, res) => {
 const loadCartpage = async (req, res) => {
   try {
     const email = req.session.email;
-    const cart=req.session.cart
-    const wish=req.session.wish
+    const cart = req.session.cart;
+    const wish = req.session.wish;
     // const userData = req.
     const userData = await User.findOne({ email: email });
 
@@ -112,78 +105,51 @@ const loadCartpage = async (req, res) => {
     const proData = [];
 
     if (cartData) {
-
       const arr = [];
 
       for (let i = 0; i < cartData.items.length; i++) {
         arr.push(cartData.items[i].productsId.toString());
       }
       // console.log(arr);
-    
+
       for (let i = 0; i < arr.length; i++) {
         proData.push(await Product.findById({ _id: arr[i] }));
       }
 
-      // console.log(proData);
+      
 
-    //   for(let i=0;i<cartData.items.length;i++){
-    //     for(let j=0;j<proData.length;j++){
-    //       console.log("not WORKIN");
-    //       if(cartData.items[i].productsId.toString()==proData[j]._id.toString()){
-            
-    //       if(cartData.items[i].subTotal/cartData.items[i].quantity!=proData[j].offerPrice){
-    //         console.log("cart id       "+cartData.items[i].productsId)
-    //         console.log("product id                "+cartData.items[i].productsId)
-    //         const subTotal=proData[j].offerPrice*cartData.items[i].quantity
-    //         console.log("gduggggggggggggggg"+subTotal)
-    //         cartData.items[i].subTotal=subTotal
-    //       }
-    //     }
-    //     }
-    //   }
-     
-    // }
-    // let sum=0
+      
 
-    // for(let i=0;i<cartData.items.length;i++){
-    //   console.log(cartData.items[i].subTotal)
-    //   sum=sum+cartData.items[i].subTotal
-    // }
+      for (let i = 0; i < proData.length; i++) {
+        if (
+          proData[i].offerPrice * cartData.items[i].quantity !==
+          cartData.items[i].subTotal
+        ) {
+          cartData.items[i].subTotal =
+            proData[i].offerPrice * cartData.items[i].quantity;
+          await cartData.save();
+        }
+      }
+      let sub = [];
 
-    // console.log(sum)  
+      for (let i = 0; i < cartData.items.length; i++) {
+        sub.push(cartData.items[i].subTotal);
+      }
+      let total;
+      if (sub.length > 0) {
+        total = sub.reduce((acc, curr) => acc + curr);
+      } else {
+        total = 0;
+      }
 
-    // cartData.total=sum
-    // cartData.save()
-
-  //  console.log(proData)
-
-   for(let i=0;i<proData.length;i++){
-    if((proData[i].offerPrice*cartData.items[i].quantity)!==cartData.items[i].subTotal){
-      cartData.items[i].subTotal=proData[i].offerPrice*cartData.items[i].quantity;
-     await cartData.save()
+      cartData.total = total;
+      await cartData.save();
     }
-   }
-   let sub=[]
-
-   for(let i=0;i<cartData.items.length;i++){
-    sub.push(cartData.items[i].subTotal)
-   }
-   let total
-   if(sub.length>0){
-    total=sub.reduce((acc,curr)=>acc+curr)
-   }else{
-    total=0
-   }
-  
-
-   cartData.total=total;
-   await cartData.save()
-
-
-    }
-    console.log("cartDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+cartData)
-    console.log("prrrrrrrrrrrrrrroDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+proData)
-    res.render("cart", { proData, cartData ,cart,wish});
+    console.log("cartDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + cartData);
+    console.log(
+      "prrrrrrrrrrrrrrroDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + proData
+    );
+    res.render("cart", { proData, cartData, cart, wish });
 
     // console.log(cartData)
   } catch (error) {
@@ -243,7 +209,7 @@ const decrement = async (req, res) => {
     const quantity = parseInt(qty);
 
     if (quantity > 1) {
-      console.log("decrement")
+      console.log("decrement");
       const addPrice = await Cart.findOneAndUpdate(
         { userId: req.session.userId, "items.productsId": proIdString },
         {
@@ -283,7 +249,7 @@ const removeCart = async (req, res) => {
 
     res.json({ status: true, total: findPro.total });
     // console.log(id)
-  } catch (error) { 
+  } catch (error) {
     console.log(error.message);
   }
 };
@@ -295,24 +261,24 @@ const loadCheckOut = async (req, res) => {
     const cartData = await Cart.findOne({ userId: userData._id });
     const quantity = [];
     // console.log("acaaaafudfaiagdig"+cartData);
-    if(cartData.items.length==0){
+    if (cartData.items.length == 0) {
       // console.log("emptyyyyyyyyyyy")
-      res.json({status:"empty"})
-    }else{
+      res.json({ status: "empty" });
+    } else {
       for (let i = 0; i < cartData.items.length; i++) {
         quantity.push(cartData.items[i].quantity);
       }
-  
+
       const proId = [];
       for (let i = 0; i < cartData.items.length; i++) {
         proId.push(cartData.items[i].productsId);
       }
       const proData = [];
-  
+
       for (let i = 0; i < proId.length; i++) {
         proData.push(await Product.findById({ _id: proId[i] }));
       }
-  
+
       for (let i = 0; i < proData.length; i++) {
         for (let j = 0; j < quantity.length; j++) {
           if (proData[i].stock < quantity[i]) {
@@ -320,11 +286,9 @@ const loadCheckOut = async (req, res) => {
           }
         }
       }
-  
+
       res.json({ status: true });
     }
-
-    
   } catch (error) {
     console.log(error.message);
   }
@@ -332,8 +296,8 @@ const loadCheckOut = async (req, res) => {
 
 const loadCheckOutPage = async (req, res) => {
   try {
-    const cart=req.session.cart
-    const wish=req.session.wish
+    const cart = req.session.cart;
+    const wish = req.session.wish;
     const userData = await User.findOne({ email: req.session.email });
 
     const cartData = await Cart.findOne({ userId: userData._id });
@@ -356,132 +320,133 @@ const loadCheckOutPage = async (req, res) => {
 
     const address = await Address.find({ userId: userData._id });
 
+    const CouponDataArray = await Coupon.find({ isActive: true });
 
-    const CouponDataArray=await Coupon.find({isActive:true})
+    console.log(cartData);
 
-    console.log(cartData)
-
-    res.render("checkOut", { proData, cartItems, cartData, address ,CouponDataArray,wish,cart});
+    res.render("checkOut", {
+      proData,
+      cartItems,
+      cartData,
+      address,
+      CouponDataArray,
+      wish,
+      cart,
+    });
   } catch (error) {}
 };
 
 const addOrder = async (req, res) => {
   try {
-
     // console.log("inside aaaaaaaaaddddddddddOrder");
-    const { addressId, cartid, paymentOption,total,code } = req.body;
+    const { addressId, cartid, paymentOption, total, code } = req.body;
     // console.log(addressId)
     // console.log("inside aaaaaaaaaddddddddddOrder",paymentOption);
-    const findCoupon=await Coupon.findOne({couponCode:code})
+    const findCoupon = await Coupon.findOne({ couponCode: code });
 
-    if(!addressId||!paymentOption){
-
-      res.json({status:"fill"})
-
-    }else if(paymentOption=="Cash on Delivery"){
+    if (!addressId || !paymentOption) {
+      res.json({ status: "fill" });
+    } else if (paymentOption == "Cash on Delivery") {
       // console.log("inside eeeeeeelse aaaaaaaaaddddddddddOrder");
       const userData = await User.findOne({ email: req.session.email });
 
       const cartData = await Cart.findOne({ userId: userData._id });
-  
+
       const proData = [];
-  
+
       for (let i = 0; i < cartData.items.length; i++) {
         proData.push(cartData.items[i]);
       }
       console.log(proData);
-  
-    const quantity=[]
-  
-  
-      for(let i=0;i<proData.length;i++){
-        quantity.push(proData[i].quantity)
+
+      const quantity = [];
+
+      for (let i = 0; i < proData.length; i++) {
+        quantity.push(proData[i].quantity);
       }
-  
-      const proId=[]
-      
-      for(let i=0;i<proData.length;i++){
-        proId.push(proData[i].productsId)
+
+      const proId = [];
+
+      for (let i = 0; i < proData.length; i++) {
+        proId.push(proData[i].productsId);
       }
-  
-      for(let i=0;i<proId.length;i++){
-  
-        const product=await Product.findByIdAndUpdate({_id:proId[i]},
+
+      for (let i = 0; i < proId.length; i++) {
+        const product = await Product.findByIdAndUpdate(
+          { _id: proId[i] },
           {
-            $inc:{
-              stock:-quantity[i]
-            }
-          })
+            $inc: {
+              stock: -quantity[i],
+            },
+          }
+        );
       }
 
       // console.log(" quantityyyyyyyyyyyyyyyyyy"+quantity)
-  
+
       const orderNum = generateOrder.generateOrder();
-      const time=generateOrder.getCurrentTime()
+      const time = generateOrder.getCurrentTime();
       console.log(orderNum);
-  
+
       const addressData = await Address.findOne({ _id: addressId });
-  
+
       console.log(addressData);
-      const date=generateDate()
-      
-      console.log(findCoupon)
-      
-      if(findCoupon){
-        console.log("inside find coupon")
+      const date = generateDate();
+
+      console.log(findCoupon);
+
+      if (findCoupon) {
+        console.log("inside find coupon");
         const orderData = new Order({
           userId: userData._id,
-          userEmail:userData.email,
+          userEmail: userData.email,
           orderNumber: orderNum,
           items: proData,
           totalAmount: total,
           orderType: paymentOption,
-          orderDate:date,
+          orderDate: date,
           status: "Processing",
           shippingAddress: addressData,
-          coupon:findCoupon.couponCode,
-          discount:findCoupon.discount,
-          time:time
+          coupon: findCoupon.couponCode,
+          discount: findCoupon.discount,
+          time: time,
         });
-    
+
         console.log(proData);
-    
+
         orderData.save();
 
-        const updateCoupon=await Coupon.findByIdAndUpdate({_id:findCoupon._id},
+        const updateCoupon = await Coupon.findByIdAndUpdate(
+          { _id: findCoupon._id },
           {
-            $push:{
-              users:userData._id
-            }
-          })
-      }else{
+            $push: {
+              users: userData._id,
+            },
+          }
+        );
+      } else {
         const orderData = new Order({
           userId: userData._id,
-          userEmail:userData.email,
+          userEmail: userData.email,
           orderNumber: orderNum,
           items: proData,
           totalAmount: total,
           orderType: paymentOption,
-          orderDate:date,
+          orderDate: date,
           status: "Processing",
-          shippingAddress: addressData, 
-          time:time
+          shippingAddress: addressData,
+          time: time,
         });
-    
+
         console.log(proData);
-    
+
         orderData.save();
       }
-      
 
-    
-  
       res.json({ status: true });
-  
+
       const deleteCart = await Cart.findByIdAndDelete({ _id: cartData._id });
-
-    }else if(paymentOption=="Razorpay"){
-
+    } else if (paymentOption == "Razorpay") {
       const userData = await User.findOne({ email: req.session.email });
       const cartData = await Cart.findOne({ userId: userData._id });
 
@@ -490,54 +455,55 @@ const addOrder = async (req, res) => {
         proData.push(cartData.items[i]);
       }
       console.log(proData);
-      const quantity=[]
-      
-      for(let i=0;i<proData.length;i++){
-        quantity.push(proData[i].quantity)
-      }
-  
-      const proId=[]
-      
-      for(let i=0;i<proData.length;i++){
-        proId.push(proData[i].productsId)
-      }
-  
-     
-      const orderNum = generateOrder.generateOrder();
-      
+      const quantity = [];
 
-      const stringOrder_id=orderNum.toString()
+      for (let i = 0; i < proData.length; i++) {
+        quantity.push(proData[i].quantity);
+      }
+
+      const proId = [];
+
+      for (let i = 0; i < proData.length; i++) {
+        proId.push(proData[i].productsId);
+      }
+
+      const orderNum = generateOrder.generateOrder();
+
+      const stringOrder_id = orderNum.toString();
       console.log(orderNum);
       const addressData = await Address.findOne({ _id: addressId });
-      const date=generateDate()
-      console.log(typeof(total))
-     
-      var options={
-        amount:total*100,
-        currency:"INR",
-        receipt:stringOrder_id
-      }
+      const date = generateDate();
+      console.log(typeof total);
+
+      var options = {
+        amount: total * 100,
+        currency: "INR",
+        receipt: stringOrder_id,
+      };
       // console.log(typeof(total))
-      console.log(options)
- 
-      let amount=Number(total)
+      console.log(options);
+
+      let amount = Number(total);
       // let result=amount*10
-      console.log(amount+"aaaaaaaaaaaaaaaaaaaamountma")
-      instance.orders.create(options,async(error,razorpayOrder)=>{
-        if(!error){
-          console.log(razorpayOrder)
-          res.json({status:"rezorpay",order:razorpayOrder,address:addressId,orderNumber:orderNum,total:amount,code:code})
-        }else{
-          console.log(error.message)
+      console.log(amount + "aaaaaaaaaaaaaaaaaaaamountma");
+      instance.orders.create(options, async (error, razorpayOrder) => {
+        if (!error) {
+          console.log(razorpayOrder);
+          res.json({
+            status: "rezorpay",
+            order: razorpayOrder,
+            address: addressId,
+            orderNumber: orderNum,
+            total: amount,
+            code: code,
+          });
+        } else {
+          console.log(error.message);
         }
-      })
-
-
+      });
     }
 
     // console.log(addressId, cartid, checkedOption);
-
-   
   } catch (error) {
     console.log(error);
   }
