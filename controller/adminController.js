@@ -435,27 +435,18 @@ const dateFilter = async (req, res) => {
   try {
     const date = req.query.value;
     const date2 = req.query.value1;
-    console.log(date,"                 ",date2)
-    const parts = date.split("-");
-    const parts1=date2.split("-");
-    const day = parseInt(parts[2], 10);
-    const day1=parseInt(parts1[2], 10)
-
-    const month = parseInt(parts[1], 10);
-    const month1 =parseInt(parts1[1], 10);
-
-    const rotatedDate = day + "-" + month + "-" + parts[0];
-    const rotatedDate1 = day1 + "-" + month1 + "-" + parts1[0];
-
-
-    console.log(rotatedDate,"         ",rotatedDate1)
+   
+    const firstDate=new Date(date)
+    const secondDate=new Date(date2)
     // console.log(rotatedDate)
+
+    console.log(firstDate,'                            ',secondDate)
 
     const order = await Order.find({
       status: { $nin: ["Ordered", "Canceled", "Shipped"] },
-      orderDate:{
-        $gte:rotatedDate,
-        $lte:rotatedDate1 
+      createdAt:{
+        $gte:firstDate,
+        $lte:secondDate 
       }
     });
 
