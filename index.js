@@ -58,5 +58,7 @@ app.get("*",(req,res)=>{
 })
 console.log("hai server");
 app.listen(8081,`0.0.0.0`,()=>{
-    console.log("server Running ..")
+
+
+
 })  
