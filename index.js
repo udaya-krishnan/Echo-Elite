@@ -56,7 +56,7 @@ app.use('/admin',adminRoute)
 app.get("*",(req,res)=>{
     res.redirect("/404")
 })
-
+console.log("hai server");
 app.listen(8081,`0.0.0.0`,()=>{
-    console.log("server Running")
+    console.log("server Running ......")
 })  
