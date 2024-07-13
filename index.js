@@ -46,7 +46,7 @@ app.use(nocache())
 const  userRoute=require('./router/userRoute');
 
 app.use('/',userRoute)  
-
+       
 
 //****************************FOR ADMIN ROUTE ****************************/
 
