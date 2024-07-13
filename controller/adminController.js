@@ -216,6 +216,9 @@ order.forEach(order => {
     productQuantityMap.set(productId, (productQuantityMap.get(productId) || 0) + quantity);
   });
 });
+console.log("start");
+console.log(productQuantityMap)
+console.log("ende");
 
 // Convert the map to an array of objects
 const productQuantityArray = [...productQuantityMap.entries()].map(([productId, quantity]) => ({ productId, quantity }));

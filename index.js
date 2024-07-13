@@ -1,8 +1,10 @@
 const mongoose=require("mongoose")
 
+require('dotenv').config()
+
+const uri = "mongodb+srv://udayankrishnan36:M4olyzIijyjz0nRF@cluster0.o5mynnz.mongodb.net/udayankrishnan36?retryWrites=true&w=majority&appName=Cluster0"
 function connectDb(){
     // mongoose.connect("mongodb://localhost:27017/E-commerce")
-    const uri = "mongodb+srv://udayan:udayan2003@cluster0.wa6vfuy.mongodb.net/E-commmerce?retryWrites=true&w=majority&appName=Cluster0";
     mongoose.connect(uri)
     .then(()=>{ 
         console.log("connect")
@@ -11,7 +13,6 @@ function connectDb(){
 
 connectDb()
 
-require('dotenv').config()
 const session=require("express-session")
 const {v4:uuidv4}=require("uuid")
 const nocache=require("nocache")
@@ -20,6 +21,8 @@ const bodyParser=require('body-parser')
 
 const express=require("express")
 const app=express();
+
+console.log("hello")
 
 const path=require("path");
 
@@ -42,7 +45,7 @@ app.use(nocache())
 
 const  userRoute=require('./router/userRoute');
 
-app.use('/',userRoute)
+app.use('/',userRoute)  
 
 
 //****************************FOR ADMIN ROUTE ****************************/
@@ -54,6 +57,6 @@ app.get("*",(req,res)=>{
     res.redirect("/404")
 })
 
-app.listen(2003,()=>{
+app.listen(8081,`0.0.0.0`,()=>{
     console.log("server Running")
 })  
