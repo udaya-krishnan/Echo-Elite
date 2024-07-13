@@ -9,13 +9,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: |
+        rm -rf node_modules package-lock.json
         npm install
-        # Ensure all modules are installed correctly
-        if [ ! -f ./node_modules/mongoose/lib/helpers/populate/setPopulatedVirtualValue.js ]; then
-          echo "setPopulatedVirtualValue.js not found, reinstalling mongoose"
-          npm uninstall mongoose
-          npm install mongoose
-        fi
-        # Print the directory structure for debugging
-        ls -la node_modules/mongoose/lib/helpers/populate
         npm start
