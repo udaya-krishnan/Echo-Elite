@@ -16,5 +16,6 @@ jobs:
           npm uninstall mongoose
           npm install mongoose
         fi
+        # Print the directory structure for debugging
+        ls -la node_modules/mongoose/lib/helpers/populate
         npm start
-
