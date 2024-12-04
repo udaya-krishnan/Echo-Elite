@@ -17,9 +17,14 @@ const referralCode = require("../controller/refferalCode");
 const generateDate = require("../controller/dateGenrator");
 const generateTransaction=require("../controller/transationId")
 const Rating=require("../model/ratingModel")
+require('dotenv').config();
+
 
 const Email = process.env.Email;
 const pass = process.env.Pass;
+
+
+
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -85,6 +90,8 @@ const insertUser = async (req, res) => {
     // console.log(email);
     // console.log(mobile);
 
+    console.log("Email:", process.env.Email);
+console.log("Pass:", process.env.Pass);
     // res.redirect('/otp')
     const otp = generateOTP.generateOTP();
     console.log(otp);
@@ -157,6 +164,8 @@ const insertUser = async (req, res) => {
       if (mailOptions) {
         transporter.sendMail(mailOptions, (err) => {
           if (err) {
+            console.log('error spoted');
+            
             console.log(err.message);
           } else {
             console.log("mail send sucessfull");
