@@ -21,10 +21,12 @@ const loadAdd=async(req,res)=>{
  
 const addBrand=async(req,res)=>{
   try {
+   console.log('hjdfhjsfhjsdfjksfhhfjhdf');
    
       const newName=req.body.name
-
+        console.log(newName)
       const unique=Brand.findOne({name:newName})
+      console.log(unique)
       
       if(!unique){
         const brand=new Brand({
