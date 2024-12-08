@@ -2,14 +2,24 @@ const mongoose=require("mongoose")
 
 require('dotenv').config()
 
-const uri = "mongodb+srv://udayankrishnan36:M4olyzIijyjz0nRF@cluster0.o5mynnz.mongodb.net/udayankrishnan36?retryWrites=true&w=majority&appName=Cluster0"
-function connectDb(){
-    // mongoose.connect("mongodb://localhost:27017/E-commerce")
-    mongoose.connect(uri)
-    .then(()=>{ 
-        console.log("connect")
+
+const uri = "mongodb+srv://udayankrishnan36:M4olyzIijyjz0nRF@cluster0.o5mynnz.mongodb.net/udayankrishnan36?retryWrites=true&w=majority";
+
+function connectDb() {
+    mongoose.connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     })
+    .then(() => {
+        console.log("Database connection successful");
+    })
+    .catch((error) => {
+        console.error("Database connection error:", error);
+    });
 }
+
+// Call the function to connect
+connectDb();
 
 connectDb()
 
