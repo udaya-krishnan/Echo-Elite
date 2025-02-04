@@ -1,6 +1,7 @@
 const mongoose=require("mongoose")
 
 require('dotenv').config()
+// const common = require('./Common'); // Ensure the filename matches exactly (case-sensitive in Linux)
 
 
 const uri = "mongodb+srv://udayankrishnan36:M4olyzIijyjz0nRF@cluster0.o5mynnz.mongodb.net/udayankrishnan36?retryWrites=true&w=majority";
