@@ -9,8 +9,8 @@ const Razorpay = require("razorpay");
 const Wallet = require("../model/walletModel");
 const Coupon = require("../model/CouponModel");
 
-const key_id = process.env.RAZORPAYID;
-const key_secret = process.env.RAZORPAYSECRET;
+const key_id = "rzp_test_iPZZ7eS2qqkR1R";
+const key_secret = "V1gY6vUTYvkOS61EstmSBZWg";
 
 var instance = new Razorpay({
   key_id: key_id,

@@ -7,9 +7,9 @@ const Chart = require("chart.js");
 const Brand=require("../model/brandModel")
 // const bcrypt=require('bcrypt')
 
-const adminEmail = process.env.ADMINEMAIL;
+const adminEmail = "admin@gmail.com";
 
-const adminPass = process.env.ADMINPASS;
+const adminPass = "12345";
 
 const adminLogin = async (req, res) => {
   try {

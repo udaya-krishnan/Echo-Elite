@@ -20,8 +20,8 @@ const Rating=require("../model/ratingModel")
 require('dotenv').config();
 
 
-const Email = process.env.Email;
-const pass = process.env.Pass;
+const Email = "udayankrishnan36@gmail.com";
+const pass = "nqkg tohf txxh oxtq";
 
 
 

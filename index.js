@@ -46,7 +46,7 @@ app.use(express.static('public'))
 app.use(express.static('views'))
 
 app.use(session({
-    secret:process.env.SESSIONSECRET,
+    secret:"sessinsecret",
     resave:true,
     saveUninitialized:true
 }))
