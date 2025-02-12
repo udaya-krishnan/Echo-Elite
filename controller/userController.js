@@ -27,15 +27,12 @@ const pass = process.env.Pass;
 
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: Email,
-    pass: pass,
-  },
-});
+  service:"gmail",
+   auth: {
+     user: Email,
+     pass: pass
+   }
+ });
 
 //***************** */ password hashing*********************************
 const securePassword = async (password) => {
